@@ -1,0 +1,9 @@
+C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\bin\Debug\BudgetManagement.exe.config
+C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\bin\Debug\BudgetManagement.exe
+C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\bin\Debug\BudgetManagement.pdb
+C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.csprojAssemblyReference.cache
+C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.Properties.Resources.resources
+C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.csproj.GenerateResource.cache
+C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.csproj.CoreCompileInputs.cache
+C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.exe
+C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.pdb
