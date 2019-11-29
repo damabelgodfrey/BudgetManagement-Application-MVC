@@ -16,6 +16,8 @@ namespace BudgetManagement.Repository
         public static List<Contact> ContactList = new List<Contact>();
 
         //add contact
+
+        public SqlCommand sqlCommand;
         public string AddContact(Contact contact)
         {
             if (CheckUser(contact))
@@ -58,28 +60,31 @@ namespace BudgetManagement.Repository
         // Delete Contact
         public string DeleteContact(Contact contact)
         {
+            dbReturnMessage = "";
+            if (ValidateAction("Are You show you want to delete Contact", "DELETE OPEREATION"))
+            {
+                dbQuery = "DELETE FROM Contacts WHERE [Id] = @Id";
+                sqlCommand = new SqlCommand(dbQuery, sqlConnection);
+                sqlCommand.Parameters.AddWithValue("@Id", contact.cID);
+                try
+                {
+                    sqlConnection.Open();
+                    int i = sqlCommand.ExecuteNonQuery();
+                    if (i > 0)
+                        dbReturnMessage = contact.cName + "  Deleted Successfully!!";
 
-            dbQuery = "DELETE FROM Contacts WHERE [Id] = @Id";
-            sqlCommand = new SqlCommand(dbQuery, sqlConnection);
-            sqlCommand.Parameters.AddWithValue("@Id", contact.cID);
-            try
-            {
-                sqlConnection.Open();
-                int i = sqlCommand.ExecuteNonQuery();
-                if (i >0)
-                    dbReturnMessage = contact.cName + "  Deleted Successfully!!";
-
-                else
-                    throw new Exception("Error: " + contact.cName + " Data Could Not Be Deleted!");
-                sqlConnection.Close();
-            }
-            catch (Exception ex)
-            {
-                dbReturnMessage = "Exception: " + ex.Message;
-            }
-            finally
-            {
-                sqlConnection.Close();
+                    else
+                        throw new Exception("Error: " + contact.cName + " Data Could Not Be Deleted!");
+                    sqlConnection.Close();
+                }
+                catch (Exception ex)
+                {
+                    dbReturnMessage = "Exception: " + ex.Message;
+                }
+                finally
+                {
+                    sqlConnection.Close();
+                }
             }
             return dbReturnMessage;
         }

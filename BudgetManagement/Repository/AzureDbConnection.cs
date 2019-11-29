@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Windows.Forms;
 
 namespace BudgetManagement.Repository
 {
@@ -12,11 +13,10 @@ namespace BudgetManagement.Repository
     {
         
         private readonly string dbConnMessage;
-        protected  string Key; 
-        protected string dbReturnMessage;
-        protected string dbQuery;
-        protected SqlConnection sqlConnection;
-        protected SqlCommand sqlCommand;
+        public static string Key; 
+        protected static string dbReturnMessage;
+        protected static string dbQuery;
+        public SqlConnection sqlConnection;
 
         public AzureDbConnection()
         {
@@ -24,8 +24,8 @@ namespace BudgetManagement.Repository
             {
                 string dbconn = ConfigurationManager.ConnectionStrings["dbConnection"].ConnectionString;
                 //The query to use
-               
-                 sqlConnection = new SqlConnection(dbconn);
+
+                sqlConnection = new SqlConnection(dbconn);
                 //sqlConnection.Open();
 
             }
@@ -36,6 +36,17 @@ namespace BudgetManagement.Repository
             }
 
 
+        }
+        public bool ValidateAction(string message, string caption)
+        {
+            var result = MessageBox.Show(message, caption,
+                                         MessageBoxButtons.YesNo,
+                                         MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                return true;
+            }
+            else { return false; }
         }
     }
 }

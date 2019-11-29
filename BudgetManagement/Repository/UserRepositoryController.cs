@@ -14,25 +14,34 @@ namespace BudgetManagement.Repository
 {
     class UserRepositoryController: AzureDbConnection
     {
-        
-            //Add User 
+        public static List<User> UserList = new List<User>();
+        public SqlCommand sqlCommand;
+        internal static string getKey()
+        {
+            Key = "b14ca5898a4e4133bbce2ea2315a1916";
+            return Key;
+        }
+
+        //Add User 
         public string AddUser(User user)
             {
+            dbReturnMessage = "";
             if (CheckUser(user))
             {
-                dbReturnMessage = "Error: Email already exist with another user ";
+                dbReturnMessage = "false";
+            }
+            else
+            {
 
-            }else { 
-                dbReturnMessage = "";
                 dbQuery = "INSERT INTO Users([Name],[Email],[Password]) VALUES(@Name, @Email, @Password);";
                 try
                 {
-                sqlCommand = new SqlCommand(dbQuery, sqlConnection);
-                sqlCommand.Parameters.AddWithValue("@Name", user.uName);
-                sqlCommand.Parameters.AddWithValue("@Email", user.uEmail);
-                Key = "b14ca5898a4e4133bbce2ea2315a1916";
+                    sqlCommand = new SqlCommand(dbQuery, sqlConnection);
+                    sqlCommand.Parameters.AddWithValue("@Name", user.uName);
+                    sqlCommand.Parameters.AddWithValue("@Email", user.uEmail);
+                    Key = getKey();
                     String EncriptPassword = DataCypher.EncryptString(Key, user.uPassword); //encript password
-                sqlCommand.Parameters.AddWithValue("@Password", EncriptPassword);          
+                    sqlCommand.Parameters.AddWithValue("@Password", EncriptPassword);
                     sqlConnection.Open();
                     int i = sqlCommand.ExecuteNonQuery();
                     if (i > 0)
@@ -52,6 +61,70 @@ namespace BudgetManagement.Repository
                 }
             }
                 return dbReturnMessage;
+        }
+
+        public  string VerifyUser(string email, string Password)
+        {
+            if (UserList.Count()> 0)
+            {
+                UserRepositoryController.UserList.Clear();
+            }
+                
+            dbQuery = "SELECT * FROM Users  WHERE [Email] = @Email;";
+            sqlCommand = new SqlCommand(dbQuery, sqlConnection);
+            sqlCommand.Parameters.AddWithValue("@Email", email);
+            try
+            {
+                using (sqlConnection)
+                {
+
+
+                    using (sqlConnection)
+                    {
+                        sqlConnection.Open();
+                        SqlDataReader reader = sqlCommand.ExecuteReader();
+
+                        // Call Read before accessing data.
+                        while (reader.Read())
+                        {
+                            ReadUserRow((IDataRecord)reader);
+                            break;
+                        }
+                        sqlConnection.Close();
+                        reader.Close();
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                dbReturnMessage = "Exception: " + ex.Message;
+                MessageBox.Show(dbReturnMessage, "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+            if (UserList.Count() > 0)
+            {
+                return "true";
+            }
+            else {
+                return "false";
+            }
+            
+        }
+
+        //
+        private  void ReadUserRow(IDataRecord record)
+        {
+            int id = Convert.ToInt32(record[0]);
+            string Name = Convert.ToString(record[1]);
+            string Email = Convert.ToString(record[2]);
+            string Password = Convert.ToString(record[3]);
+            User obj = new User(id, Name, Email, Password);
+            UserList.Add(obj);
         }
 
         //Check if user exist

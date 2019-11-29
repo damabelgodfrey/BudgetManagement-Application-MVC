@@ -11,6 +11,7 @@ using System.Data.SqlClient;
 using System.Configuration;
 using BudgetManagement.Models;
 using BudgetManagement.Repository;
+using BudgetManagement.Views;
 
 namespace BudgetManagement
 {
@@ -24,28 +25,28 @@ namespace BudgetManagement
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            string a;
-            DialogResult result;
-            User user = new User(0, "name22", "email2@yahoo.com", "password");
-            UserRepositoryController test = new UserRepositoryController();
-            a = test.AddUser(user);
+            //string a;
+            //DialogResult result;
+            //User user = new User(0, "tests", "test@yahoo.comd", "password");
+            //UserRepositoryController test = new UserRepositoryController();
+            //a = test.AddUser(user);
+
+
+            ////Contact contact = new Contact(8, 1,"Jame1", "contact 00 address hhh", "contact type4");
+            //ContactRepositoryController test1 = new ContactRepositoryController();
+            ////a = test.AddContact(contact);
+            //// a = test.DeleteContact(contact);
+            //// a = test.UpdateContact(contact);
+            ////List<Contact> ab = test1.GetContact(1);
+
+            //string caption = "List from add user";
+            //MessageBoxButtons buttons = MessageBoxButtons.YesNo;
            
 
-           // Contact contact = new Contact(8, 1,"Jame1", "contact 00 address hhh", "contact type4");
-           // ContactRepositoryController test = new ContactRepositoryController();
-            //a = test.AddContact(contact);
-           // a = test.DeleteContact(contact);
-            // a = test.UpdateContact(contact);
-           // List<Contact> ab = test.GetContact(1);
-
-            string caption = "Message from add user";
-            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            //result = MessageBox.Show(ab.Count().ToString(), caption, buttons);
            
 
-            result = MessageBox.Show(a.ToString(), caption, buttons);
-           
-
-            Application.Run(new Form1());
+            Application.Run(new LoginForm());
         }
     }
 }
