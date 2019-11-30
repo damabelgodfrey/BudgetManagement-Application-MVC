@@ -9,18 +9,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace BudgetManagement.Views
 {
     public partial class LoginForm : Form
     {
         public LoginForm()
         {
-            PictureBox pb1 = new PictureBox();
-            pb1.ImageLocation = "http://www.dotnetperls.com/favicon.ico";
             InitializeComponent();
         }
 
-        private void loginBtn_Click(object sender, EventArgs e)
+        private  void loginBtn_Click(object sender, EventArgs e)
         {
             string email = LoginEmailtxt.Text; ;
             string password = LoginPasswordtxt.Text;
@@ -37,8 +36,9 @@ namespace BudgetManagement.Views
             bool result = MainFormController.Authentication(email, password);
             if (result)
             {
-                //if authentication is true call mainform controller to oppen view with the user
-                //remove login page
+                this.Hide();
+                Dashboard myDashboard = new Dashboard();
+                myDashboard.ShowDialog();       
             }
             else
             {
@@ -85,15 +85,13 @@ namespace BudgetManagement.Views
                 string result = MainFormController.RegisterUser(name,email, password, passwordConfirm);
                 if(result == "false")
                 {
-                    RegisterPasswordL.ResetText();
+                    registerSuccessImage.Visible = false;
+                    RegisterPassword2L.ResetText();
                     MessageBox.Show("Email already exist", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
+                } else {
                     registerSuccessImage.Visible = true;
                     RegisterPasswordL.ResetText();
                     RegisterPassword2L.ResetText();
-
                 }
 
             }

@@ -25,28 +25,7 @@ namespace BudgetManagement
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //string a;
-            //DialogResult result;
-            //User user = new User(0, "tests", "test@yahoo.comd", "password");
-            //UserRepositoryController test = new UserRepositoryController();
-            //a = test.AddUser(user);
-
-
-            ////Contact contact = new Contact(8, 1,"Jame1", "contact 00 address hhh", "contact type4");
-            //ContactRepositoryController test1 = new ContactRepositoryController();
-            ////a = test.AddContact(contact);
-            //// a = test.DeleteContact(contact);
-            //// a = test.UpdateContact(contact);
-            ////List<Contact> ab = test1.GetContact(1);
-
-            //string caption = "List from add user";
-            //MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-           
-
-            //result = MessageBox.Show(ab.Count().ToString(), caption, buttons);
-           
-
-            Application.Run(new LoginForm());
+            Application.Run(new Dashboard());
         }
     }
 }

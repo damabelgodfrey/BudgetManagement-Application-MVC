@@ -54,6 +54,7 @@ namespace BudgetManagement.Repository
                 catch (Exception ex)
                 {
                     dbReturnMessage = "Exception: " + ex.Message;
+                    MessageBox.Show(dbReturnMessage, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -99,7 +100,7 @@ namespace BudgetManagement.Repository
             catch (Exception ex)
             {
                 dbReturnMessage = "Exception: " + ex.Message;
-                MessageBox.Show(dbReturnMessage, "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(dbReturnMessage, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             }
             finally

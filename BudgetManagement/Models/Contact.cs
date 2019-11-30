@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BudgetManagement.Models
 {
-    class Contact
+    public class Contact
     {
 
         public int cID { get; set; }
