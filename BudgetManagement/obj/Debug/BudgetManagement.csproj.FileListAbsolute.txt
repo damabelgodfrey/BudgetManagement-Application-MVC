@@ -9,3 +9,4 @@ C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\B
 C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.pdb
 C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.Views.LoginForm.resources
 C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.Views.Dashboard.resources
+C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.Views.ContactView.resources

@@ -38,16 +38,21 @@ namespace BudgetManagement.Repository
                 {
                     sqlConnection.Open();
                     int i = sqlCommand.ExecuteNonQuery();
-                    if (i >0)
-                        dbReturnMessage = contact.cName + "  Added Successfully!!";
-
+                    if (i > 0)
+                    {
+                        dbReturnMessage = "success";
+                    }
                     else
-                        throw new Exception("Error: "+contact.cName + " Data Could Not Be Added!");
-                    sqlConnection.Close();
+                    {
+                        MessageBox.Show(i + "  Could not verify", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        sqlConnection.Close();
+                    }
                 }
                 catch (Exception ex)
-                {
+                { 
                     dbReturnMessage = "Exception: " + ex.Message;
+                    MessageBox.Show("Could not open", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 }
                 finally
                 {
@@ -119,9 +124,11 @@ namespace BudgetManagement.Repository
             }
             return dbReturnMessage;
         }
+
         // select contact
-        public List<Contact> GetContact(int userId)
+        public  List<Contact> GetContact(int userId)
         {
+            ContactList.Clear(); //fetch updated contact list from database into contactlist;
 
             dbQuery = "SELECT * FROM CONTACTS  WHERE [UserId] = @UserId ;";
             sqlCommand = new SqlCommand(dbQuery, sqlConnection);

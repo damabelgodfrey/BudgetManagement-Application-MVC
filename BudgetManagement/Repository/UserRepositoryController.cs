@@ -16,6 +16,14 @@ namespace BudgetManagement.Repository
     {
         public static List<User> UserList = new List<User>();
         public SqlCommand sqlCommand;
+
+        internal static int GetUserID() {
+
+           int id = UserList[0].uID;
+            return id;
+
+        }
+
         internal static string getKey()
         {
             Key = "b14ca5898a4e4133bbce2ea2315a1916";

@@ -5,38 +5,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace BudgetManagement.Controllers
 {
     public class ContactController
     {
-        IDashboardView _view;
+        IContactView _view;
         Contact _selectedUser;
         List<Contact> myContactlist;
 
-        public ContactController(IDashboardView view, List<Contact> mycontact)
+        public ContactController(IContactView view, List<Contact> mycontact)
         {
             this._view = view;
             this.myContactlist = mycontact;
-             //IDashboardView.SetContactController(this);
+            view.SetContactController(this);
         }
 
         public void AddNewContact()
         {
             //string id = _users.FindLastIndex.GetType();
-            _selectedUser = new Contact(0/*id*/,0,
-                                 "" /*name*/,
-                                 ""  /*address*/,
-                                 ""/*type*/);
+            int userID = UserRepositoryController.GetUserID();
+
+            _selectedUser = new Contact(userID, userID, "","","");
 
             this.updateViewDetailValues(_selectedUser);
-            this._view.CanModifyID = true;
+            this._view.CanModifyID = false;
 
         }
         public void RemoveContact()
         {
             string id = this._view.GetIdOfSelectedContactInGrid();
-            Contact userToRemove = null;
+            Contact contactToRemove = null;
 
             if (id != "")
             {
@@ -44,16 +44,22 @@ namespace BudgetManagement.Controllers
                 {
                     if (contact.cID.ToString() == id)
                     {
-                        userToRemove = contact;
+                        contactToRemove = contact;
                         break;
                     }
                 }
 
-                if (userToRemove != null)
+                if (contactToRemove != null)
                 {
-                    int newSelectedIndex = this.myContactlist.IndexOf(userToRemove);
-                    this.myContactlist.Remove(userToRemove);
-                    this._view.RemoveContactFromGrid(userToRemove);
+
+                    //delete from database
+                    //use the global static ContactList
+                    ContactRepositoryController contactRepoObj = new ContactRepositoryController();
+                    contactRepoObj.DeleteContact(contactToRemove); 
+
+                    int newSelectedIndex = this.myContactlist.IndexOf(contactToRemove);
+                   this.myContactlist.Remove(contactToRemove);
+                    this._view.RemoveContactFromGrid(contactToRemove);
 
                     if (newSelectedIndex > -1 && newSelectedIndex < myContactlist.Count)
                     {
@@ -68,13 +74,41 @@ namespace BudgetManagement.Controllers
             updateContactWithViewValues(_selectedUser);
             if (!this.myContactlist.Contains(_selectedUser))
             {
-                // Add new user
+                // Add new contact
+
                 this.myContactlist.Add(_selectedUser);
-                this._view.AddContactToGrid(_selectedUser);
+                ContactRepositoryController contactRepoObj = new ContactRepositoryController();
+
+
+                string returnMsg = contactRepoObj.AddContact(_selectedUser);
+                MessageBox.Show(returnMsg.ToString(), "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                if (returnMsg == "success")
+                {
+                    this._view.ClearGrid();
+                    int id = UserRepositoryController.GetUserID();
+                    ContactRepositoryController contactObj = new ContactRepositoryController();
+                     myContactlist = contactObj.GetContact(id);
+                    foreach (Contact contact in this.myContactlist)
+                    {
+                    this._view.AddContactToGrid(contact); //UPDATE GRIDE
+                        MessageBox.Show(contact.cID+" Updating view", "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+
+                    }
+
+                    MessageBox.Show("ADDED SUCCESSFULLY", "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                }
+                else
+                {
+                    MessageBox.Show(returnMsg.ToString()+"  Contact was not able to update to database", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                }
             }
             else
             {
-                // Update existing
+                // Update existing contact
                 this._view.UpdateGridWithChangedContact(_selectedUser);
             }
             _view.SetSelectedContactInGrid(_selectedUser);
@@ -97,7 +131,7 @@ namespace BudgetManagement.Controllers
         }
         private void updateViewDetailValues(Contact contact)
         {
-            _view.Name = contact.cName;
+            _view.ContactName = contact.cName;
             _view.Address = contact.cAddress;
             _view.CID = contact.cID.ToString();
             _view.ContactType = contact.cType;
@@ -105,7 +139,7 @@ namespace BudgetManagement.Controllers
 
         private void updateContactWithViewValues(Contact contact)
         {
-            contact.cName = _view.Name;
+            contact.cName = _view.ContactName;
             contact.cAddress = _view.Address;
             contact.cID = Convert.ToInt32(_view.CID);
             contact.cType = _view.ContactType;
@@ -117,8 +151,8 @@ namespace BudgetManagement.Controllers
             if (myContactlist.Count > 0)
             {
 
-                foreach (Contact usr in myContactlist)
-                    _view.AddContactToGrid(usr);
+                foreach (Contact contact in myContactlist)
+                    _view.AddContactToGrid(contact);
 
                 _view.SetSelectedContactInGrid((Contact)myContactlist[0]);
             }

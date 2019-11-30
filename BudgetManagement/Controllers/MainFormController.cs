@@ -41,7 +41,7 @@ namespace BudgetManagement.Controllers
                     }
                     else
                     {
-                        UserRepositoryController.UserList.Clear();
+                        
                        // MessageBox.Show("iNVALID PASSWORD", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return false;
                     }
@@ -67,6 +67,24 @@ namespace BudgetManagement.Controllers
             string returnmsg = usr.AddUser(user);
 
             return returnmsg;
+        }
+        public static string SetUpUserDetails()
+        {
+
+            List<User> usl = UserRepositoryController.UserList;
+            try
+            {
+                ContactRepositoryController contactRepoObj = new ContactRepositoryController();
+                contactRepoObj.GetContact(usl[0].uID);
+                return "success";
+
+            }
+            catch (Exception)
+            {
+
+                return "fail";
+
+            }
         }
     }
     }
