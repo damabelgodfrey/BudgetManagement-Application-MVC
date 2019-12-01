@@ -76,11 +76,14 @@ namespace BudgetManagement.Repository
                     sqlConnection.Open();
                     int i = sqlCommand.ExecuteNonQuery();
                     if (i > 0)
-                        dbReturnMessage = contact.cName + "  Deleted Successfully!!";
+                    {
+                        dbReturnMessage = "success";
 
+                    }
                     else
-                        throw new Exception("Error: " + contact.cName + " Data Could Not Be Deleted!");
-                    sqlConnection.Close();
+                    {
+                        dbReturnMessage = "Error: " + contact.cName + " Data Could Not Be Deleted!";
+                    }
                 }
                 catch (Exception ex)
                 {

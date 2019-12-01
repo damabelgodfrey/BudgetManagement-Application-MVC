@@ -14,6 +14,7 @@ namespace BudgetManagement.Controllers
         IContactView _view;
         Contact _selectedUser;
         List<Contact> myContactlist;
+        int userID = UserRepositoryController.GetUserID();
 
         public ContactController(IContactView view, List<Contact> mycontact)
         {
@@ -25,7 +26,7 @@ namespace BudgetManagement.Controllers
         public void AddNewContact()
         {
             //string id = _users.FindLastIndex.GetType();
-            int userID = UserRepositoryController.GetUserID();
+            
 
             _selectedUser = new Contact(userID, userID, "","","");
 
@@ -36,6 +37,8 @@ namespace BudgetManagement.Controllers
         public void RemoveContact()
         {
             string id = this._view.GetIdOfSelectedContactInGrid();
+
+
             Contact contactToRemove = null;
 
             if (id != "")
@@ -52,19 +55,26 @@ namespace BudgetManagement.Controllers
                 if (contactToRemove != null)
                 {
 
-                    //delete from database
-                    //use the global static ContactList
                     ContactRepositoryController contactRepoObj = new ContactRepositoryController();
-                    contactRepoObj.DeleteContact(contactToRemove); 
-
-                    int newSelectedIndex = this.myContactlist.IndexOf(contactToRemove);
-                   this.myContactlist.Remove(contactToRemove);
-                    this._view.RemoveContactFromGrid(contactToRemove);
-
-                    if (newSelectedIndex > -1 && newSelectedIndex < myContactlist.Count)
+                    string returnMsg = contactRepoObj.DeleteContact(contactToRemove);
+                    if (returnMsg == "success")
                     {
-                        this._view.SetSelectedContactInGrid((Contact)myContactlist[newSelectedIndex]);
+                        myContactlist = contactRepoObj.GetContact(userID);
+                        int newSelectedIndex = this.myContactlist.IndexOf(contactToRemove);
+                        //this.myContactlist.Remove(contactToRemove);
+                        this._view.RemoveContactFromGrid(contactToRemove);
+
+                        if (newSelectedIndex > -1 && newSelectedIndex < myContactlist.Count)
+                        {
+                            this._view.SetSelectedContactInGrid((Contact)myContactlist[newSelectedIndex]);
+                        }
                     }
+                    else
+                    {
+                        MessageBox.Show(returnMsg, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    }
+
                 }
             }
         }

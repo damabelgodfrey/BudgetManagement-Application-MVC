@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Windows.Forms;
 
 namespace BudgetManagement.Views
 {
@@ -30,19 +31,6 @@ namespace BudgetManagement.Views
         /// </summary>
         private void InitializeComponent()
         {
-            this.MenuTab = new System.Windows.Forms.TabControl();
-            this.HomePage = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.TransactionC = new System.Windows.Forms.TabControl();
-            this.TransactionPage = new System.Windows.Forms.TabPage();
-            this.RecurringTPage = new System.Windows.Forms.TabPage();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.Event = new System.Windows.Forms.TabPage();
-            this.Task = new System.Windows.Forms.TabControl();
-            this.TaskPage = new System.Windows.Forms.TabPage();
-            this.AppointmentPage = new System.Windows.Forms.TabPage();
-            this.Contact = new System.Windows.Forms.TabPage();
-            this.contactListView = new System.Windows.Forms.ListView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.DeleteCbtn = new System.Windows.Forms.Button();
             this.updateCBtn = new System.Windows.Forms.Button();
@@ -57,181 +45,21 @@ namespace BudgetManagement.Views
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.payerRBtn = new System.Windows.Forms.RadioButton();
             this.payeeRBtn = new System.Windows.Forms.RadioButton();
-            this.PredictionPage = new System.Windows.Forms.TabPage();
-            this.MenuTab.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            this.TransactionC.SuspendLayout();
-            this.RecurringTPage.SuspendLayout();
-            this.Event.SuspendLayout();
-            this.Task.SuspendLayout();
-            this.Contact.SuspendLayout();
+            this.contactGrdView = new System.Windows.Forms.ListView();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             this.contactGbox.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // MenuTab
-            // 
-            this.MenuTab.AllowDrop = true;
-            this.MenuTab.Appearance = System.Windows.Forms.TabAppearance.Buttons;
-            this.MenuTab.Controls.Add(this.HomePage);
-            this.MenuTab.Controls.Add(this.tabPage2);
-            this.MenuTab.Controls.Add(this.Event);
-            this.MenuTab.Controls.Add(this.Contact);
-            this.MenuTab.Controls.Add(this.PredictionPage);
-            this.MenuTab.ItemSize = new System.Drawing.Size(45, 35);
-            this.MenuTab.Location = new System.Drawing.Point(0, 0);
-            this.MenuTab.Name = "MenuTab";
-            this.MenuTab.Padding = new System.Drawing.Point(6, 6);
-            this.MenuTab.SelectedIndex = 0;
-            this.MenuTab.Size = new System.Drawing.Size(1019, 543);
-            this.MenuTab.TabIndex = 1;
-            // 
-            // HomePage
-            // 
-            this.HomePage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(2)))), ((int)(((byte)(26)))));
-            this.HomePage.Location = new System.Drawing.Point(4, 39);
-            this.HomePage.Name = "HomePage";
-            this.HomePage.Padding = new System.Windows.Forms.Padding(3);
-            this.HomePage.Size = new System.Drawing.Size(1011, 500);
-            this.HomePage.TabIndex = 0;
-            this.HomePage.Text = "   Home    ";
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(2)))), ((int)(((byte)(26)))));
-            this.tabPage2.Controls.Add(this.TransactionC);
-            this.tabPage2.Location = new System.Drawing.Point(4, 39);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1011, 500);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Transaction Manager";
-            // 
-            // TransactionC
-            // 
-            this.TransactionC.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.TransactionC.Controls.Add(this.TransactionPage);
-            this.TransactionC.Controls.Add(this.RecurringTPage);
-            this.TransactionC.ItemSize = new System.Drawing.Size(171, 26);
-            this.TransactionC.Location = new System.Drawing.Point(-4, 0);
-            this.TransactionC.Name = "TransactionC";
-            this.TransactionC.SelectedIndex = 0;
-            this.TransactionC.Size = new System.Drawing.Size(1019, 508);
-            this.TransactionC.TabIndex = 0;
-            // 
-            // TransactionPage
-            // 
-            this.TransactionPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(2)))), ((int)(((byte)(26)))));
-            this.TransactionPage.Location = new System.Drawing.Point(4, 30);
-            this.TransactionPage.Name = "TransactionPage";
-            this.TransactionPage.Padding = new System.Windows.Forms.Padding(3);
-            this.TransactionPage.Size = new System.Drawing.Size(1011, 474);
-            this.TransactionPage.TabIndex = 0;
-            this.TransactionPage.Text = "Manage Transaction";
-            // 
-            // RecurringTPage
-            // 
-            this.RecurringTPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(2)))), ((int)(((byte)(26)))));
-            this.RecurringTPage.Controls.Add(this.checkBox1);
-            this.RecurringTPage.Location = new System.Drawing.Point(4, 30);
-            this.RecurringTPage.Name = "RecurringTPage";
-            this.RecurringTPage.Padding = new System.Windows.Forms.Padding(3);
-            this.RecurringTPage.Size = new System.Drawing.Size(1011, 474);
-            this.RecurringTPage.TabIndex = 1;
-            this.RecurringTPage.Text = "Manage Recurring Transaction";
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(258, 89);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(80, 17);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "checkBox1";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // Event
-            // 
-            this.Event.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(2)))), ((int)(((byte)(26)))));
-            this.Event.Controls.Add(this.Task);
-            this.Event.Location = new System.Drawing.Point(4, 39);
-            this.Event.Name = "Event";
-            this.Event.Padding = new System.Windows.Forms.Padding(3);
-            this.Event.Size = new System.Drawing.Size(1011, 500);
-            this.Event.TabIndex = 2;
-            this.Event.Text = "Event Manager";
-            // 
-            // Task
-            // 
-            this.Task.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.Task.Controls.Add(this.TaskPage);
-            this.Task.Controls.Add(this.AppointmentPage);
-            this.Task.ItemSize = new System.Drawing.Size(35, 25);
-            this.Task.Location = new System.Drawing.Point(-4, 0);
-            this.Task.Name = "Task";
-            this.Task.SelectedIndex = 0;
-            this.Task.Size = new System.Drawing.Size(1019, 504);
-            this.Task.TabIndex = 0;
-            // 
-            // TaskPage
-            // 
-            this.TaskPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(2)))), ((int)(((byte)(26)))));
-            this.TaskPage.Location = new System.Drawing.Point(4, 29);
-            this.TaskPage.Name = "TaskPage";
-            this.TaskPage.Padding = new System.Windows.Forms.Padding(3);
-            this.TaskPage.Size = new System.Drawing.Size(1011, 471);
-            this.TaskPage.TabIndex = 1;
-            this.TaskPage.Text = "Manage Task";
-            // 
-            // AppointmentPage
-            // 
-            this.AppointmentPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(2)))), ((int)(((byte)(26)))));
-            this.AppointmentPage.Location = new System.Drawing.Point(4, 29);
-            this.AppointmentPage.Name = "AppointmentPage";
-            this.AppointmentPage.Padding = new System.Windows.Forms.Padding(3);
-            this.AppointmentPage.Size = new System.Drawing.Size(1011, 471);
-            this.AppointmentPage.TabIndex = 2;
-            this.AppointmentPage.Text = "Manage Appointment";
-            // 
-            // Contact
-            // 
-            this.Contact.BackColor = System.Drawing.SystemColors.Control;
-            this.Contact.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.Contact.Controls.Add(this.contactListView);
-            this.Contact.Controls.Add(this.groupBox3);
-            this.Contact.Controls.Add(this.contactGbox);
-            this.Contact.Location = new System.Drawing.Point(4, 39);
-            this.Contact.Name = "Contact";
-            this.Contact.Padding = new System.Windows.Forms.Padding(3);
-            this.Contact.Size = new System.Drawing.Size(1011, 500);
-            this.Contact.TabIndex = 3;
-            this.Contact.Text = "Contact Manager";
-            // 
-            // contactListView
-            // 
-            this.contactListView.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.contactListView.FullRowSelect = true;
-            this.contactListView.GridLines = true;
-            this.contactListView.HideSelection = false;
-            this.contactListView.Location = new System.Drawing.Point(3, 208);
-            this.contactListView.Name = "contactListView";
-            this.contactListView.ShowItemToolTips = true;
-            this.contactListView.Size = new System.Drawing.Size(1001, 285);
-            this.contactListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.contactListView.TabIndex = 35;
-            this.contactListView.UseCompatibleStateImageBehavior = false;
-            this.contactListView.View = System.Windows.Forms.View.Details;
-            this.contactListView.SelectedIndexChanged += new System.EventHandler(this.contactListView_SelectedIndexChanged);
             // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.DeleteCbtn);
             this.groupBox3.Controls.Add(this.updateCBtn);
             this.groupBox3.Controls.Add(this.addCBtn);
-            this.groupBox3.Location = new System.Drawing.Point(775, 6);
+            this.groupBox3.Location = new System.Drawing.Point(785, 14);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(223, 177);
+            this.groupBox3.Size = new System.Drawing.Size(217, 177);
             this.groupBox3.TabIndex = 6;
             this.groupBox3.TabStop = false;
             // 
@@ -280,7 +108,7 @@ namespace BudgetManagement.Views
             this.contactGbox.Controls.Add(this.addressCtxt);
             this.contactGbox.Controls.Add(this.groupBox2);
             this.contactGbox.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.contactGbox.Location = new System.Drawing.Point(8, 6);
+            this.contactGbox.Location = new System.Drawing.Point(12, 13);
             this.contactGbox.Name = "contactGbox";
             this.contactGbox.Size = new System.Drawing.Size(761, 177);
             this.contactGbox.TabIndex = 0;
@@ -371,37 +199,46 @@ namespace BudgetManagement.Views
             this.payeeRBtn.Text = "Payee";
             this.payeeRBtn.UseVisualStyleBackColor = true;
             // 
-            // PredictionPage
+            // contactGrdView
             // 
-            this.PredictionPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(2)))), ((int)(((byte)(26)))));
-            this.PredictionPage.ForeColor = System.Drawing.SystemColors.Control;
-            this.PredictionPage.Location = new System.Drawing.Point(4, 39);
-            this.PredictionPage.Name = "PredictionPage";
-            this.PredictionPage.Padding = new System.Windows.Forms.Padding(3);
-            this.PredictionPage.Size = new System.Drawing.Size(1011, 500);
-            this.PredictionPage.TabIndex = 4;
-            this.PredictionPage.Text = "Spending Projection";
+            this.contactGrdView.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.contactGrdView.FullRowSelect = true;
+            this.contactGrdView.GridLines = true;
+            this.contactGrdView.HideSelection = false;
+            this.contactGrdView.Location = new System.Drawing.Point(0, 257);
+            this.contactGrdView.Name = "contactGrdView";
+            this.contactGrdView.Size = new System.Drawing.Size(1019, 234);
+            this.contactGrdView.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.contactGrdView.TabIndex = 35;
+            this.contactGrdView.UseCompatibleStateImageBehavior = false;
+            this.contactGrdView.View = System.Windows.Forms.View.Details;
+            this.contactGrdView.SelectedIndexChanged += new System.EventHandler(this.contactGrdView_SelectedIndexChanged);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(0, 235);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(151, 23);
+            this.button1.TabIndex = 36;
+            this.button1.Text = "ID";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // ContactView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(11)))), ((int)(((byte)(51)))));
-            this.ClientSize = new System.Drawing.Size(1016, 544);
-            this.Controls.Add(this.MenuTab);
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.ClientSize = new System.Drawing.Size(1019, 491);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.contactGrdView);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.contactGbox);
+            this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "ContactView";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Manage Contact Board";
-            this.MenuTab.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
-            this.TransactionC.ResumeLayout(false);
-            this.RecurringTPage.ResumeLayout(false);
-            this.RecurringTPage.PerformLayout();
-            this.Event.ResumeLayout(false);
-            this.Task.ResumeLayout(false);
-            this.Contact.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.contactGbox.ResumeLayout(false);
             this.contactGbox.PerformLayout();
@@ -412,20 +249,6 @@ namespace BudgetManagement.Views
         }
 
         #endregion
-
-        private System.Windows.Forms.TabControl MenuTab;
-        private System.Windows.Forms.TabPage HomePage;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TabControl TransactionC;
-        private System.Windows.Forms.TabPage TransactionPage;
-        private System.Windows.Forms.TabPage RecurringTPage;
-        private System.Windows.Forms.TabPage Event;
-        private System.Windows.Forms.TabPage Contact;
-        private System.Windows.Forms.TabPage PredictionPage;
-        private System.Windows.Forms.TabControl Task;
-        private System.Windows.Forms.TabPage TaskPage;
-        private System.Windows.Forms.TabPage AppointmentPage;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button DeleteCbtn;
         private System.Windows.Forms.Button updateCBtn;
         private System.Windows.Forms.Button addCBtn;
@@ -440,6 +263,7 @@ namespace BudgetManagement.Views
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.RadioButton payerRBtn;
         private System.Windows.Forms.RadioButton payeeRBtn;
-        internal System.Windows.Forms.ListView contactListView;
+        internal ListView contactGrdView;
+        private Button button1;
     }
 }

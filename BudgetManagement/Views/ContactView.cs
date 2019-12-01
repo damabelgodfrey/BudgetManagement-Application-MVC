@@ -16,7 +16,7 @@ namespace BudgetManagement.Views
     public partial class ContactView : Form, IContactView
     {
         ContactController contactController;
-        ContactRepositoryController contactRepoController;
+       // ContactRepositoryController contactRepoController;
         public ContactView()
         {
             InitializeComponent();
@@ -39,7 +39,7 @@ namespace BudgetManagement.Views
             }
             set
             {
-                if (value == "payee")
+                if (value == "Payee")
                     this.payeeRBtn.Checked = true;
                 else
                     this.payerRBtn.Checked = true;
@@ -65,31 +65,30 @@ namespace BudgetManagement.Views
         public void AddContactToGrid(Contact contact)
         {
             ListViewItem parent;
-            parent = this.contactListView.Items.Add(contact.cID.ToString());
+            parent = this.contactGrdView.Items.Add(contact.cID.ToString());
             parent.SubItems.Add(contact.cName);
             parent.SubItems.Add(contact.cType);
             parent.SubItems.Add(contact.cAddress);
+            ApplyStripeToContactGride();
         }
 
         public void ClearGrid()
         {
-            // Define columns in grid
-            this.contactListView.Columns.Clear();
+            // Define columns and clear item
+            this.contactGrdView.Columns.Clear();
 
-            this.contactListView.Columns.Add("Id", 150, HorizontalAlignment.Left);
-            this.contactListView.Columns.Add("Name", 150, HorizontalAlignment.Left);
-            this.contactListView.Columns.Add("Type", 150, HorizontalAlignment.Left);
-            this.contactListView.Columns.Add("Address", 250, HorizontalAlignment.Left);
-
-            // Add rows to grid
-            this.contactListView.Items.Clear();
+            this.contactGrdView.Columns.Add("Id", 150, HorizontalAlignment.Left);
+            this.contactGrdView.Columns.Add("Name", 250, HorizontalAlignment.Left);
+            this.contactGrdView.Columns.Add("Type", 150, HorizontalAlignment.Left);
+            this.contactGrdView.Columns.Add("Address", 450, HorizontalAlignment.Left);
+            this.contactGrdView.Items.Clear();
         }
 
         public void UpdateGridWithChangedContact(Contact contact)
         {
             ListViewItem rowToUpdate = null;
 
-            foreach (ListViewItem row in this.contactListView.Items)
+            foreach (ListViewItem row in this.contactGrdView.Items)
             {
                 if (row.Text == contact.cID.ToString())
                 {
@@ -107,8 +106,8 @@ namespace BudgetManagement.Views
         }
         public string GetIdOfSelectedContactInGrid()
         {
-            if (this.contactListView.SelectedItems.Count > 0)
-                return this.contactListView.SelectedItems[0].Text;
+            if (this.contactGrdView.SelectedItems.Count > 0)
+                return this.contactGrdView.SelectedItems[0].Text;
             else
                 return "";
         }
@@ -118,7 +117,7 @@ namespace BudgetManagement.Views
 
             ListViewItem rowToRemove = null;
 
-            foreach (ListViewItem row in this.contactListView.Items)
+            foreach (ListViewItem row in this.contactGrdView.Items)
             {
                 if (row.Text == contact.cID.ToString())
                 {
@@ -128,15 +127,16 @@ namespace BudgetManagement.Views
 
             if (rowToRemove != null)
             {
-                this.contactListView.Items.Remove(rowToRemove);
-                this.contactListView.Focus();
+                this.contactGrdView.Items.Remove(rowToRemove);
+                ApplyStripeToContactGride();
+                this.contactGrdView.Focus();
             }
         }
 
 
         public void SetSelectedContactInGrid(Contact contact)
         {
-            foreach (ListViewItem row in this.contactListView.Items)
+            foreach (ListViewItem row in this.contactGrdView.Items)
             {
                 if (row.Text == contact.cID.ToString())
                 {
@@ -153,7 +153,7 @@ namespace BudgetManagement.Views
             //this.cancelCbBtn.Visible = true;
             this.updateCBtn.Text = "Register Contact";
             this.contactGbox.Text = "Add Contact";
-            this.contactListView.BackColor = System.Drawing.ColorTranslator.FromHtml("#626262");
+            this.contactGrdView.BackColor = System.Drawing.ColorTranslator.FromHtml("#626262");
             this.contactController.AddNewContact();
 
         }
@@ -176,16 +176,42 @@ namespace BudgetManagement.Views
            // this.contactListView.BackColor = System.Drawing.Color.Empty; //setto inactive
         }
 
-        private void contactListView_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (this.contactListView.SelectedItems.Count > 0)
-                this.contactController.SelectedContactChanged(this.contactListView.SelectedItems[0].Text);
-        }
-
+  
 
         public void SetContactController(ContactController controller)
         {
             contactController = controller;
+        }
+        public void ApplyStripeToContactGride()
+        {
+            int i = 0;
+            contactGrdView.BackColor = Color.FromArgb(255, 255, 255);
+            foreach (ListViewItem row in this.contactGrdView.Items)
+            {
+                if (i == 1)
+                {
+                    row.BackColor = Color.FromArgb(230, 230, 255);
+                    i = 0;
+
+                }
+                else
+                {
+                    row.BackColor = Color.FromArgb(255, 255, 255);
+                    i = 1;
+                }
+            }
+        }
+
+        private void contactListView_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            if(this.contactGrdView.SelectedItems.Count > 0)
+                this.contactController.SelectedContactChanged(this.contactGrdView.SelectedItems[0].Text);
+        }
+
+        private void contactGrdView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.contactGrdView.SelectedItems.Count > 0)
+                this.contactController.SelectedContactChanged(this.contactGrdView.SelectedItems[0].Text);
         }
     }
 }
