@@ -8,17 +8,18 @@ namespace BudgetManagement.Models
 {
     public class Transaction
     {
-        public Transaction(int id, string name, string occurance, string date, double amount, string type, string contact)
+        public Transaction(int id, int UserID,string name, string note, string datetime, double amount, string type, string contact)
         {
             transID = id;
+            transUserID = UserID;
             transName = name;
+            transNote = note;
             transAmount = amount;
             transType = type;
-            TransDate = date;
-            transOccurance = occurance;
+            TransDate = datetime;
             transContact = contact;
         }
-        Transaction()
+        public Transaction()
         {
             //Transaction transObj;
             //transObj.addTransaction("Product Buy","","05,11,2019",100,"income",&Category("Game",500));
@@ -26,11 +27,12 @@ namespace BudgetManagement.Models
         }
 
         public int transID { get; set; }
+        public int transUserID { get; set; }
         public string transName { get; set; }
+        public string transNote { get; set; }
         public double transAmount { get; set; }
         public string transType { get; set; }
         public string TransDate { get; set; }
-        public string transOccurance { get; set; }
         public string transContact { get; set; }
 
 

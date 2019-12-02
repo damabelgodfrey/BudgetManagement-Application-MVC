@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace BudgetManagement.Repository
 {
-    class ContactRepositoryController : AzureDbConnection
+    class ContactRepository : AzureDbConnection
     {
         public static List<Contact> ContactList = new List<Contact>();
 
@@ -20,6 +20,10 @@ namespace BudgetManagement.Repository
         public SqlCommand sqlCommand;
         public string AddContact(Contact contact)
         {
+            var a = contact.GetType();
+            MessageBox.Show(a.ToString(), "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+
             if (CheckUser(contact))
             {
                 dbReturnMessage = "Error: " + contact.cName+  " already exist on contact list";

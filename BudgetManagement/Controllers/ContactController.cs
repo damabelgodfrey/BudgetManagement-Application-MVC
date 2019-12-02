@@ -14,7 +14,7 @@ namespace BudgetManagement.Controllers
         IContactView _view;
         Contact _selectedUser;
         List<Contact> myContactlist;
-        int userID = UserRepositoryController.GetUserID();
+        int userID = UserRepository.GetUserID();
 
         public ContactController(IContactView view, List<Contact> mycontact)
         {
@@ -55,7 +55,7 @@ namespace BudgetManagement.Controllers
                 if (contactToRemove != null)
                 {
 
-                    ContactRepositoryController contactRepoObj = new ContactRepositoryController();
+                    ContactRepository contactRepoObj = new ContactRepository();
                     string returnMsg = contactRepoObj.DeleteContact(contactToRemove);
                     if (returnMsg == "success")
                     {
@@ -87,7 +87,7 @@ namespace BudgetManagement.Controllers
                 // Add new contact
 
                 this.myContactlist.Add(_selectedUser);
-                ContactRepositoryController contactRepoObj = new ContactRepositoryController();
+                ContactRepository contactRepoObj = new ContactRepository();
 
 
                 string returnMsg = contactRepoObj.AddContact(_selectedUser);
@@ -96,8 +96,8 @@ namespace BudgetManagement.Controllers
                 if (returnMsg == "success")
                 {
                     this._view.ClearGrid();
-                    int id = UserRepositoryController.GetUserID();
-                    ContactRepositoryController contactObj = new ContactRepositoryController();
+                    int id = UserRepository.GetUserID();
+                    ContactRepository contactObj = new ContactRepository();
                      myContactlist = contactObj.GetContact(id);
                     foreach (Contact contact in this.myContactlist)
                     {

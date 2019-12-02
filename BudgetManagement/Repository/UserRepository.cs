@@ -12,7 +12,7 @@ using BudgetManagement.Utilities;
 
 namespace BudgetManagement.Repository
 {
-    class UserRepositoryController: AzureDbConnection
+    class UserRepository: AzureDbConnection
     {
         public static List<User> UserList = new List<User>();
         public SqlCommand sqlCommand;
@@ -76,7 +76,7 @@ namespace BudgetManagement.Repository
         {
             if (UserList.Count()> 0)
             {
-                UserRepositoryController.UserList.Clear();
+                UserRepository.UserList.Clear();
             }
                 
             dbQuery = "SELECT * FROM Users  WHERE [Email] = @Email;";

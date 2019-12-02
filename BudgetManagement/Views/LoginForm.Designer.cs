@@ -32,7 +32,6 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.loginBtn = new System.Windows.Forms.Button();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.LoginPasswordtxt = new System.Windows.Forms.TextBox();
             this.LoginEmailtxt = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -51,6 +50,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.passwordCheckBox = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -70,8 +70,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.passwordCheckBox);
             this.tabPage1.Controls.Add(this.loginBtn);
-            this.tabPage1.Controls.Add(this.radioButton1);
             this.tabPage1.Controls.Add(this.LoginPasswordtxt);
             this.tabPage1.Controls.Add(this.LoginEmailtxt);
             this.tabPage1.Controls.Add(this.label2);
@@ -94,31 +94,24 @@
             this.loginBtn.UseVisualStyleBackColor = true;
             this.loginBtn.Click += new System.EventHandler(this.loginBtn_Click);
             // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(417, 171);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(101, 17);
-            this.radioButton1.TabIndex = 4;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Show Password";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
             // LoginPasswordtxt
             // 
             this.LoginPasswordtxt.Location = new System.Drawing.Point(131, 143);
+            this.LoginPasswordtxt.MaxLength = 10;
             this.LoginPasswordtxt.Name = "LoginPasswordtxt";
+            this.LoginPasswordtxt.PasswordChar = '+';
             this.LoginPasswordtxt.Size = new System.Drawing.Size(323, 20);
             this.LoginPasswordtxt.TabIndex = 3;
+            this.LoginPasswordtxt.Text = "password";
             // 
             // LoginEmailtxt
             // 
             this.LoginEmailtxt.Location = new System.Drawing.Point(131, 79);
+            this.LoginEmailtxt.MaxLength = 50;
             this.LoginEmailtxt.Name = "LoginEmailtxt";
             this.LoginEmailtxt.Size = new System.Drawing.Size(323, 20);
             this.LoginEmailtxt.TabIndex = 2;
+            this.LoginEmailtxt.Text = "test@yahoo.com";
             // 
             // label2
             // 
@@ -272,6 +265,17 @@
             this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             // 
+            // passwordCheckBox
+            // 
+            this.passwordCheckBox.AutoSize = true;
+            this.passwordCheckBox.Location = new System.Drawing.Point(458, 146);
+            this.passwordCheckBox.Name = "passwordCheckBox";
+            this.passwordCheckBox.Size = new System.Drawing.Size(102, 17);
+            this.passwordCheckBox.TabIndex = 6;
+            this.passwordCheckBox.Text = "Show Password";
+            this.passwordCheckBox.UseVisualStyleBackColor = true;
+            this.passwordCheckBox.CheckedChanged += new System.EventHandler(this.passwordCheckBox_CheckedChanged);
+            // 
             // LoginForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -279,6 +283,7 @@
             this.ClientSize = new System.Drawing.Size(819, 456);
             this.Controls.Add(this.groupBox1);
             this.Name = "LoginForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LoginForm";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -297,7 +302,6 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.TextBox LoginPasswordtxt;
         private System.Windows.Forms.TextBox LoginEmailtxt;
         private System.Windows.Forms.Label label2;
@@ -315,5 +319,6 @@
         private System.Windows.Forms.Button Register;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.PictureBox registerSuccessImage;
+        private System.Windows.Forms.CheckBox passwordCheckBox;
     }
 }

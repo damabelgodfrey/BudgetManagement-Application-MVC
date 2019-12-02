@@ -28,25 +28,50 @@ namespace BudgetManagement.Views
                 MessageBox.Show("Please enter Email", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (string.IsNullOrWhiteSpace(password))
+            else if (!Authentication.IsValidEmail(email))
+            {
+                MessageBox.Show("Please enter Email in right format", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            else if (string.IsNullOrWhiteSpace(password))
             {
                 MessageBox.Show("Please enter Email", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
-            }
-            bool result = MainFormController.Authentication(email, password);
-            if (result)
+            } else
             {
-                this.Hide();
-                Dashboard myDashboard = new Dashboard();
-                myDashboard.ShowDialog();       
-            }
-            else
-            {
-                MessageBox.Show("Login Details Incorrect", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                bool result = Authentication.AuthenticateUser(email, password);
+                if (result)
+                {
+                    // this.Hide();
+                    Dashboard myDashboard = new Dashboard();
+                    myDashboard.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("Login Details Incorrect", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
         }
 
+
+        public string PasswordShowToggle
+        {
+            set
+            {
+                if (value == "*")
+                {
+                  
+                    this.LoginPasswordtxt.PasswordChar = '*';
+                }
+                else
+                {
+                    this.LoginPasswordtxt.PasswordChar = '\0';
+
+                }
+            }
+
+        }
         private void Register_Click(object sender, EventArgs e)
         {
             string name = RegisterNameL.Text; ;
@@ -62,6 +87,11 @@ namespace BudgetManagement.Views
             else if (string.IsNullOrWhiteSpace(email))
             {
                 MessageBox.Show("Please Enter Email", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+               
+            }
+            else if (!Authentication.IsValidEmail(email)) {
+                MessageBox.Show("Please Enter email in right format", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             else if (string.IsNullOrWhiteSpace(password))
@@ -82,7 +112,7 @@ namespace BudgetManagement.Views
             else
             {
 
-                string result = MainFormController.RegisterUser(name,email, password, passwordConfirm);
+                string result = Authentication.RegisterUser(name,email, password, passwordConfirm);
                 if(result == "false")
                 {
                     registerSuccessImage.Visible = false;
@@ -97,5 +127,17 @@ namespace BudgetManagement.Views
             }
         }
 
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+           // LoginPasswordtxt.PasswordChar = LoginPasswordtxt.Checked ? '\0' : '*';
+           // this.LoginPasswordtxt.PasswordChar = '\0';
+
+               // }
+        }
+        private void passwordCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            LoginPasswordtxt.PasswordChar = passwordCheckBox.Checked ? '\0' : '*';
+
+        }
     }
 }

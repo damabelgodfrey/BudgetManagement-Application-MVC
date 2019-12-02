@@ -205,9 +205,9 @@ namespace BudgetManagement.Views
             this.contactGrdView.FullRowSelect = true;
             this.contactGrdView.GridLines = true;
             this.contactGrdView.HideSelection = false;
-            this.contactGrdView.Location = new System.Drawing.Point(0, 257);
+            this.contactGrdView.Location = new System.Drawing.Point(0, 264);
             this.contactGrdView.Name = "contactGrdView";
-            this.contactGrdView.Size = new System.Drawing.Size(1019, 234);
+            this.contactGrdView.Size = new System.Drawing.Size(1059, 267);
             this.contactGrdView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.contactGrdView.TabIndex = 35;
             this.contactGrdView.UseCompatibleStateImageBehavior = false;
@@ -228,7 +228,7 @@ namespace BudgetManagement.Views
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1019, 491);
+            this.ClientSize = new System.Drawing.Size(1059, 531);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.contactGrdView);
             this.Controls.Add(this.groupBox3);
