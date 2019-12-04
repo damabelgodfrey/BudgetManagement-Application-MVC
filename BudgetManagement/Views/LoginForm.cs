@@ -12,16 +12,16 @@ using System.Windows.Forms;
 
 namespace BudgetManagement.Views
 {
-    public partial class LoginForm : Form
+    public partial class MyLoginForm : Form
     {
-        public LoginForm()
+        public MyLoginForm()
         {
             InitializeComponent();
         }
 
-        private  void loginBtn_Click(object sender, EventArgs e)
+        private void SubmitBtn_Click(object sender, EventArgs e)
         {
-            string email = LoginEmailtxt.Text; ;
+            string email = loginEmailTxt.Text; ;
             string password = LoginPasswordtxt.Text;
             if (string.IsNullOrWhiteSpace(email))
             {
@@ -42,7 +42,8 @@ namespace BudgetManagement.Views
                 bool result = Authentication.AuthenticateUser(email, password);
                 if (result)
                 {
-                    // this.Hide();
+                    //this.Hide();
+                   // Dispose();
                     Dashboard myDashboard = new Dashboard();
                     myDashboard.ShowDialog();
                 }
@@ -115,11 +116,9 @@ namespace BudgetManagement.Views
                 string result = Authentication.RegisterUser(name,email, password, passwordConfirm);
                 if(result == "false")
                 {
-                    registerSuccessImage.Visible = false;
                     RegisterPassword2L.ResetText();
                     MessageBox.Show("Email already exist", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 } else {
-                    registerSuccessImage.Visible = true;
                     RegisterPasswordL.ResetText();
                     RegisterPassword2L.ResetText();
                 }
@@ -139,5 +138,8 @@ namespace BudgetManagement.Views
             LoginPasswordtxt.PasswordChar = passwordCheckBox.Checked ? '\0' : '*';
 
         }
+
+
+      
     }
 }

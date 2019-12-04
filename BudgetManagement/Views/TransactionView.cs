@@ -1,5 +1,6 @@
 ﻿using BudgetManagement.Controllers;
 using BudgetManagement.Models;
+using BudgetManagement.Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,19 +20,23 @@ namespace BudgetManagement.Views
         public TransactionView()
         {
             InitializeComponent();
+            this.tContactCombobox.DataSource = ContactRepository.ContactList;
+            this.tContactCombobox.DisplayMember = "cName";
+            //this.tContactCombobox.ValueMember = "cID";
+
         }
 
         public string AllContactName
         {
-            get { return this.tContactCombobox.Text; }
-            set { this.tContactCombobox.Text = value; }
+            get { return this.tContactCombobox.DisplayMember; }
 
         }
         public string ViewTransName
         {
             get { return this.tNameTbox.Text; }
 
-            set { this.tNameTbox.Text = value; }
+            set {
+                this.tNameTbox.Text = value; }
         }
         
         public string ViewTransType
@@ -87,7 +92,8 @@ namespace BudgetManagement.Views
 
         private void tContactCombobox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.tcontactTbox.Text = tcontactTbox.Text;
+            this.tcontactTbox.Text = this.tContactCombobox.GetItemText(this.tContactCombobox.SelectedItem); 
+            //transactionController.LoadTransactionView();
 
         }
 
@@ -186,7 +192,7 @@ namespace BudgetManagement.Views
         {
             this.addTBtn.Enabled = false;
             this.DeleteTBtn.Enabled = false;
-            //this.cancelCbBtn.Visible = true;
+            this.cancelTBtn.Visible = true;
             this.UpdateTBtn.Text = "Register Contact";
             this.transDetailBox.Text = "Add Contact";
             this.transDetailBox.BackColor = System.Drawing.ColorTranslator.FromHtml("#d8dde3");
@@ -208,7 +214,7 @@ namespace BudgetManagement.Views
             this.UpdateTBtn.Text = "Update Contact";
             this.addTBtn.Enabled = true;
             this.DeleteTBtn.Enabled = true;
-            this.DeleteTBtn.Visible = false;
+            this.DeleteTBtn.Visible = true;
         }
         //apply zebraline to grid
         public void ApplyStripeToTransactionGrid()
@@ -241,6 +247,17 @@ namespace BudgetManagement.Views
         {
             if (this.transGridView.SelectedItems.Count > 0)
                 this.transactionController.SelectedTransactionChanged(this.transGridView.SelectedItems[0].Text);
+        }
+
+        private void cancelTBtn_Click(object sender, EventArgs e)
+        {
+            this.cancelTBtn.Visible = false;
+            this.addTBtn.Enabled = true;
+            this.DeleteTBtn.Enabled = true;
+            this.UpdateTBtn.Text = "Update Transaction";
+            this.transDetailBox.Text = "Update Transaction";
+            this.transDetailBox.BackColor = System.Drawing.Color.Empty;
+            this.transactionController.LoadTransactionView();
         }
     }
 }

@@ -45,8 +45,8 @@ namespace BudgetManagement.Views
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.payerRBtn = new System.Windows.Forms.RadioButton();
             this.payeeRBtn = new System.Windows.Forms.RadioButton();
+            this.contactGrdViewheader = new MaterialSkin.Controls.MaterialListView();
             this.contactGrdView = new System.Windows.Forms.ListView();
-            this.button1 = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             this.contactGbox.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -65,7 +65,7 @@ namespace BudgetManagement.Views
             // 
             // DeleteCbtn
             // 
-            this.DeleteCbtn.Location = new System.Drawing.Point(19, 115);
+            this.DeleteCbtn.Location = new System.Drawing.Point(19, 124);
             this.DeleteCbtn.Name = "DeleteCbtn";
             this.DeleteCbtn.Size = new System.Drawing.Size(181, 39);
             this.DeleteCbtn.TabIndex = 5;
@@ -199,29 +199,39 @@ namespace BudgetManagement.Views
             this.payeeRBtn.Text = "Payee";
             this.payeeRBtn.UseVisualStyleBackColor = true;
             // 
+            // contactGrdViewheader
+            // 
+            this.contactGrdViewheader.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.contactGrdViewheader.CheckBoxes = true;
+            this.contactGrdViewheader.Depth = 0;
+            this.contactGrdViewheader.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F);
+            this.contactGrdViewheader.FullRowSelect = true;
+            this.contactGrdViewheader.GridLines = true;
+            this.contactGrdViewheader.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.contactGrdViewheader.HideSelection = false;
+            this.contactGrdViewheader.Location = new System.Drawing.Point(0, 197);
+            this.contactGrdViewheader.MouseLocation = new System.Drawing.Point(-1, -1);
+            this.contactGrdViewheader.MouseState = MaterialSkin.MouseState.OUT;
+            this.contactGrdViewheader.Name = "contactGrdViewheader";
+            this.contactGrdViewheader.OwnerDraw = true;
+            this.contactGrdViewheader.Size = new System.Drawing.Size(1059, 49);
+            this.contactGrdViewheader.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.contactGrdViewheader.TabIndex = 37;
+            this.contactGrdViewheader.UseCompatibleStateImageBehavior = false;
+            this.contactGrdViewheader.View = System.Windows.Forms.View.Details;
+            // 
             // contactGrdView
             // 
             this.contactGrdView.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.contactGrdView.FullRowSelect = true;
             this.contactGrdView.GridLines = true;
             this.contactGrdView.HideSelection = false;
-            this.contactGrdView.Location = new System.Drawing.Point(0, 264);
+            this.contactGrdView.Location = new System.Drawing.Point(0, 247);
             this.contactGrdView.Name = "contactGrdView";
-            this.contactGrdView.Size = new System.Drawing.Size(1059, 267);
-            this.contactGrdView.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.contactGrdView.TabIndex = 35;
+            this.contactGrdView.Size = new System.Drawing.Size(1059, 284);
+            this.contactGrdView.TabIndex = 38;
             this.contactGrdView.UseCompatibleStateImageBehavior = false;
             this.contactGrdView.View = System.Windows.Forms.View.Details;
-            this.contactGrdView.SelectedIndexChanged += new System.EventHandler(this.contactGrdView_SelectedIndexChanged);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(0, 235);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(151, 23);
-            this.button1.TabIndex = 36;
-            this.button1.Text = "ID";
-            this.button1.UseVisualStyleBackColor = true;
+            this.contactGrdView.SelectedIndexChanged += new System.EventHandler(this.contactGrdView_SelectedIndexChanged_1);
             // 
             // ContactView
             // 
@@ -229,8 +239,8 @@ namespace BudgetManagement.Views
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1059, 531);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.contactGrdView);
+            this.Controls.Add(this.contactGrdViewheader);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.contactGbox);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -263,7 +273,7 @@ namespace BudgetManagement.Views
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.RadioButton payerRBtn;
         private System.Windows.Forms.RadioButton payeeRBtn;
-        internal ListView contactGrdView;
-        private Button button1;
+        private MaterialSkin.Controls.MaterialListView contactGrdViewheader;
+        private ListView contactGrdView;
     }
 }

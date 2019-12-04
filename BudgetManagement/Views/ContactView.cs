@@ -213,5 +213,11 @@ namespace BudgetManagement.Views
             if (this.contactGrdView.SelectedItems.Count > 0)
                 this.contactController.SelectedContactChanged(this.contactGrdView.SelectedItems[0].Text);
         }
+
+        private void contactGrdView_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            if (this.contactGrdView.SelectedItems.Count > 0)
+                this.contactController.SelectedContactChanged(this.contactGrdView.SelectedItems[0].Text);
+        }
     }
 }

@@ -20,20 +20,31 @@ namespace BudgetManagement.Controllers
     {
         this._view = view;
         this.myTransactionlist = mytransaction;
-        view.SetTransactionController(this);
+        _view.SetTransactionController(this);
     }
 
     public void AddNewTransaction()
     {
-        //string id = _users.FindLastIndex.GetType();
+            //string id = _users.FindLastIndex.GetType();
 
-
-        _selectedTransaction = new Transaction(userID, userID, "", "", "",0,"","");
+            try
+            {
+                _selectedTransaction = new Transaction(userID, userID, "", "", "", 0, "", "");
+            }
+            catch (Exception)
+            {
+                DateTime now = DateTime.Now;
+                string date = now.ToString();
+                _selectedTransaction = new RecurringTransaction(userID, userID, "", "", date, 0, "", "","", date);
+            }
+        
 
         this.updateViewDetailValues(_selectedTransaction);
         this._view.CanModifyID = false;
 
     }
+
+    
     public void RemoveTransaction()
     {
         string id = this._view.GetIdOfSelectedTransactionInGrid();
@@ -56,7 +67,7 @@ namespace BudgetManagement.Controllers
             {
 
                 TransactionRepository transactionRepoObj = new TransactionRepository();
-                string returnMsg = transactionRepoObj.DeleteTransaction(transactionToRemove,"");
+                string returnMsg = transactionRepoObj.DeleteTransaction(transactionToRemove);
                 if (returnMsg == "success")
                 {
                     myTransactionlist = transactionRepoObj.GetTransaction(userID);
@@ -86,12 +97,12 @@ namespace BudgetManagement.Controllers
         {
             // Add new transaction
 
-            this.myTransactionlist.Add(_selectedTransaction);
+           // this.myTransactionlist.Add(_selectedTransaction);
             TransactionRepository transactionRepoObj = new TransactionRepository();
 
 
-            string returnMsg = transactionRepoObj.AddTransaction(_selectedTransaction,"");
-            MessageBox.Show(returnMsg.ToString(), "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            string returnMsg = transactionRepoObj.AddTransaction(_selectedTransaction);
+           // MessageBox.Show(returnMsg.ToString(), "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             if (returnMsg == "success")
             {
@@ -102,25 +113,34 @@ namespace BudgetManagement.Controllers
                 foreach (Transaction transaction in this.myTransactionlist)
                 {
                     this._view.AddTransactionToGrid(transaction); //UPDATE GRIDE
-                    MessageBox.Show(transaction.transID + " Updating view", "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
 
                 }
-
                 MessageBox.Show("ADDED SUCCESSFULLY", "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
             }
             else
             {
-                MessageBox.Show(returnMsg.ToString() + "  Transaction was not able to update to database", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(returnMsg.ToString() + "  Transaction was not able to be added to database", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             }
         }
         else
         {
-            // Update existing transaction
-            this._view.UpdateGridWithChangedTransaction(_selectedTransaction);
-        }
+                // Update existing transaction
+                TransactionRepository transactionRepoObj = new TransactionRepository();
+                string returnMsg = transactionRepoObj.UpdateTransaction(_selectedTransaction);
+                if(returnMsg == "success")
+                {
+                    this._view.UpdateGridWithChangedTransaction(_selectedTransaction);
+                    MessageBox.Show(returnMsg, "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                }
+                else
+                {
+                    MessageBox.Show(returnMsg, "Update Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                }
+            }
         _view.SetSelectedTransactionInGrid(_selectedTransaction);
         this._view.CanModifyID = false;
     }

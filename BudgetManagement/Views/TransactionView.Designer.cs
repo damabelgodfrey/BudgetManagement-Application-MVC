@@ -127,6 +127,7 @@ namespace BudgetManagement.Views
             // 
             // tContactCombobox
             // 
+            this.tContactCombobox.DropDownHeight = 200;
             this.tContactCombobox.FormattingEnabled = true;
             this.tContactCombobox.Location = new System.Drawing.Point(6, 47);
             this.tContactCombobox.Name = "tContactCombobox";
@@ -136,10 +137,9 @@ namespace BudgetManagement.Views
             // 
             // tDatePicker
             // 
-            this.tDatePicker.AllowDrop = true;
-            this.tDatePicker.CustomFormat = "MM/dd/yyyy hh:mm:ss tt";
+            this.tDatePicker.CustomFormat = "dd-MM-yyyy hh:mm";
             this.tDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.tDatePicker.Location = new System.Drawing.Point(494, 34);
+            this.tDatePicker.Location = new System.Drawing.Point(494, 11);
             this.tDatePicker.Name = "tDatePicker";
             this.tDatePicker.Size = new System.Drawing.Size(284, 20);
             this.tDatePicker.TabIndex = 17;
@@ -285,6 +285,7 @@ namespace BudgetManagement.Views
             this.cancelTBtn.TabIndex = 4;
             this.cancelTBtn.Text = "Cancel";
             this.cancelTBtn.UseVisualStyleBackColor = true;
+            this.cancelTBtn.Click += new System.EventHandler(this.cancelTBtn_Click);
             // 
             // transGridView
             // 

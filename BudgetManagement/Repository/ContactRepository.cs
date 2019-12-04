@@ -20,9 +20,7 @@ namespace BudgetManagement.Repository
         public SqlCommand sqlCommand;
         public string AddContact(Contact contact)
         {
-            var a = contact.GetType();
-            MessageBox.Show(a.ToString(), "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+            
 
             if (CheckUser(contact))
             {

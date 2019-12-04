@@ -8,6 +8,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -19,7 +20,6 @@ namespace BudgetManagement.Views
         {
             InitializeComponent();
             Authentication.SetUpUserDetails();
-
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -66,7 +66,11 @@ namespace BudgetManagement.Views
 
             TransactionController tcontroller = new TransactionController(tview, mytrans);
             tcontroller.LoadTransactionView();
+
+           //Application.Run(new TransactionView());
             tview.ShowDialog();
         }
+
+     
     }
 }
