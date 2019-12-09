@@ -15,6 +15,7 @@ namespace BudgetManagement.Controllers
         Contact _selectedUser;
         List<Contact> myContactlist;
         int userID = UserRepository.GetUserID();
+        string contactName = TransactionController.GetNewContactName();
 
         public ContactController(IContactView view, List<Contact> mycontact)
         {
@@ -28,7 +29,7 @@ namespace BudgetManagement.Controllers
             //string id = _users.FindLastIndex.GetType();
             
 
-            _selectedUser = new Contact(userID, userID, "","","");
+            _selectedUser = new Contact(userID, userID, contactName, "","");
 
             this.updateViewDetailValues(_selectedUser);
             this._view.CanModifyID = false;
@@ -59,7 +60,7 @@ namespace BudgetManagement.Controllers
                     string returnMsg = contactRepoObj.DeleteContact(contactToRemove);
                     if (returnMsg == "success")
                     {
-                        myContactlist = contactRepoObj.GetContact(userID);
+                        myContactlist = contactRepoObj.GetSavedContact(userID);
                         int newSelectedIndex = this.myContactlist.IndexOf(contactToRemove);
                         //this.myContactlist.Remove(contactToRemove);
                         this._view.RemoveContactFromGrid(contactToRemove);
@@ -98,7 +99,7 @@ namespace BudgetManagement.Controllers
                     this._view.ClearGrid();
                     int id = UserRepository.GetUserID();
                     ContactRepository contactObj = new ContactRepository();
-                     myContactlist = contactObj.GetContact(id);
+                     myContactlist = contactObj.GetSavedContact(id);
                     foreach (Contact contact in this.myContactlist)
                     {
                     this._view.AddContactToGrid(contact); //UPDATE GRIDE
@@ -146,6 +147,7 @@ namespace BudgetManagement.Controllers
             _view.CID = contact.cID.ToString();
             _view.ContactType = contact.cType;
         }
+
 
         private void updateContactWithViewValues(Contact contact)
         {

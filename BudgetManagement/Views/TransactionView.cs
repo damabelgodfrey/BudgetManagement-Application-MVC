@@ -16,11 +16,13 @@ namespace BudgetManagement.Views
     public partial class TransactionView : Form, ITransactionView
     {
         TransactionController transactionController;
+        private static TransactionView TransactionForm;
+        private static readonly object TransactionPadlock = new object();
         // ContactRepositoryController contactRepoController;
         public TransactionView()
         {
             InitializeComponent();
-            this.tContactCombobox.DataSource = ContactRepository.ContactList;
+            this.tContactCombobox.DataSource = ContactRepository.GetContactList();
             this.tContactCombobox.DisplayMember = "cName";
             //this.tContactCombobox.ValueMember = "cID";
 
@@ -107,6 +109,19 @@ namespace BudgetManagement.Views
             parent.SubItems.Add(transaction.transType);
             ApplyStripeToTransactionGrid();
         }
+
+        internal static TransactionView GetTransactionForm()
+        {
+            lock (TransactionPadlock)
+            {
+                if (TransactionForm == null || TransactionForm.IsDisposed)
+                {
+                    TransactionForm = new TransactionView();
+                }
+                return TransactionForm;
+            }
+        }
+
 
         public void ClearGrid()
         {

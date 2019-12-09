@@ -14,7 +14,7 @@ namespace BudgetManagement.Repository
 {
     class UserRepository: AzureDbConnection
     {
-        public static List<User> UserList = new List<User>();
+        private static List<User> UserList = new List<User>();
         public SqlCommand sqlCommand;
 
         internal static int GetUserID() {
@@ -24,7 +24,15 @@ namespace BudgetManagement.Repository
 
         }
 
-        internal static string getKey()
+        internal static List<User> GetUserList(){
+            return UserList;
+        }
+        internal static void ClearUserList()
+        {
+            UserList.Clear();
+        }
+
+        internal static string GetKey()
         {
             Key = "b14ca5898a4e4133bbce2ea2315a1916";
             return Key;
@@ -47,7 +55,7 @@ namespace BudgetManagement.Repository
                     sqlCommand = new SqlCommand(dbQuery, sqlConnection);
                     sqlCommand.Parameters.AddWithValue("@Name", user.uName);
                     sqlCommand.Parameters.AddWithValue("@Email", user.uEmail);
-                    Key = getKey();
+                    Key = GetKey();
                     String EncriptPassword = DataCypher.EncryptString(Key, user.uPassword); //encript password
                     sqlCommand.Parameters.AddWithValue("@Password", EncriptPassword);
                     sqlConnection.Open();
@@ -76,7 +84,7 @@ namespace BudgetManagement.Repository
         {
             if (UserList.Count()> 0)
             {
-                UserRepository.UserList.Clear();
+                ClearUserList();
             }
                 
             dbQuery = "SELECT * FROM Users  WHERE [Email] = @Email;";

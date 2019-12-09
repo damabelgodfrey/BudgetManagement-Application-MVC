@@ -13,35 +13,32 @@ namespace BudgetManagement.Repository
 {
     class TransactionRepository : AzureDbConnection
     {
-        public static List<Transaction> TransactionList = new List<Transaction>();
-        public static List<RecurringTransaction> RecurringTransList = new List<RecurringTransaction>();
+        private static List<Transaction> TransactionList = new List<Transaction>();
+        private static List<RecurringTransaction> RecurringTransList = new List<RecurringTransaction>();
+      
 
         //add contact
         public SqlCommand sqlCommand;
         public string AddTransaction(Transaction transaction)
         {
-            var a = transaction.GetType();
+            dbReturnMessage = "";
             if (transaction is RecurringTransaction)
             {
-                MessageBox.Show(a.ToString(), "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // dbQuery = "INSERT INTO RECURRINGTRANSACTIONS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[StartDate],[Period]) VALUES(@UserId,@Name, @type,@Amount,@Note,@ContactName,@StartDate,@Period);";
+
 
             }
 
             if (transaction.GetType().IsAssignableFrom(typeof(Transaction)))
             {
-               // MessageBox.Show("Transaction", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-               // MessageBox.Show("RecurringTransaction","ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-
-
-            dbReturnMessage = "";
-          
-               // dbQuery = "INSERT INTO RECURRINGTRANSACTIONS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[StartDate],[Period]) VALUES(@UserId,@Name, @type,@Amount,@Note,@ContactName,@StartDate,@Period);";
                 dbQuery = "INSERT INTO TRANSACTIONS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[StartDate]) VALUES(@UserId,@Name, @Type,@Amount,@Note,@ContactName,@StartDate);";
+            }
+            if (transaction.GetType().IsAssignableFrom(typeof(RecurringTransaction)))
+            {
+                // dbQuery = "INSERT INTO RECURRINGTRANSACTIONS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[StartDate],[Period]) VALUES(@UserId,@Name, @type,@Amount,@Note,@ContactName,@StartDate,@Period);";
+
+            }
+               // dbQuery = "INSERT INTO RECURRINGTRANSACTIONS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[StartDate],[Period]) VALUES(@UserId,@Name, @type,@Amount,@Note,@ContactName,@StartDate,@Period);";
 
             //dbQuery = "INSERT INTO Contacts([UserId],[Name],[Address],[Type]) VALUES(@UserId,@Name, @address, @type);";
 
@@ -53,14 +50,13 @@ namespace BudgetManagement.Repository
                 sqlCommand.Parameters.AddWithValue("@Note", transaction.transNote);
                 sqlCommand.Parameters.AddWithValue("@ContactName", transaction.transContact);
                 sqlCommand.Parameters.AddWithValue("@StartDate", transaction.TransDate);
-             MessageBox.Show(transaction.transID+transaction.transName+ transaction.transType+ transaction.transAmount+ transaction.transNote+ transaction.transContact+ transaction.TransDate+"RecurringTransaction","ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(transaction.transID+transaction.transName+ transaction.transType+ transaction.transAmount+ transaction.transNote+ transaction.transContact+ transaction.TransDate+"RecurringTransaction","ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (transaction.GetType().IsAssignableFrom(typeof(RecurringTransaction)))
+            {
+                 sqlCommand.Parameters.AddWithValue("@EndDate", transaction.TransDate);
+                sqlCommand.Parameters.AddWithValue("@period", transaction.TransDate);
 
-            // if (frequency == "Recurrent")
-            // {
-            // sqlCommand.Parameters.AddWithValue("@EndDate", transaction.TransDate);
-            // sqlCommand.Parameters.AddWithValue("@period", transaction.TransDate);
-            // }
-
+            }
             try
             {
                     sqlConnection.Open();
@@ -88,7 +84,7 @@ namespace BudgetManagement.Repository
             return dbReturnMessage;
         }
         //list transaction
-        public List<Transaction> GetTransaction(int userId)
+        public List<Transaction> GetSavedTransaction(int userId)
         {
             TransactionList.Clear(); //fetch updated contact list from database into contactlist;
             dbQuery = "SELECT * FROM TRANSACTIONS  WHERE [UserId] = @UserId ;";
@@ -360,6 +356,13 @@ namespace BudgetManagement.Repository
             string endDate = Convert.ToString(record[9]);
             RecurringTransaction obj = new RecurringTransaction(id, UserId, Name, Note, TransDate, Amount, Type, CountactName, Transfrequency, endDate);
             RecurringTransList.Add(obj); //add contact to contact list
+        }
+
+        //access list of transation
+        public static List<Transaction> RequestTransactionList()
+        {
+
+            return TransactionList;
         }
 
     }

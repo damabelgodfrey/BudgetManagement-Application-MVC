@@ -15,8 +15,15 @@ namespace BudgetManagement.Controllers
     Transaction _selectedTransaction;
     List<Transaction> myTransactionlist;
     int userID = UserRepository.GetUserID();
+    private static string NewContactName = "";
 
-    public TransactionController(ITransactionView view, List<Transaction> mytransaction)
+
+        internal static string GetNewContactName()
+        {
+            return NewContactName;
+        }
+
+        public TransactionController(ITransactionView view, List<Transaction> mytransaction)
     {
         this._view = view;
         this.myTransactionlist = mytransaction;
@@ -70,7 +77,7 @@ namespace BudgetManagement.Controllers
                 string returnMsg = transactionRepoObj.DeleteTransaction(transactionToRemove);
                 if (returnMsg == "success")
                 {
-                    myTransactionlist = transactionRepoObj.GetTransaction(userID);
+                    myTransactionlist = transactionRepoObj.GetSavedTransaction(userID);
                     int newSelectedIndex = this.myTransactionlist.IndexOf(transactionToRemove);
                     //this.myTransactionlist.Remove(transactionToRemove);
                     this._view.RemoveTransactionFromGrid(transactionToRemove);
@@ -109,14 +116,34 @@ namespace BudgetManagement.Controllers
                 this._view.ClearGrid();
                 int id = UserRepository.GetUserID();
                 TransactionRepository transactionObj = new TransactionRepository();
-                myTransactionlist = transactionObj.GetTransaction(id);
+                myTransactionlist = transactionObj.GetSavedTransaction(id);
                 foreach (Transaction transaction in this.myTransactionlist)
                 {
                     this._view.AddTransactionToGrid(transaction); //UPDATE GRIDE
 
                 }
                 MessageBox.Show("ADDED SUCCESSFULLY", "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                   string Dcontact= _selectedTransaction.transContact;
+                   List<Contact> dContactList = ContactRepository.GetContactList();
 
+            
+                    int contactExist = 0;
+                    foreach (var contact in dContactList)
+                    {
+                        if(Dcontact == contact.cName)
+                        {
+                            contactExist = 1;
+                        }
+                    }
+                    if (contactExist == 0)
+                    {
+                        NewContactName = _selectedTransaction.transContact;
+                        ContactView ContactForm = ContactView.GetContactForm();
+                        ContactController controller = new ContactController(ContactForm, dContactList);
+                        controller.LoadContactView();
+
+                        ContactForm.Show();
+                    }
             }
             else
             {

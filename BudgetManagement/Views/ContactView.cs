@@ -16,12 +16,37 @@ namespace BudgetManagement.Views
     public partial class ContactView : Form, IContactView
     {
         ContactController contactController;
-       // ContactRepositoryController contactRepoController;
+        private static ContactView ContactForm;
+        private static readonly object ContactPadlock = new object();
+
+        // ContactRepositoryController contactRepoController;
         public ContactView()
         {
             InitializeComponent();
+            string contactName = TransactionController.GetNewContactName();
+            if (contactName !="")
+            {
+                //click n button
+                addCBtn.PerformClick();
+                this.nameCtxt.Text = contactName;
+            
+            }
         }
+        //Open contact form.
+        public static ContactView GetContactForm()
+        {
+            lock (ContactPadlock)
+            {
+                if (ContactForm == null || ContactForm.IsDisposed)
+                {
+                    ContactForm = new ContactView();
+                    ContactForm.Focus();
 
+                }
+          
+                return ContactForm;
+            }
+        }
         public string ContactName
         {
             get { return this.nameCtxt.Text; }
@@ -106,10 +131,13 @@ namespace BudgetManagement.Views
         }
         public string GetIdOfSelectedContactInGrid()
         {
-            if (this.contactGrdView.SelectedItems.Count > 0)
+            if (this.contactGrdView.SelectedItems.Count > 0) {
                 return this.contactGrdView.SelectedItems[0].Text;
+            }
             else
+            {
                 return "";
+            }
         }
 
         public void RemoveContactFromGrid(Contact contact)
@@ -202,22 +230,11 @@ namespace BudgetManagement.Views
             }
         }
 
-        private void contactListView_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-            if(this.contactGrdView.SelectedItems.Count > 0)
-                this.contactController.SelectedContactChanged(this.contactGrdView.SelectedItems[0].Text);
-        }
-
-        private void contactGrdView_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (this.contactGrdView.SelectedItems.Count > 0)
-                this.contactController.SelectedContactChanged(this.contactGrdView.SelectedItems[0].Text);
-        }
-
         private void contactGrdView_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             if (this.contactGrdView.SelectedItems.Count > 0)
                 this.contactController.SelectedContactChanged(this.contactGrdView.SelectedItems[0].Text);
         }
+
     }
 }

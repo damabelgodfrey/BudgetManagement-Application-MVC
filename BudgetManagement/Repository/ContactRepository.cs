@@ -13,15 +13,12 @@ namespace BudgetManagement.Repository
 {
     class ContactRepository : AzureDbConnection
     {
-        public static List<Contact> ContactList = new List<Contact>();
-
+        private static List<Contact> ContactList = new List<Contact>();
         //add contact
-
         public SqlCommand sqlCommand;
+
         public string AddContact(Contact contact)
         {
-            
-
             if (CheckUser(contact))
             {
                 dbReturnMessage = "Error: " + contact.cName+  " already exist on contact list";
@@ -99,6 +96,7 @@ namespace BudgetManagement.Repository
             return dbReturnMessage;
         }
 
+        //Udate contact 
         public string UpdateContact(Contact contact)
         {
 
@@ -130,10 +128,21 @@ namespace BudgetManagement.Repository
             return dbReturnMessage;
         }
 
-        // select contact
-        public  List<Contact> GetContact(int userId)
+        //get list of contact
+        internal static List<Contact> GetContactList()
         {
-            ContactList.Clear(); //fetch updated contact list from database into contactlist;
+            return ContactList;
+        }
+
+        //clear contact list
+        internal static void ClearContactList()
+        {
+            ContactList.Clear();
+        }
+        // Get contact from database
+        public List<Contact> GetSavedContact(int userId)
+        {
+            ClearContactList(); //fetch updated contact list from database into contactlist;
 
             dbQuery = "SELECT * FROM CONTACTS  WHERE [UserId] = @UserId ;";
             sqlCommand = new SqlCommand(dbQuery, sqlConnection);

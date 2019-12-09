@@ -23,8 +23,8 @@ namespace BudgetManagement.Controllers
         {
 
             string response;
-            String Key = UserRepository.getKey();
-            List<User> myUserlist = UserRepository.UserList;
+            String Key = UserRepository.GetKey();
+            List<User> myUserlist = UserRepository.GetUserList();
             // string decriptPassword = DataCypher.EncryptString(Key, password);
             UserRepository usd = new UserRepository();
              response = usd.VerifyUser(email, password);
@@ -76,16 +76,16 @@ namespace BudgetManagement.Controllers
         public static string SetUpUserDetails()
         {
 
-            List<User> usl = UserRepository.UserList;
+            List<User> usl = UserRepository.GetUserList();
 
             try
             {   
                 //get contacts
                 ContactRepository contactRepoObj = new ContactRepository();
-                contactRepoObj.GetContact(usl[0].uID);
+                contactRepoObj.GetSavedContact(usl[0].uID);
                 //get transaction
                 TransactionRepository transRepoObj = new TransactionRepository();
-                transRepoObj.GetTransaction(usl[0].uID);
+                transRepoObj.GetSavedTransaction(usl[0].uID);
                 transRepoObj.GetRecurringTransaction(usl[0].uID);
                 //get events
                 EventRepository eventRepoObj = new EventRepository();
