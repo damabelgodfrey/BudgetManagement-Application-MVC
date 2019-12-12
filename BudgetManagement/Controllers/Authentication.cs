@@ -73,7 +73,7 @@ namespace BudgetManagement.Controllers
 
         // setup user details
         // Contact list, transaction list, events list etc from database into program
-        public static string SetUpUserDetails()
+        public static void SetUpUserDetails()
         {
 
             List<User> usl = UserRepository.GetUserList();
@@ -85,19 +85,21 @@ namespace BudgetManagement.Controllers
                 contactRepoObj.GetSavedContact(usl[0].uID);
                 //get transaction
                 TransactionRepository transRepoObj = new TransactionRepository();
-                transRepoObj.GetSavedTransaction(usl[0].uID);
-                transRepoObj.GetRecurringTransaction(usl[0].uID);
+                transRepoObj.GetSavedRecurringTransaction(usl[0].uID);
+                TransactionRepository transRepoObj2 = new TransactionRepository();
+
+                transRepoObj2.GetSavedTransaction(usl[0].uID);
                 //get events
                 EventRepository eventRepoObj = new EventRepository();
                 eventRepoObj.GetEvents(usl[0].uID);
                 eventRepoObj.GetRecurringEvents(usl[0].uID);
-                return "success";
+               // return "success";
 
             }
             catch (Exception)
             {
 
-                return "fail";
+                //return "fail";
 
             }
         }

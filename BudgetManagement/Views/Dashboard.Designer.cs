@@ -42,7 +42,7 @@
             // 
             // contactView
             // 
-            this.contactView.Location = new System.Drawing.Point(302, 46);
+            this.contactView.Location = new System.Drawing.Point(291, 178);
             this.contactView.Name = "contactView";
             this.contactView.Size = new System.Drawing.Size(278, 174);
             this.contactView.TabIndex = 0;
@@ -52,7 +52,7 @@
             // 
             // transactionview
             // 
-            this.transactionview.Location = new System.Drawing.Point(605, 55);
+            this.transactionview.Location = new System.Drawing.Point(618, 178);
             this.transactionview.Name = "transactionview";
             this.transactionview.Size = new System.Drawing.Size(305, 174);
             this.transactionview.TabIndex = 1;

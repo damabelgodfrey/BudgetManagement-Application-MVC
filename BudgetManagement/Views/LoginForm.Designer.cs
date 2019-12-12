@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.LoginPasswordtxt = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
@@ -38,6 +39,7 @@
             this.SubmitBtn = new MaterialSkin.Controls.MaterialRaisedButton();
             this.passwordCheckBox = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.showPassword = new System.Windows.Forms.CheckBox();
             this.materialLabel6 = new MaterialSkin.Controls.MaterialLabel();
             this.materialLabel5 = new MaterialSkin.Controls.MaterialLabel();
             this.materialLabel4 = new MaterialSkin.Controls.MaterialLabel();
@@ -50,13 +52,11 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.materialRaisedButton1 = new MaterialSkin.Controls.MaterialRaisedButton();
-            this.showPassword = new System.Windows.Forms.CheckBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -86,6 +86,16 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Login";
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::BudgetManagement.Properties.Resources.Logo;
+            this.pictureBox1.Location = new System.Drawing.Point(225, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(123, 76);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 11;
+            this.pictureBox1.TabStop = false;
+            // 
             // LoginPasswordtxt
             // 
             this.LoginPasswordtxt.Depth = 0;
@@ -101,19 +111,19 @@
             this.LoginPasswordtxt.Size = new System.Drawing.Size(301, 23);
             this.LoginPasswordtxt.TabIndex = 10;
             this.LoginPasswordtxt.TabStop = false;
-            this.LoginPasswordtxt.Text = "password";
+            this.LoginPasswordtxt.Text = "admin";
             this.LoginPasswordtxt.UseSystemPasswordChar = false;
             // 
             // materialLabel2
             // 
             this.materialLabel2.AutoSize = true;
             this.materialLabel2.Depth = 0;
-            this.materialLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.materialLabel2.Font = new System.Drawing.Font("Roboto", 11F);
             this.materialLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.materialLabel2.Location = new System.Drawing.Point(58, 154);
             this.materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel2.Name = "materialLabel2";
-            this.materialLabel2.Size = new System.Drawing.Size(75, 18);
+            this.materialLabel2.Size = new System.Drawing.Size(75, 19);
             this.materialLabel2.TabIndex = 9;
             this.materialLabel2.Text = "Password";
             // 
@@ -121,12 +131,12 @@
             // 
             this.materialLabel1.AutoSize = true;
             this.materialLabel1.Depth = 0;
-            this.materialLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.materialLabel1.Font = new System.Drawing.Font("Roboto", 11F);
             this.materialLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.materialLabel1.Location = new System.Drawing.Point(70, 106);
             this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel1.Name = "materialLabel1";
-            this.materialLabel1.Size = new System.Drawing.Size(45, 18);
+            this.materialLabel1.Size = new System.Drawing.Size(47, 19);
             this.materialLabel1.TabIndex = 8;
             this.materialLabel1.Text = "Email";
             // 
@@ -145,7 +155,7 @@
             this.loginEmailTxt.Size = new System.Drawing.Size(301, 23);
             this.loginEmailTxt.TabIndex = 2;
             this.loginEmailTxt.TabStop = false;
-            this.loginEmailTxt.Text = "test@yahoo.com";
+            this.loginEmailTxt.Text = "admin@yahoo.com";
             this.loginEmailTxt.UseSystemPasswordChar = false;
             // 
             // SubmitBtn
@@ -195,16 +205,27 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Register";
             // 
+            // showPassword
+            // 
+            this.showPassword.AutoSize = true;
+            this.showPassword.Location = new System.Drawing.Point(449, 211);
+            this.showPassword.Name = "showPassword";
+            this.showPassword.Size = new System.Drawing.Size(102, 17);
+            this.showPassword.TabIndex = 19;
+            this.showPassword.Text = "Show Password";
+            this.showPassword.UseVisualStyleBackColor = true;
+            this.showPassword.CheckedChanged += new System.EventHandler(this.showPassword_CheckedChanged);
+            // 
             // materialLabel6
             // 
             this.materialLabel6.AutoSize = true;
             this.materialLabel6.Depth = 0;
-            this.materialLabel6.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.materialLabel6.Font = new System.Drawing.Font("Roboto", 11F);
             this.materialLabel6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.materialLabel6.Location = new System.Drawing.Point(40, 113);
             this.materialLabel6.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel6.Name = "materialLabel6";
-            this.materialLabel6.Size = new System.Drawing.Size(51, 18);
+            this.materialLabel6.Size = new System.Drawing.Size(53, 19);
             this.materialLabel6.TabIndex = 18;
             this.materialLabel6.Text = "EMAIL";
             // 
@@ -212,12 +233,12 @@
             // 
             this.materialLabel5.AutoSize = true;
             this.materialLabel5.Depth = 0;
-            this.materialLabel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.materialLabel5.Font = new System.Drawing.Font("Roboto", 11F);
             this.materialLabel5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.materialLabel5.Location = new System.Drawing.Point(32, 211);
             this.materialLabel5.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel5.Name = "materialLabel5";
-            this.materialLabel5.Size = new System.Drawing.Size(78, 18);
+            this.materialLabel5.Size = new System.Drawing.Size(74, 19);
             this.materialLabel5.TabIndex = 17;
             this.materialLabel5.Text = "CONFIRM";
             // 
@@ -225,12 +246,12 @@
             // 
             this.materialLabel4.AutoSize = true;
             this.materialLabel4.Depth = 0;
-            this.materialLabel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.materialLabel4.Font = new System.Drawing.Font("Roboto", 11F);
             this.materialLabel4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.materialLabel4.Location = new System.Drawing.Point(24, 163);
             this.materialLabel4.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel4.Name = "materialLabel4";
-            this.materialLabel4.Size = new System.Drawing.Size(96, 18);
+            this.materialLabel4.Size = new System.Drawing.Size(88, 19);
             this.materialLabel4.TabIndex = 16;
             this.materialLabel4.Text = "PASSWORD";
             // 
@@ -238,17 +259,19 @@
             // 
             this.materialLabel3.AutoSize = true;
             this.materialLabel3.Depth = 0;
-            this.materialLabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.materialLabel3.Font = new System.Drawing.Font("Roboto", 11F);
             this.materialLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.materialLabel3.Location = new System.Drawing.Point(38, 72);
             this.materialLabel3.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel3.Name = "materialLabel3";
-            this.materialLabel3.Size = new System.Drawing.Size(51, 18);
+            this.materialLabel3.Size = new System.Drawing.Size(52, 19);
             this.materialLabel3.TabIndex = 15;
             this.materialLabel3.Text = "NAME";
             // 
             // Register
             // 
+            this.Register.AutoSize = true;
+            this.Register.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Register.Depth = 0;
             this.Register.Icon = null;
             this.Register.Location = new System.Drawing.Point(196, 255);
@@ -256,7 +279,7 @@
             this.Register.MouseState = MaterialSkin.MouseState.HOVER;
             this.Register.Name = "Register";
             this.Register.Primary = true;
-            this.Register.Size = new System.Drawing.Size(194, 32);
+            this.Register.Size = new System.Drawing.Size(194, 36);
             this.Register.TabIndex = 14;
             this.Register.Text = "SUBMIT";
             this.Register.UseVisualStyleBackColor = true;
@@ -360,27 +383,6 @@
             this.materialRaisedButton1.TabIndex = 2;
             this.materialRaisedButton1.UseVisualStyleBackColor = true;
             // 
-            // showPassword
-            // 
-            this.showPassword.AutoSize = true;
-            this.showPassword.Location = new System.Drawing.Point(449, 211);
-            this.showPassword.Name = "showPassword";
-            this.showPassword.Size = new System.Drawing.Size(102, 17);
-            this.showPassword.TabIndex = 19;
-            this.showPassword.Text = "Show Password";
-            this.showPassword.UseVisualStyleBackColor = true;
-            this.showPassword.CheckedChanged += new System.EventHandler(this.showPassword_CheckedChanged);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::BudgetManagement.Properties.Resources.Logo;
-            this.pictureBox1.Location = new System.Drawing.Point(225, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(123, 76);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 11;
-            this.pictureBox1.TabStop = false;
-            // 
             // MyLoginForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -394,10 +396,10 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

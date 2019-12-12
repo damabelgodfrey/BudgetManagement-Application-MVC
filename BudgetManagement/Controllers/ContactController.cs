@@ -92,8 +92,6 @@ namespace BudgetManagement.Controllers
 
 
                 string returnMsg = contactRepoObj.AddContact(_selectedUser);
-                MessageBox.Show(returnMsg.ToString(), "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
                 if (returnMsg == "success")
                 {
                     this._view.ClearGrid();
@@ -103,9 +101,6 @@ namespace BudgetManagement.Controllers
                     foreach (Contact contact in this.myContactlist)
                     {
                     this._view.AddContactToGrid(contact); //UPDATE GRIDE
-                        MessageBox.Show(contact.cID+" Updating view", "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-
                     }
 
                     MessageBox.Show("ADDED SUCCESSFULLY", "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Warning);

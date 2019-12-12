@@ -25,5 +25,23 @@ namespace BudgetManagement.Controllers
         double ViewTransAmount { get; set; }
         string ViewTransType { get; set; }
         string ViewTransName { get; set; }
+
+        void ClearRGrid();
+       // void AddRTransactionToGrid(RecurringTransaction trans);
+       // void UpdateGridWithChangedRTransaction(RecurringTransaction trans);
+       // void RemoveRTransactionFromGrid(RecurringTransaction trans);
+        string GetIdOfSelectedRTransactionInGrid();
+       // void SetSelectedRTransactionInGrid(RecurringTransaction trans);
+
+        bool CanModifyRID { set; }
+        string ViewRTransID { get; set; }
+        string ViewRTransNote { get; set; }
+        string ViewRTransContact { get; set; }
+        double ViewRTransAmount { get; set; }
+        string ViewRTransType { get; set; }
+        string ViewRTransName { get; set; }
+        string ViewRTransStartDate { get; set; }
+        string ViewRTransEndDate { get; set; }
+        string viewRTransFrequency { get; set; }
     }
 }

@@ -8,15 +8,12 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Data;
 using System.Windows.Forms;
-
 namespace BudgetManagement.Repository
 {
     class TransactionRepository : AzureDbConnection
     {
         private static List<Transaction> TransactionList = new List<Transaction>();
-        private static List<RecurringTransaction> RecurringTransList = new List<RecurringTransaction>();
-      
-
+        private static List<RecurringTransaction> RecurringTransactionList = new List<RecurringTransaction>();
         //add contact
         public SqlCommand sqlCommand;
         public string AddTransaction(Transaction transaction)
@@ -24,14 +21,15 @@ namespace BudgetManagement.Repository
             dbReturnMessage = "";
             if (transaction is RecurringTransaction)
             {
-                // dbQuery = "INSERT INTO RECURRINGTRANSACTIONS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[StartDate],[Period]) VALUES(@UserId,@Name, @type,@Amount,@Note,@ContactName,@StartDate,@Period);";
-
-
+               dbQuery = "INSERT INTO RECURRINGTRANSACTIONS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[Frequency],[StartDate],[EndDate]) VALUES(@UserId,@Name, @Type,@Amount,@Note,@ContactName,@Frequency,@StartDate,@EndDate);";
             }
-
-            if (transaction.GetType().IsAssignableFrom(typeof(Transaction)))
+            else
             {
                 dbQuery = "INSERT INTO TRANSACTIONS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[StartDate]) VALUES(@UserId,@Name, @Type,@Amount,@Note,@ContactName,@StartDate);";
+            }
+            if (transaction.GetType().IsAssignableFrom(typeof(Transaction)))
+            {
+               // dbQuery = "INSERT INTO TRANSACTIONS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[StartDate]) VALUES(@UserId,@Name, @Type,@Amount,@Note,@ContactName,@StartDate);";
             }
             if (transaction.GetType().IsAssignableFrom(typeof(RecurringTransaction)))
             {
@@ -43,19 +41,17 @@ namespace BudgetManagement.Repository
             //dbQuery = "INSERT INTO Contacts([UserId],[Name],[Address],[Type]) VALUES(@UserId,@Name, @address, @type);";
 
             sqlCommand = new SqlCommand(dbQuery, sqlConnection);
-                sqlCommand.Parameters.AddWithValue("@UserId", transaction.transID);
-                sqlCommand.Parameters.AddWithValue("@Name", transaction.transName);
-                sqlCommand.Parameters.AddWithValue("@Type", transaction.transType);
-                sqlCommand.Parameters.AddWithValue("@Amount", transaction.transAmount);
-                sqlCommand.Parameters.AddWithValue("@Note", transaction.transNote);
-                sqlCommand.Parameters.AddWithValue("@ContactName", transaction.transContact);
-                sqlCommand.Parameters.AddWithValue("@StartDate", transaction.TransDate);
-                MessageBox.Show(transaction.transID+transaction.transName+ transaction.transType+ transaction.transAmount+ transaction.transNote+ transaction.transContact+ transaction.TransDate+"RecurringTransaction","ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            if (transaction.GetType().IsAssignableFrom(typeof(RecurringTransaction)))
+            sqlCommand.Parameters.AddWithValue("@UserId", transaction.transID);
+            sqlCommand.Parameters.AddWithValue("@Name", transaction.transName);
+            sqlCommand.Parameters.AddWithValue("@Type", transaction.transType);
+            sqlCommand.Parameters.AddWithValue("@Amount", transaction.transAmount);
+            sqlCommand.Parameters.AddWithValue("@Note", transaction.transNote);
+            sqlCommand.Parameters.AddWithValue("@ContactName", transaction.transContact);
+            sqlCommand.Parameters.AddWithValue("@StartDate", Convert.ToDateTime(transaction.TransDate));
+            if (transaction is RecurringTransaction rTransaction)
             {
-                 sqlCommand.Parameters.AddWithValue("@EndDate", transaction.TransDate);
-                sqlCommand.Parameters.AddWithValue("@period", transaction.TransDate);
-
+                sqlCommand.Parameters.AddWithValue("@Frequency", rTransaction.transFreQuency);
+                sqlCommand.Parameters.AddWithValue("@EndDate", Convert.ToDateTime(rTransaction.transEndDate));
             }
             try
             {
@@ -74,7 +70,7 @@ namespace BudgetManagement.Repository
                 catch (Exception ex)
                 {
                     dbReturnMessage = "Exception: " + ex.Message;
-                    MessageBox.Show("Could not open", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(dbReturnMessage+ "Could not open", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 }
                 finally
@@ -105,22 +101,19 @@ namespace BudgetManagement.Repository
                     }
                     sqlConnection.Close();
                     reader.Close();
-
                 }
             }
             catch (Exception ex)
             {
                 dbReturnMessage = "Exception: " + ex.Message;
-
+                MessageBox.Show(dbReturnMessage);
             }
             finally
             {
                 sqlConnection.Close();
             }
-           
-                return TransactionList;
 
-            
+            return TransactionList;
         }
 
         // Delete Transaction
@@ -129,8 +122,14 @@ namespace BudgetManagement.Repository
             dbReturnMessage = "";
             if (ValidateAction("Are You show you want to delete transaction", "DELETE OPEREATION"))
             {
+                if (transaction is RecurringTransaction)
+                {
+                    dbQuery = "DELETE FROM RecurringTransactions WHERE [Id] = @Id";
+                }
+                else
+                {
                     dbQuery = "DELETE FROM Transactions WHERE [Id] = @Id";
-                
+                }
                 sqlCommand = new SqlCommand(dbQuery, sqlConnection);
                 sqlCommand.Parameters.AddWithValue("@Id", transaction.transID);
                 try
@@ -140,7 +139,6 @@ namespace BudgetManagement.Repository
                     if (i > 0)
                     {
                         dbReturnMessage = "success";
-
                     }
                     else
                     {
@@ -150,6 +148,8 @@ namespace BudgetManagement.Repository
                 catch (Exception ex)
                 {
                     dbReturnMessage = "Exception: " + ex.Message;
+                    MessageBox.Show(dbReturnMessage);
+
                 }
                 finally
                 {
@@ -161,21 +161,16 @@ namespace BudgetManagement.Repository
         //update transaction
         public string UpdateTransaction(Transaction transaction)
         {
-
-            if (transaction.GetType().IsAssignableFrom(typeof(Transaction)))
+            if (transaction is RecurringTransaction)
             {
-
-                dbQuery = "UPDATE TRANSACTIONS SET [Name] = @Name, [Type]=@Type,[Amount] = @Amount, [Note]=@Note," +
-                  "[ContactName]=@ContactName,[StartDate]=@StartDate WHERE [Id] = @Id ;";
-
+                dbQuery = "UPDATE RECURRINGTRANSACTIONS SET [Name] = @Name, [Type]=@Type,[Amount] = @Amount, [Note]=@Note," +
+                    "[ContactName]=@ContactName,[Frequency]=@Frequency,[StartDate]=@StartDate,[EndDate]=@EndDate WHERE [Id] = @Id ;";
             }
             else
             {
-               dbQuery = "UPDATE RECURRENTTRANSACTIONS SET [Name] = @Name, [Type]=@Type,[Amount] = @Amount, [Note]=@Note," +
-            "[ContactName]=@ContactName,[StartDate]=@StartDate,[EndDate]=@EndDate,[period]=@period WHERE [Id] = @Id ;";
+               dbQuery = "UPDATE TRANSACTIONS SET [Name] = @Name, [Type]=@Type,[Amount] = @Amount, [Note]=@Note," +
+            "[ContactName]=@ContactName,[StartDate]=@StartDate WHERE [Id] = @Id ;";
             }
-            
-
             sqlCommand = new SqlCommand(dbQuery, sqlConnection);
             sqlCommand.Parameters.AddWithValue("@Id", transaction.transID);
             sqlCommand.Parameters.AddWithValue("@Name", transaction.transName);
@@ -183,11 +178,11 @@ namespace BudgetManagement.Repository
             sqlCommand.Parameters.AddWithValue("@Amount", transaction.transAmount);
             sqlCommand.Parameters.AddWithValue("@Note", transaction.transNote);
             sqlCommand.Parameters.AddWithValue("@ContactName", transaction.transContact);
-            sqlCommand.Parameters.AddWithValue("@StartDate", transaction.TransDate);
-            if (transaction.GetType().IsAssignableFrom(typeof(RecurringTransaction)))
+            sqlCommand.Parameters.AddWithValue("@StartDate", Convert.ToDateTime(transaction.TransDate));
+            if (transaction is RecurringTransaction rtransaction)
             {
-                sqlCommand.Parameters.AddWithValue("@EndDate", transaction.TransDate);
-                sqlCommand.Parameters.AddWithValue("@period", transaction.TransDate);
+                sqlCommand.Parameters.AddWithValue("@Frequency", rtransaction.transFreQuency);
+                sqlCommand.Parameters.AddWithValue("@EndDate", Convert.ToDateTime(rtransaction.transEndDate));
             }
             try
             {
@@ -196,17 +191,19 @@ namespace BudgetManagement.Repository
                 if (i > 0)
                 {
                     dbReturnMessage = "success";
+
                 }
                 else
                 {
                     dbReturnMessage = "Error: " + transaction.transName + " I had difficulty to be certain the update was successful!";
                     sqlConnection.Close();
                 }
-           
             }
             catch (Exception ex)
             {
                 dbReturnMessage = "Exception: " + ex.Message;
+                MessageBox.Show(dbReturnMessage);
+
             }
             finally
             {
@@ -217,7 +214,6 @@ namespace BudgetManagement.Repository
         //check if transaction name exist
         public bool CheckTransaction(Transaction transaction)
         {
-
             dbQuery = "SELECT count(*)  FROM Transaction WHERE [Name] = @Name";
             sqlCommand = new SqlCommand(dbQuery, sqlConnection);
             sqlCommand.Parameters.AddWithValue("@Name", transaction.transName);
@@ -249,9 +245,9 @@ namespace BudgetManagement.Repository
         }
 
         //get Recurring transaction
-        public List<RecurringTransaction> GetRecurringTransaction(int userId)
+        public List<RecurringTransaction> GetSavedRecurringTransaction(int userId)
         {
-            RecurringTransList.Clear(); //fetch updated contact list from database into contactlist;
+            RecurringTransactionList.Clear(); //fetch updated contact list from database into contactlist;
             dbQuery = "SELECT * FROM RECURRINGTRANSACTIONS  WHERE [UserId] = @UserId ;";
             sqlCommand = new SqlCommand(dbQuery, sqlConnection);
             sqlCommand.Parameters.AddWithValue("@UserId", userId);
@@ -260,7 +256,6 @@ namespace BudgetManagement.Repository
                 using (sqlConnection)
                 {
                     sqlConnection.Open();
-
                     SqlDataReader reader = sqlCommand.ExecuteReader();
 
                     // Call Read before accessing data.
@@ -276,6 +271,8 @@ namespace BudgetManagement.Repository
             catch (Exception ex)
             {
                 dbReturnMessage = "Exception: " + ex.Message;
+                MessageBox.Show(dbReturnMessage);
+
 
             }
             finally
@@ -283,46 +280,9 @@ namespace BudgetManagement.Repository
                 sqlConnection.Close();
             }
 
-            return RecurringTransList;
-
-
+            return RecurringTransactionList;
         }
 
-        // Delete Transaction
-        public string DeleteRecurringTransaction(RecurringTransaction transaction)
-        {
-            dbReturnMessage = "";
-            if (ValidateAction("Are You show you want to delete this recuring transaction", "DELETE OPEREATION"))
-            {
-                dbQuery = "DELETE FROM RecuringTransactions WHERE [Id] = @Id";
-
-                sqlCommand = new SqlCommand(dbQuery, sqlConnection);
-                sqlCommand.Parameters.AddWithValue("@Id", transaction.transID);
-                try
-                {
-                    sqlConnection.Open();
-                    int i = sqlCommand.ExecuteNonQuery();
-                    if (i > 0)
-                    {
-                        dbReturnMessage = "success";
-
-                    }
-                    else
-                    {
-                        dbReturnMessage = "Error: " + transaction.transName + " Data Could Not Be Deleted!";
-                    }
-                }
-                catch (Exception ex)
-                {
-                    dbReturnMessage = "Exception: " + ex.Message;
-                }
-                finally
-                {
-                    sqlConnection.Close();
-                }
-            }
-            return dbReturnMessage;
-        }
         //Iterate through transaction
         //add to transaction list
         private static void ReadTransRow(IDataRecord record)
@@ -336,9 +296,8 @@ namespace BudgetManagement.Repository
             string CountactName = Convert.ToString(record[6]);
             string TransDate = Convert.ToString(record[7]);
           
-                Transaction obj = new Transaction(id, UserId, Name, Note, TransDate, Amount, Type, CountactName);
-                TransactionList.Add(obj); //add contact to contact list
-           
+            Transaction obj = new Transaction(id, UserId, Name, Note, TransDate, Amount, Type, CountactName);
+            TransactionList.Add(obj); //add contact to contact list
         }
 
         //read returning transaction row
@@ -351,19 +310,22 @@ namespace BudgetManagement.Repository
             double Amount = Convert.ToDouble(record[4]);
             string Note = Convert.ToString(record[5]);
             string CountactName = Convert.ToString(record[6]);
-            string TransDate = Convert.ToString(record[7]);
-            string Transfrequency = Convert.ToString(record[8]);
-            string endDate = Convert.ToString(record[9]);
-            RecurringTransaction obj = new RecurringTransaction(id, UserId, Name, Note, TransDate, Amount, Type, CountactName, Transfrequency, endDate);
-            RecurringTransList.Add(obj); //add contact to contact list
+            string Transfrequency = Convert.ToString(record[7]);
+            string TransDate = Convert.ToString(record[8]);
+            string EndDate = Convert.ToString(record[9]);
+            RecurringTransaction obj = new RecurringTransaction(id, UserId, Name, Note, TransDate, Amount, Type, CountactName, Transfrequency, EndDate);
+            RecurringTransactionList.Add(obj); //add contact to contact list
         }
 
         //access list of transation
         public static List<Transaction> RequestTransactionList()
         {
-
             return TransactionList;
         }
+        public static List<RecurringTransaction> RequestRecurringTransactionList()
+        {
 
+            return RecurringTransactionList;
+        }
     }
 }

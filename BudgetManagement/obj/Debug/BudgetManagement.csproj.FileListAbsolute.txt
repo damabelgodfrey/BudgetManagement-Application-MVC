@@ -8,7 +8,6 @@ C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\B
 C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.pdb
 C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.Views.Dashboard.resources
 C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.Views.ContactView.resources
-C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.csproj.CoreCompileInputs.cache
 C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.Views.TransactionView.resources
 C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\bin\Debug\MaterialSkin.dll
 C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.csproj.CopyComplete

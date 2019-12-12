@@ -200,15 +200,19 @@ namespace BudgetManagement.Views
             // 
             // contactGrdView
             // 
+            this.contactGrdView.AllowColumnReorder = true;
             this.contactGrdView.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.contactGrdView.FullRowSelect = true;
             this.contactGrdView.GridLines = true;
             this.contactGrdView.HideSelection = false;
             this.contactGrdView.Location = new System.Drawing.Point(0, 213);
             this.contactGrdView.Name = "contactGrdView";
             this.contactGrdView.Size = new System.Drawing.Size(1059, 318);
+            this.contactGrdView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.contactGrdView.TabIndex = 38;
             this.contactGrdView.UseCompatibleStateImageBehavior = false;
             this.contactGrdView.View = System.Windows.Forms.View.Details;
+            this.contactGrdView.VirtualListSize = 10;
             this.contactGrdView.SelectedIndexChanged += new System.EventHandler(this.contactGrdView_SelectedIndexChanged_1);
             // 
             // ContactView
