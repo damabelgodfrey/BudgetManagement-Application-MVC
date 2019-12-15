@@ -27,13 +27,6 @@ namespace BudgetManagement.Views
             this.tContactCombobox.DisplayMember = "cName";
             this.rTransContactList.DataSource = ContactRepository.GetContactList();
             this.rTransContactList.DisplayMember = "cName";
-
-           // var FrequencyList = new List<ArrayList>();
-           // FrequencyList.Add(new ArrayList() { "Daily", "Monthly","Yearly" });
-           // rTransFrequencyList.DataSource = FrequencyList;
-           // this.rTransFrequencyList.DisplayMember = "cName";
-            //this.tContactCombobox.ValueMember = "cID";
-
         }
 
         // for recurent Transaction
@@ -161,6 +154,7 @@ namespace BudgetManagement.Views
 
         private void RegisterRTransaction_Click(object sender, EventArgs e)
         {
+            RegisterRTransaction.Enabled = false;
             this.transactionController.SaveRTransaction();
             this.RegisterRTransaction.Text = "Update Recurring";
             this.AddRTransaction.Enabled = true;
@@ -168,6 +162,8 @@ namespace BudgetManagement.Views
             this.DeleteRTransaction.Visible = true;
             rTransDetailBox.BackColor = System.Drawing.Color.Empty;
             this.transactionController.LoadRTransactionView();
+            RegisterRTransaction.Enabled = true;
+
 
         }
         private void CancelAddRAction_Click(object sender, EventArgs e)
@@ -182,7 +178,11 @@ namespace BudgetManagement.Views
         }
         private void DeleteRTransaction_Click(object sender, EventArgs e)
         {
+            DeleteRTransaction.Enabled = false;
             this.transactionController.RemoveRTransaction();
+            DeleteRTransaction.Enabled = true;
+
+
         }
         private void RTransListView_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -454,13 +454,17 @@ namespace BudgetManagement.Views
         // delete contact
         private void DeleteTBtn_Click(object sender, EventArgs e)
         {
+            DeleteTBtn.Enabled = false;
             this.transactionController.RemoveTransaction();
+            DeleteTBtn.Enabled = true;
+
 
         }
 
-         //call controller to save transaction
+        //call controller to save transaction
         private void UpdateTBtn_Click(object sender, EventArgs e)
         {
+            UpdateTBtn.Enabled = false;
             this.transactionController.SaveTransaction();
             this.UpdateTBtn.Text = "Update Contact";
             this.addTBtn.Enabled = true;
@@ -469,6 +473,8 @@ namespace BudgetManagement.Views
             cancelTBtn.Visible = true;
             this.transDetailBox.BackColor = System.Drawing.Color.Empty;
             this.transactionController.LoadTransactionView();
+            UpdateTBtn.Enabled = true;
+
 
         }
         //apply zebraline to grid
@@ -515,6 +521,40 @@ namespace BudgetManagement.Views
             this.transactionController.LoadTransactionView();
         }
 
-      
+        private void tAmountTbox_TextChanged(object sender, EventArgs e)
+        {
+            if (System.Text.RegularExpressions.Regex.IsMatch(tAmountTbox.Text, "[^0-9]"))
+            {
+                MessageBox.Show("Please enter only numbers.");
+                tAmountTbox.Text = tAmountTbox.Text.Remove(tAmountTbox.Text.Length - 1);
+            }
+        }
+
+        private void rTransAmount_TextChanged(object sender, EventArgs e)
+        {
+            if (System.Text.RegularExpressions.Regex.IsMatch(rTransAmount.Text, "^[0-9]{2}")) 
+            {
+                MessageBox.Show("Please enter only numbers.");
+                 rTransAmount.Text = rTransAmount.Text.Remove(rTransAmount.Text.Length - 1);
+            }
+        }
+
+        private void RefreshTView_Click(object sender, EventArgs e)
+        {
+            RefreshRTView.Enabled = false;
+            RefreshRTView.Text = "Resfreshing....";
+            this.transactionController.LoadTransactionView();
+            RefreshRTView.Enabled = true;
+            RefreshRTView.Text = "Resfresh View";
+        }
+
+        private void RefreshTView_Click_1(object sender, EventArgs e)
+        {
+            RefreshTView.Enabled = false;
+            RefreshTView.Text = "Resfreshing....";
+            this.transactionController.LoadRTransactionView();
+            RefreshTView.Enabled = true;
+            RefreshTView.Text = "Resfresh View";
+        }
     }
 }

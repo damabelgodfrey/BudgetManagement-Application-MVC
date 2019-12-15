@@ -1,5 +1,6 @@
 ﻿using BudgetManagement.Models;
 using BudgetManagement.Repository;
+using BudgetManagement.Views;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,70 +8,86 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace BudgetManagement.Controllers
 {
-    class ReportController
+    public class ReportController
     {
-        List<Transaction> trans = TransactionRepository.RequestTransactionList();
+        ReportView _view;
+        List<Transaction> reportTransactionlist;
 
-        private void button1_Click(object sender, EventArgs e)
+        //List<RecurringTransaction> myRecurringTransactionlist = new List<RecurringTransaction>();
+
+        int userID = UserRepository.GetUserID();
+        private static string NewContactName = "";
+        internal static string GetNewContactName()
         {
-           // try
-           // {
-            //    string connetionString = null;
-            //    SqlConnection connection;
-            //    SqlCommand command;
-            //    SqlDataAdapter adapter = new SqlDataAdapter();
-            //    DataSet ds = new DataSet();
-            //    int i = 0;
-            //    string sql = null;
-            //    int yPoint = 0;
-            //    string pubname = null;
-            //    string city = null;
-            //    string state = null;
+            return NewContactName;
+        }
 
-            //    connetionString = "Data Source=YourServerName;Initial Catalog=pubs;User ID=sa;Password=zen412";
-            //    sql = "select pub_name,city,country from publishers";
-            //    connection = new SqlConnection(connetionString);
-            //    connection.Open();
-            //    command = new SqlCommand(sql, connection);
-            //    adapter.SelectCommand = command;
-            //    adapter.Fill(ds);
-            //    connection.Close();
+        public ReportController()
+        {
+            _view = ReportView.GetReportForm();
+            _view.SetReportController(this);
+            SetReportFormDetails();
+            _view.WindowState = FormWindowState.Normal;
+            _view.Activate();
+            _view.Show();
+        }
 
-            //    PdfDocument pdf = new PdfDocument();
-            //    pdf.Info.Title = "Database to PDF";
-            //    PdfPage pdfPage = pdf.AddPage();
-            //    XGraphics graph = XGraphics.FromPdfPage(pdfPage);
-            //    XFont font = new XFont("Verdana", 20, XFontStyle.Regular);
+        public void SetReportFormDetails()
+        {
+            TransactionRepository getSaveTransaction = new TransactionRepository();
+            getSaveTransaction.GetSavedTransaction(userID);
+            reportTransactionlist = TransactionRepository.RequestTransactionList();
+            LoadReportView();
+        }
 
-            //    yPoint = yPoint + 100;
+        
+        internal void RequestReport(DateTime startDate, DateTime endDate, string name, string contact)
+        {
+            reportTransactionlist.Clear();
+            TransactionRepository getTransactionReport = new TransactionRepository();
+            reportTransactionlist = getTransactionReport.GetTransactionReport(userID, name, contact);
+            this._view.ClearGrid();
+            foreach (Transaction transaction in this.reportTransactionlist)
+            {
+                //if(Convert.ToDateTime(transaction.TransDate).Date == Convert.ToDateTime(transaction.TransDate).Date)
+                
+                int startRangeCheck = DateTime.Compare(Convert.ToDateTime(transaction.TransDate).Date, Convert.ToDateTime(startDate));
+                int endRangeCheck = DateTime.Compare(Convert.ToDateTime(transaction.TransDate).Date, Convert.ToDateTime(endDate));
 
-            //    for (i = 0; i < = ds.Tables[0].Rows.Count - 1; i++)
-            //    {
-            //        pubname = ds.Tables[0].Rows[i].ItemArray[0].ToString();
-            //        city = ds.Tables[0].Rows[i].ItemArray[1].ToString();
-            //        state = ds.Tables[0].Rows[i].ItemArray[2].ToString();
+                if (startRangeCheck != -1 && endRangeCheck !=1)
+                {
+                        this._view.AddTransactionToGrid(transaction);
+                              
+                }
+            }
+        }
 
-            //        graph.DrawString(pubname, font, XBrushes.Black, new XRect(40, yPoint, pdfPage.Width.Point, pdfPage.Height.Point), XStringFormats.TopLeft);
+        public void LoadReportView()
+        {
+            _view.ClearGrid();
+           int noTransaction = 0;
+            if (reportTransactionlist.Count >0)
+            {
+                foreach (Transaction transaction in reportTransactionlist)
+                {
+                    if(noTransaction > 50)
+                    {
+                        return;
+                    }
+                    _view.AddTransactionToGrid(transaction);
+                    noTransaction++;
+                }
 
-            //        graph.DrawString(city, font, XBrushes.Black, new XRect(280, yPoint, pdfPage.Width.Point, pdfPage.Height.Point), XStringFormats.TopLeft);
-
-            //        graph.DrawString(state, font, XBrushes.Black, new XRect(420, yPoint, pdfPage.Width.Point, pdfPage.Height.Point), XStringFormats.TopLeft);
-
-            //        yPoint = yPoint + 40;
-            //    }
+                _view.SetSelectedTransactionInGrid((Transaction)reportTransactionlist[0]);
+            }
 
 
-            //    string pdfFilename = "dbtopdf.pdf";
-            //    pdf.Save(pdfFilename);
-            //    Process.Start(pdfFilename);
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.ToString());
-            //}
         }
     }
 }
+
+ 

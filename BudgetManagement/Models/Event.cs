@@ -8,13 +8,12 @@ namespace BudgetManagement.Models
 {
    public class Event
     {
-        public Event(int id, int UserID, string name, string note, string datetime, double amount, string type, string contact)
+        public Event(int id, int UserID, string name, string note, DateTime datetime, string type, string contact)
         {
             EventID = id;
             EventUserID = UserID;
             EventName = name;
             EventNote = note;
-            EventAmount = amount;
             EventType = type;
             EventDate = datetime;
             EventContact = contact;
@@ -32,7 +31,7 @@ namespace BudgetManagement.Models
         public string EventNote { get; set; }
         public double EventAmount { get; set; }
         public string EventType { get; set; }
-        public string EventDate { get; set; }
+        public DateTime EventDate { get; set; }
         public string EventContact { get; set; }
 
 

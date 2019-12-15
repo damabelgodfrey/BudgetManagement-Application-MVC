@@ -8,11 +8,13 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Data;
 using System.Windows.Forms;
+using NLog;
 
 namespace BudgetManagement.Repository
 {
     class ContactRepository : AzureDbConnection
     {
+        private Logger logger = LogManager.GetCurrentClassLogger();
         private static List<Contact> ContactList = new List<Contact>();
         //add contact
         public SqlCommand sqlCommand;
@@ -48,7 +50,8 @@ namespace BudgetManagement.Repository
                     }
                 }
                 catch (Exception ex)
-                { 
+                {
+                    logger.Error(ex);
                     dbReturnMessage = "Exception: " + ex.Message;
                     MessageBox.Show("Could not open", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
 

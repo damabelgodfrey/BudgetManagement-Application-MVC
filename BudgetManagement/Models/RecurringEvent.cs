@@ -8,19 +8,20 @@ namespace BudgetManagement.Models
 { 
   public class RecurringEvent : Event
     {
-        public RecurringEvent(int id, int UserID, string name, string note, string datetime, double amount, string type, string contact, string frequency, string endDate) : base()
+        public RecurringEvent(int id, int UserID, string name, string note, DateTime datetime, string type, string contact, string frequency, DateTime endDate) : base()
         {
             EventID = id;
             EventUserID = UserID;
             EventName = name;
             EventNote = note;
-            EventAmount = amount;
             EventType = type;
             EventDate = datetime;
             EventContact = contact;
+            EventFreQuency = frequency;
+            EventEndDate = endDate;
 
         }
         public string EventFreQuency { get; set; }
-        public string EventEndDate { get; set; }
+        public DateTime EventEndDate { get; set; }
     }
 }

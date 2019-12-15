@@ -8,7 +8,7 @@ namespace BudgetManagement.Models
 {
     public class Transaction
     {
-        public Transaction(int id, int UserID,string name, string note, string datetime, double amount, string type, string contact)
+        public Transaction(int id, int UserID,string name, string note, DateTime datetime, double amount, string type, string contact)
         {
             transID = id;
             transUserID = UserID;
@@ -32,7 +32,7 @@ namespace BudgetManagement.Models
         public string transNote { get; set; }
         public double transAmount { get; set; }
         public string transType { get; set; }
-        public string TransDate { get; set; }
+        public DateTime TransDate { get; set; }
         public string transContact { get; set; }
 
 

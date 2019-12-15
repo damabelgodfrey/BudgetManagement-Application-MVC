@@ -100,6 +100,8 @@ namespace BudgetManagement.Views
             string email = RegisterEmailL.Text;
             string password = RegisterPasswordL.Text; ;
             string passwordConfirm = RegisterPassword2L.Text;
+            DateTime thisDay = DateTime.Today;
+
 
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -135,7 +137,7 @@ namespace BudgetManagement.Views
             else
             {
 
-                string result = Authentication.RegisterUser(name, email, password, passwordConfirm);
+                string result = Authentication.RegisterUser(name, email, password, passwordConfirm, thisDay);
                 if (result == "false")
                 {
                     RegisterPassword2L.ResetText();

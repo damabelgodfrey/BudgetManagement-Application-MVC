@@ -14,6 +14,9 @@ namespace BudgetManagement.Repository
     {
         private static List<Transaction> TransactionList = new List<Transaction>();
         private static List<RecurringTransaction> RecurringTransactionList = new List<RecurringTransaction>();
+        public static List<Transaction> ReportTransactionList = new List<Transaction>();
+
+        
         //add contact
         public SqlCommand sqlCommand;
         public string AddTransaction(Transaction transaction)
@@ -21,7 +24,7 @@ namespace BudgetManagement.Repository
             dbReturnMessage = "";
             if (transaction is RecurringTransaction)
             {
-               dbQuery = "INSERT INTO RECURRINGTRANSACTIONS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[Frequency],[StartDate],[EndDate]) VALUES(@UserId,@Name, @Type,@Amount,@Note,@ContactName,@Frequency,@StartDate,@EndDate);";
+                dbQuery = "INSERT INTO RECURRINGTRANSACTIONS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[Frequency],[StartDate],[EndDate]) VALUES(@UserId,@Name, @Type,@Amount,@Note,@ContactName,@Frequency,@StartDate,@EndDate);";
             }
             else
             {
@@ -29,14 +32,14 @@ namespace BudgetManagement.Repository
             }
             if (transaction.GetType().IsAssignableFrom(typeof(Transaction)))
             {
-               // dbQuery = "INSERT INTO TRANSACTIONS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[StartDate]) VALUES(@UserId,@Name, @Type,@Amount,@Note,@ContactName,@StartDate);";
+                // dbQuery = "INSERT INTO TRANSACTIONS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[StartDate]) VALUES(@UserId,@Name, @Type,@Amount,@Note,@ContactName,@StartDate);";
             }
             if (transaction.GetType().IsAssignableFrom(typeof(RecurringTransaction)))
             {
                 // dbQuery = "INSERT INTO RECURRINGTRANSACTIONS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[StartDate],[Period]) VALUES(@UserId,@Name, @type,@Amount,@Note,@ContactName,@StartDate,@Period);";
 
             }
-               // dbQuery = "INSERT INTO RECURRINGTRANSACTIONS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[StartDate],[Period]) VALUES(@UserId,@Name, @type,@Amount,@Note,@ContactName,@StartDate,@Period);";
+            // dbQuery = "INSERT INTO RECURRINGTRANSACTIONS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[StartDate],[Period]) VALUES(@UserId,@Name, @type,@Amount,@Note,@ContactName,@StartDate,@Period);";
 
             //dbQuery = "INSERT INTO Contacts([UserId],[Name],[Address],[Type]) VALUES(@UserId,@Name, @address, @type);";
 
@@ -55,30 +58,91 @@ namespace BudgetManagement.Repository
             }
             try
             {
-                    sqlConnection.Open();
-                    int i = sqlCommand.ExecuteNonQuery();
-                    if (i > 0)
-                    {
-                        dbReturnMessage = "success";
-                    }
-                    else
-                    {
-                        MessageBox.Show(i + "  Could not verify", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        sqlConnection.Close();
-                    }
-                }
-                catch (Exception ex)
+                sqlConnection.Open();
+                int i = sqlCommand.ExecuteNonQuery();
+                if (i > 0)
                 {
-                    dbReturnMessage = "Exception: " + ex.Message;
-                    MessageBox.Show(dbReturnMessage+ "Could not open", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                    dbReturnMessage = "success";
                 }
-                finally
+                else
                 {
+                    MessageBox.Show(i + "  Could not verify", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     sqlConnection.Close();
                 }
+            }
+            catch (Exception ex)
+            {
+                dbReturnMessage = "Exception: " + ex.Message;
+                MessageBox.Show(dbReturnMessage + "Could not open", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
             return dbReturnMessage;
         }
+
+        internal List<Transaction> GetTransactionReport(int userId, string transName, string contact)
+        {
+            ReportTransactionList.Clear();
+            dbQuery = "SELECT * FROM TRANSACTIONS  WHERE ";
+           if(transName != "All")
+            {
+                dbQuery += " [Name] =@Name AND";
+            }
+            if(contact != "All")
+            {
+                dbQuery += " [ContactName] =@ContactName AND";
+            }
+            dbQuery += "[UserId] = @UserId";
+
+            sqlCommand = new SqlCommand(dbQuery, sqlConnection);
+            sqlCommand.Parameters.AddWithValue("@UserId", userId);
+            if (transName != "All")
+            {
+                sqlCommand.Parameters.AddWithValue("@Name", transName);
+
+            }
+            if (contact != "All")
+            {
+                sqlCommand.Parameters.AddWithValue("@ContactName", contact);
+
+            }
+            MessageBox.Show(dbQuery);
+            try
+                {
+                using (sqlConnection)
+                {
+                    sqlConnection.Open();
+
+                    SqlDataReader reader = sqlCommand.ExecuteReader();
+
+                    // Call Read before accessing data.
+                    while (reader.Read())
+                    {
+                        ReadTransRow((IDataRecord)reader,"Report");
+                    }
+                    sqlConnection.Close();
+                    reader.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                dbReturnMessage = "Exception: " + ex.Message;
+                MessageBox.Show(dbReturnMessage);
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+
+            return ReportTransactionList;
+        }
+
+
+
+
         //list transaction
         public List<Transaction> GetSavedTransaction(int userId)
         {
@@ -97,7 +161,7 @@ namespace BudgetManagement.Repository
                     // Call Read before accessing data.
                     while (reader.Read())
                     {
-                        ReadTransRow((IDataRecord)reader);
+                        ReadTransRow((IDataRecord)reader,"Transaction");
                     }
                     sqlConnection.Close();
                     reader.Close();
@@ -107,6 +171,7 @@ namespace BudgetManagement.Repository
             {
                 dbReturnMessage = "Exception: " + ex.Message;
                 MessageBox.Show(dbReturnMessage);
+
             }
             finally
             {
@@ -168,8 +233,8 @@ namespace BudgetManagement.Repository
             }
             else
             {
-               dbQuery = "UPDATE TRANSACTIONS SET [Name] = @Name, [Type]=@Type,[Amount] = @Amount, [Note]=@Note," +
-            "[ContactName]=@ContactName,[StartDate]=@StartDate WHERE [Id] = @Id ;";
+                dbQuery = "UPDATE TRANSACTIONS SET [Name] = @Name, [Type]=@Type,[Amount] = @Amount, [Note]=@Note," +
+             "[ContactName]=@ContactName,[StartDate]=@StartDate WHERE [Id] = @Id ;";
             }
             sqlCommand = new SqlCommand(dbQuery, sqlConnection);
             sqlCommand.Parameters.AddWithValue("@Id", transaction.transID);
@@ -261,19 +326,17 @@ namespace BudgetManagement.Repository
                     // Call Read before accessing data.
                     while (reader.Read())
                     {
-                        ReadRecurringTransRow((IDataRecord)reader);
+                        ReadTransRow((IDataRecord)reader,"RecurringTransaction");
+
                     }
                     sqlConnection.Close();
                     reader.Close();
-
                 }
             }
             catch (Exception ex)
             {
                 dbReturnMessage = "Exception: " + ex.Message;
                 MessageBox.Show(dbReturnMessage);
-
-
             }
             finally
             {
@@ -285,7 +348,7 @@ namespace BudgetManagement.Repository
 
         //Iterate through transaction
         //add to transaction list
-        private static void ReadTransRow(IDataRecord record)
+        private static void ReadTransRow(IDataRecord record, string sender)
         {
             int id = Convert.ToInt32(record[0]);
             int UserId = Convert.ToInt32(record[1]);
@@ -294,28 +357,31 @@ namespace BudgetManagement.Repository
             double Amount = Convert.ToDouble(record[4]);
             string Note = Convert.ToString(record[5]);
             string CountactName = Convert.ToString(record[6]);
-            string TransDate = Convert.ToString(record[7]);
-          
-            Transaction obj = new Transaction(id, UserId, Name, Note, TransDate, Amount, Type, CountactName);
-            TransactionList.Add(obj); //add contact to contact list
+            DateTime TransDate = Convert.ToDateTime(record[7]);
+            if (sender == "Report")
+            {
+                Transaction trans = new Transaction(id, UserId, Name, Note, TransDate, Amount, Type, CountactName);
+
+                ReportTransactionList.Add(trans);
+            }
+            if(sender =="Transaction")
+            {
+            Transaction trans= new Transaction(id, UserId, Name, Note, TransDate, Amount, Type, CountactName);
+                TransactionList.Add(trans); //add contact to contact list
+
+            }
+            if(sender == "RecurringTransaction")
+            {
+                string Transfrequency = Convert.ToString(record[8]);
+
+                DateTime EndDate = Convert.ToDateTime(record[9]);
+                RecurringTransaction obj = new RecurringTransaction(id, UserId, Name, Note, TransDate, Amount, Type, CountactName, Transfrequency, EndDate);
+
+                RecurringTransactionList.Add(obj); //add contact to contact list
+            }
         }
 
-        //read returning transaction row
-        private static void ReadRecurringTransRow(IDataRecord record)
-        {
-            int id = Convert.ToInt32(record[0]);
-            int UserId = Convert.ToInt32(record[1]);
-            string Name = Convert.ToString(record[2]);
-            string Type = Convert.ToString(record[3].ToString());
-            double Amount = Convert.ToDouble(record[4]);
-            string Note = Convert.ToString(record[5]);
-            string CountactName = Convert.ToString(record[6]);
-            string Transfrequency = Convert.ToString(record[7]);
-            string TransDate = Convert.ToString(record[8]);
-            string EndDate = Convert.ToString(record[9]);
-            RecurringTransaction obj = new RecurringTransaction(id, UserId, Name, Note, TransDate, Amount, Type, CountactName, Transfrequency, EndDate);
-            RecurringTransactionList.Add(obj); //add contact to contact list
-        }
+
 
         //access list of transation
         public static List<Transaction> RequestTransactionList()

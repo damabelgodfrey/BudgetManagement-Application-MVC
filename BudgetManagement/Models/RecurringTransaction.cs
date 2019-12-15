@@ -8,7 +8,7 @@ namespace BudgetManagement.Models
 {
     public class RecurringTransaction: Transaction
     {
-        public RecurringTransaction(int id, int UserID, string name, string note, string datetime, double amount, string type, string contact,string frequency,string endDate) : base()
+        public RecurringTransaction(int id, int UserID, string name, string note, DateTime datetime, double amount, string type, string contact,string frequency,DateTime endDate) : base()
         {
             transID = id;
             transUserID = UserID;
@@ -23,6 +23,6 @@ namespace BudgetManagement.Models
 
         }
         public string transFreQuency { get; set; }
-        public string transEndDate { get; set; }
+        public DateTime transEndDate { get; set; }
     }
 }

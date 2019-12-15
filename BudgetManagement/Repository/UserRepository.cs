@@ -24,6 +24,14 @@ namespace BudgetManagement.Repository
 
         }
 
+        internal static DateTime GetUserLogDate()
+        {
+
+            DateTime id = UserList[0].uLastAccess;
+            return id;
+
+        }
+
         internal static List<User> GetUserList(){
             return UserList;
         }
@@ -133,6 +141,7 @@ namespace BudgetManagement.Repository
             
         }
 
+
         //
         private  void ReadUserRow(IDataRecord record)
         {
@@ -140,7 +149,8 @@ namespace BudgetManagement.Repository
             string Name = Convert.ToString(record[1]);
             string Email = Convert.ToString(record[2]);
             string Password = Convert.ToString(record[3]);
-            User obj = new User(id, Name, Email, Password);
+            DateTime LastAccess = Convert.ToDateTime(record[4]);
+            User obj = new User(id, Name, Email, Password,LastAccess);
             UserList.Add(obj);
         }
 
@@ -177,6 +187,47 @@ namespace BudgetManagement.Repository
             }
            
         }
-        
+        public bool UpdateLogDate(int user)
+        {
+
+            MessageBox.Show("innn");
+
+            dbQuery = "UPDATE Users SET [LastAccess] = @LastAccess WHERE [Id] = @Id ;";
+            sqlCommand = new SqlCommand(dbQuery, sqlConnection);
+            sqlCommand.Parameters.AddWithValue("@Id", user);
+            DateTime thisDay = DateTime.Now;
+
+            sqlCommand.Parameters.AddWithValue("@LastAccess", thisDay);
+            try
+            {
+                sqlConnection.Open();
+                int i = sqlCommand.ExecuteNonQuery();
+                if (i > 0)
+                {
+                    dbReturnMessage = "  Updated Successfully!!";
+
+                }
+
+                else
+                {
+                    throw new Exception("Error:  Data Could Not Be Found!");
+
+                }
+                sqlConnection.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                dbReturnMessage = "Exception: " + ex.Message;
+                return true;
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+
+
+        }
+
     }
 }

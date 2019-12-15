@@ -59,6 +59,7 @@ namespace BudgetManagement.Views
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.CancelAddRAction = new MaterialSkin.Controls.MaterialRaisedButton();
             this.RTransListView = new System.Windows.Forms.ListView();
             this.DeleteRTransaction = new MaterialSkin.Controls.MaterialRaisedButton();
             this.RegisterRTransaction = new MaterialSkin.Controls.MaterialRaisedButton();
@@ -85,7 +86,8 @@ namespace BudgetManagement.Views
             this.rTransName = new System.Windows.Forms.TextBox();
             this.rTransAmount = new System.Windows.Forms.TextBox();
             this.rID = new System.Windows.Forms.TextBox();
-            this.CancelAddRAction = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.RefreshRTView = new System.Windows.Forms.Button();
+            this.RefreshTView = new System.Windows.Forms.Button();
             this.transDetailBox.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -101,6 +103,7 @@ namespace BudgetManagement.Views
             // 
             // transDetailBox
             // 
+            this.transDetailBox.Controls.Add(this.RefreshTView);
             this.transDetailBox.Controls.Add(this.groupBox5);
             this.transDetailBox.Controls.Add(this.groupBox1);
             this.transDetailBox.Controls.Add(this.tDatePicker);
@@ -124,7 +127,7 @@ namespace BudgetManagement.Views
             this.groupBox5.Controls.Add(this.tNoteTbox);
             this.groupBox5.Location = new System.Drawing.Point(453, 69);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(346, 79);
+            this.groupBox5.Size = new System.Drawing.Size(319, 79);
             this.groupBox5.TabIndex = 19;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Note";
@@ -133,7 +136,7 @@ namespace BudgetManagement.Views
             // 
             this.tNoteTbox.Location = new System.Drawing.Point(19, 17);
             this.tNoteTbox.Name = "tNoteTbox";
-            this.tNoteTbox.Size = new System.Drawing.Size(306, 51);
+            this.tNoteTbox.Size = new System.Drawing.Size(284, 51);
             this.tNoteTbox.TabIndex = 15;
             this.tNoteTbox.Text = "";
             // 
@@ -170,7 +173,7 @@ namespace BudgetManagement.Views
             // 
             this.tDatePicker.CustomFormat = "dd-MM-yyyy hh:mm";
             this.tDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.tDatePicker.Location = new System.Drawing.Point(494, 11);
+            this.tDatePicker.Location = new System.Drawing.Point(472, 37);
             this.tDatePicker.Name = "tDatePicker";
             this.tDatePicker.Size = new System.Drawing.Size(284, 20);
             this.tDatePicker.TabIndex = 17;
@@ -198,6 +201,7 @@ namespace BudgetManagement.Views
             this.tAmountTbox.Name = "tAmountTbox";
             this.tAmountTbox.Size = new System.Drawing.Size(177, 20);
             this.tAmountTbox.TabIndex = 8;
+            this.tAmountTbox.TextChanged += new System.EventHandler(this.tAmountTbox_TextChanged);
             // 
             // tNameTbox
             // 
@@ -251,7 +255,7 @@ namespace BudgetManagement.Views
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(459, 37);
+            this.label2.Location = new System.Drawing.Point(458, 21);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(30, 13);
             this.label2.TabIndex = 1;
@@ -396,6 +400,23 @@ namespace BudgetManagement.Views
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Recurrent Transaction";
             // 
+            // CancelAddRAction
+            // 
+            this.CancelAddRAction.AutoSize = true;
+            this.CancelAddRAction.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.CancelAddRAction.Depth = 0;
+            this.CancelAddRAction.Icon = null;
+            this.CancelAddRAction.Location = new System.Drawing.Point(900, 114);
+            this.CancelAddRAction.MouseState = MaterialSkin.MouseState.HOVER;
+            this.CancelAddRAction.Name = "CancelAddRAction";
+            this.CancelAddRAction.Primary = true;
+            this.CancelAddRAction.Size = new System.Drawing.Size(73, 36);
+            this.CancelAddRAction.TabIndex = 5;
+            this.CancelAddRAction.Text = "Cancel";
+            this.CancelAddRAction.UseVisualStyleBackColor = true;
+            this.CancelAddRAction.Visible = false;
+            this.CancelAddRAction.Click += new System.EventHandler(this.CancelAddRAction_Click);
+            // 
             // RTransListView
             // 
             this.RTransListView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -462,6 +483,7 @@ namespace BudgetManagement.Views
             // 
             // rTransDetailBox
             // 
+            this.rTransDetailBox.Controls.Add(this.RefreshRTView);
             this.rTransDetailBox.Controls.Add(this.rTransFrequency);
             this.rTransDetailBox.Controls.Add(this.materialLabel1);
             this.rTransDetailBox.Controls.Add(this.label11);
@@ -674,6 +696,7 @@ namespace BudgetManagement.Views
             this.rTransAmount.Name = "rTransAmount";
             this.rTransAmount.Size = new System.Drawing.Size(176, 20);
             this.rTransAmount.TabIndex = 1;
+            this.rTransAmount.TextChanged += new System.EventHandler(this.rTransAmount_TextChanged);
             // 
             // rID
             // 
@@ -682,22 +705,25 @@ namespace BudgetManagement.Views
             this.rID.Size = new System.Drawing.Size(80, 20);
             this.rID.TabIndex = 0;
             // 
-            // CancelAddRAction
+            // RefreshRTView
             // 
-            this.CancelAddRAction.AutoSize = true;
-            this.CancelAddRAction.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.CancelAddRAction.Depth = 0;
-            this.CancelAddRAction.Icon = null;
-            this.CancelAddRAction.Location = new System.Drawing.Point(900, 114);
-            this.CancelAddRAction.MouseState = MaterialSkin.MouseState.HOVER;
-            this.CancelAddRAction.Name = "CancelAddRAction";
-            this.CancelAddRAction.Primary = true;
-            this.CancelAddRAction.Size = new System.Drawing.Size(73, 36);
-            this.CancelAddRAction.TabIndex = 5;
-            this.CancelAddRAction.Text = "Cancel";
-            this.CancelAddRAction.UseVisualStyleBackColor = true;
-            this.CancelAddRAction.Visible = false;
-            this.CancelAddRAction.Click += new System.EventHandler(this.CancelAddRAction_Click);
+            this.RefreshRTView.Location = new System.Drawing.Point(746, 172);
+            this.RefreshRTView.Name = "RefreshRTView";
+            this.RefreshRTView.Size = new System.Drawing.Size(122, 23);
+            this.RefreshRTView.TabIndex = 20;
+            this.RefreshRTView.Text = "Refresh View";
+            this.RefreshRTView.UseVisualStyleBackColor = true;
+            this.RefreshRTView.Click += new System.EventHandler(this.RefreshTView_Click);
+            // 
+            // RefreshTView
+            // 
+            this.RefreshTView.Location = new System.Drawing.Point(729, 6);
+            this.RefreshTView.Name = "RefreshTView";
+            this.RefreshTView.Size = new System.Drawing.Size(99, 23);
+            this.RefreshTView.TabIndex = 20;
+            this.RefreshTView.Text = "Refresh View";
+            this.RefreshTView.UseVisualStyleBackColor = true;
+            this.RefreshTView.Click += new System.EventHandler(this.RefreshTView_Click_1);
             // 
             // TransactionView
             // 
@@ -788,5 +814,7 @@ namespace BudgetManagement.Views
         private TextBox rID;
         private ListView RTransListView;
         private MaterialSkin.Controls.MaterialRaisedButton CancelAddRAction;
+        private Button RefreshRTView;
+        private Button RefreshTView;
     }
 }

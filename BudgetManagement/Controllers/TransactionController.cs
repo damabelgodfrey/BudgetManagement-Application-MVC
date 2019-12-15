@@ -11,8 +11,8 @@ using System.Windows.Forms;
 namespace BudgetManagement.Controllers
 {
    public class TransactionController {
-        TransactionView _view;
-        Transaction _selectedTransaction;
+   TransactionView _view;
+   Transaction _selectedTransaction;
     RecurringTransaction _selectedRTransaction;
     List<Transaction> myTransactionlist;
     List<RecurringTransaction> myRecurringTransactionlist;
@@ -30,6 +30,8 @@ namespace BudgetManagement.Controllers
            _view = TransactionView.GetTransactionForm();
             _view.SetTransactionController(this);
             SetTransactionFormDetails();
+            _view.WindowState = FormWindowState.Normal;
+            _view.Activate();
             _view.Show();
         }
 
@@ -48,7 +50,8 @@ namespace BudgetManagement.Controllers
         public void AddNewTransaction()
         {
             //string id = _users.FindLastIndex.GetType();
-                _selectedTransaction = new Transaction(userID, userID, "", "", "", 0, "", "");
+            DateTime now = DateTime.Now;
+                _selectedTransaction = new Transaction(userID, userID, "", "", now, 0, "", "");
                 this.UpdateViewDetailValues(_selectedTransaction);
                 this._view.CanModifyID = false; 
         }
@@ -57,15 +60,14 @@ namespace BudgetManagement.Controllers
         public void AddNewRTransaction()
         {
             DateTime now = DateTime.Now;
-            string date = now.ToString();
-            _selectedRTransaction = new RecurringTransaction(userID, userID, "", "", date, 0, "", "", "", date);
+            _selectedRTransaction = new RecurringTransaction(userID, userID, "", "", now, 0, "", "", "", now);
             this.UpdateViewDetailValues(_selectedRTransaction);
             this._view.CanModifyRID = false;
         }
 
     
 
-        public void RemoveTransaction()
+        public async void RemoveTransaction()
         {
         string id = this._view.GetIdOfSelectedTransactionInGrid();
         Transaction transactionToRemove = null;
@@ -84,7 +86,7 @@ namespace BudgetManagement.Controllers
             {
 
                 TransactionRepository transactionRepoObj = new TransactionRepository();
-                string returnMsg = transactionRepoObj.DeleteTransaction(transactionToRemove);
+                string returnMsg = await Task.Run(() => transactionRepoObj.DeleteTransaction(transactionToRemove));
                 if (returnMsg == "success")
                 {
                     myTransactionlist = transactionRepoObj.GetSavedTransaction(userID);
@@ -107,7 +109,7 @@ namespace BudgetManagement.Controllers
         }
     }
         //remove recurring transaction
-        internal void RemoveRTransaction()
+        internal async void RemoveRTransaction()
         {
             string id = this._view.GetIdOfSelectedRTransactionInGrid();
 
@@ -128,10 +130,10 @@ namespace BudgetManagement.Controllers
                 if (rTransactionToRemove != null)
                 {
                     TransactionRepository transactionRepoObj = new TransactionRepository();
-                    string returnMsg = transactionRepoObj.DeleteTransaction(rTransactionToRemove);
+                    string returnMsg = await Task.Run(() => transactionRepoObj.DeleteTransaction(rTransactionToRemove));
                     if (returnMsg == "success")
                     {
-                        myRecurringTransactionlist = transactionRepoObj.GetSavedRecurringTransaction(userID);
+                        myRecurringTransactionlist =transactionRepoObj.GetSavedRecurringTransaction(userID);
                         int newRSelectedIndex = this.myRecurringTransactionlist.IndexOf(rTransactionToRemove);
                         //this.myTransactionlist.Remove(transactionToRemove);
                         this._view.RemoveTransactionFromGrid(rTransactionToRemove);
@@ -151,7 +153,7 @@ namespace BudgetManagement.Controllers
             }
         }
 
-        internal void SaveRTransaction()
+        internal async void SaveRTransaction()
         {
             updateTransactionWithViewValues(_selectedRTransaction);
             int id = UserRepository.GetUserID();
@@ -160,7 +162,7 @@ namespace BudgetManagement.Controllers
             {
                 // Add new transaction
                 TransactionRepository transactionRepoObj = new TransactionRepository();
-                string returnMsg = transactionRepoObj.AddTransaction(_selectedRTransaction);
+                string returnMsg = await Task.Run(() => transactionRepoObj.AddTransaction(_selectedRTransaction));
 
                 if (returnMsg == "success")
                 {
@@ -186,7 +188,7 @@ namespace BudgetManagement.Controllers
             {
                 // Update existing transaction
                 TransactionRepository transactionRepoObj = new TransactionRepository();
-                string returnMsg = transactionRepoObj.UpdateTransaction(_selectedRTransaction);
+                string returnMsg = await Task.Run(() => transactionRepoObj.UpdateTransaction(_selectedRTransaction));
                 myRecurringTransactionlist = transactionRepoObj.GetSavedRecurringTransaction(id);
                 if (returnMsg == "success")
                 {
@@ -202,13 +204,13 @@ namespace BudgetManagement.Controllers
             this._view.CanModifyRID = false;
         }
 
-        internal void SaveTransaction()
+        internal async void SaveTransaction()
         {
         updateTransactionWithViewValues(_selectedTransaction);
         if (!this.myTransactionlist.Contains(_selectedTransaction))
         {
             TransactionRepository transactionRepoObj = new TransactionRepository();
-            string returnMsg = transactionRepoObj.AddTransaction(_selectedTransaction);
+            string returnMsg = await Task.Run(() => transactionRepoObj.AddTransaction(_selectedTransaction));
             if (returnMsg == "success")
             {
                 this._view.ClearGrid();
@@ -236,11 +238,7 @@ namespace BudgetManagement.Controllers
                     if (contactExist == 0)
                     {
                         NewContactName = _selectedTransaction.transContact;
-                        ContactView ContactForm = ContactView.GetContactForm();
-                        ContactController controller = new ContactController(ContactForm, dContactList);
-                        controller.LoadContactView();
-
-                        ContactForm.Show();
+                        ContactController controller = new ContactController();
                     }
             }
             else
@@ -253,7 +251,7 @@ namespace BudgetManagement.Controllers
         {
                 // Update existing transaction
                 TransactionRepository transactionRepoObj = new TransactionRepository();
-                string returnMsg = transactionRepoObj.UpdateTransaction(_selectedTransaction);
+                string returnMsg = await Task.Run(() => transactionRepoObj.UpdateTransaction(_selectedTransaction));
                 if(returnMsg == "success")
                 {
                     this._view.UpdateGridWithChangedTransaction(_selectedTransaction);
@@ -309,8 +307,8 @@ namespace BudgetManagement.Controllers
                 _view.ViewRTransAmount = rTransaction.transAmount;
                 _view.ViewRTransType = rTransaction.transType;
                 _view.ViewRTransNote = rTransaction.transNote;
-                _view.ViewRTransStartDate = rTransaction.TransDate;
-                _view.ViewRTransEndDate = rTransaction.transEndDate;
+                _view.ViewRTransStartDate = rTransaction.TransDate.ToString();
+                _view.ViewRTransEndDate = rTransaction.transEndDate.ToString();
                 _view.ViewRTransContact = rTransaction.transContact;
                 _view.viewRTransFrequency = rTransaction.transFreQuency;
             }
@@ -321,7 +319,7 @@ namespace BudgetManagement.Controllers
                 _view.ViewTransAmount = transaction.transAmount;
                 _view.ViewTransType = transaction.transType;
                 _view.ViewTransNote = transaction.transNote;
-                _view.ViewTransDate = transaction.TransDate;
+                _view.ViewTransDate = transaction.TransDate.ToString();
                 _view.ViewTransContact = transaction.transContact;
             }
 
@@ -336,8 +334,8 @@ namespace BudgetManagement.Controllers
                 rTransaction.transAmount = _view.ViewRTransAmount;
                 rTransaction.transType = _view.ViewRTransType;
                 rTransaction.transNote = _view.ViewRTransNote;
-                rTransaction.TransDate = _view.ViewRTransStartDate;
-                rTransaction.transEndDate = _view.ViewRTransEndDate;
+                rTransaction.TransDate = Convert.ToDateTime(_view.ViewRTransStartDate);
+                rTransaction.transEndDate = Convert.ToDateTime(_view.ViewRTransEndDate);
                 rTransaction.transContact = _view.ViewRTransContact;
                 rTransaction.transFreQuency = _view.viewRTransFrequency;
             }
@@ -348,7 +346,7 @@ namespace BudgetManagement.Controllers
                 transaction.transAmount = _view.ViewTransAmount;
                 transaction.transType = _view.ViewTransType;
                 transaction.transNote = _view.ViewTransNote;
-                transaction.TransDate = _view.ViewTransDate;
+                transaction.TransDate = Convert.ToDateTime(_view.ViewTransDate);
                 transaction.transContact = _view.ViewTransContact;
             }
 
@@ -369,7 +367,7 @@ namespace BudgetManagement.Controllers
 
 
     }
-
+        
         //recuring transaction functions.
         public void LoadRTransactionView()
         {

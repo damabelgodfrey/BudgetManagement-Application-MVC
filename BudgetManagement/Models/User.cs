@@ -12,15 +12,17 @@ namespace BudgetManagement.Models
         public string uPassword { get; set; }
         public string uName { get; set; }
         public string uEmail { get; set; }
+        public DateTime uLastAccess { get; set; }
 
 
 
-        public User(int id, string name, string email, string password)
+        public User(int id, string name, string email, string password,DateTime lastAccess)
         {
             uID = id;
             uPassword = password;
             uName = name;
             uEmail = email;
+            uLastAccess = lastAccess;
         }
     }
 }

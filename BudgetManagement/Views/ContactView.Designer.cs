@@ -33,7 +33,7 @@ namespace BudgetManagement.Views
         {
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.DeleteCbtn = new System.Windows.Forms.Button();
-            this.updateCBtn = new System.Windows.Forms.Button();
+            this.UpdateCBtn = new System.Windows.Forms.Button();
             this.addCBtn = new System.Windows.Forms.Button();
             this.contactGbox = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -54,7 +54,7 @@ namespace BudgetManagement.Views
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.DeleteCbtn);
-            this.groupBox3.Controls.Add(this.updateCBtn);
+            this.groupBox3.Controls.Add(this.UpdateCBtn);
             this.groupBox3.Controls.Add(this.addCBtn);
             this.groupBox3.Location = new System.Drawing.Point(785, 14);
             this.groupBox3.Name = "groupBox3";
@@ -72,15 +72,15 @@ namespace BudgetManagement.Views
             this.DeleteCbtn.UseVisualStyleBackColor = true;
             this.DeleteCbtn.Click += new System.EventHandler(this.DeleteCbtn_Click);
             // 
-            // updateCBtn
+            // UpdateCBtn
             // 
-            this.updateCBtn.Location = new System.Drawing.Point(19, 61);
-            this.updateCBtn.Name = "updateCBtn";
-            this.updateCBtn.Size = new System.Drawing.Size(181, 39);
-            this.updateCBtn.TabIndex = 4;
-            this.updateCBtn.Text = "Update Contact";
-            this.updateCBtn.UseVisualStyleBackColor = true;
-            this.updateCBtn.Click += new System.EventHandler(this.updateCBtn_Click);
+            this.UpdateCBtn.Location = new System.Drawing.Point(19, 61);
+            this.UpdateCBtn.Name = "UpdateCBtn";
+            this.UpdateCBtn.Size = new System.Drawing.Size(181, 39);
+            this.UpdateCBtn.TabIndex = 4;
+            this.UpdateCBtn.Text = "Update Contact";
+            this.UpdateCBtn.UseVisualStyleBackColor = true;
+            this.UpdateCBtn.Click += new System.EventHandler(this.UpdateCBtn_Click);
             // 
             // addCBtn
             // 
@@ -94,7 +94,7 @@ namespace BudgetManagement.Views
             this.addCBtn.TabIndex = 3;
             this.addCBtn.Text = "Add New Contact";
             this.addCBtn.UseVisualStyleBackColor = false;
-            this.addCBtn.Click += new System.EventHandler(this.addCBtn_Click);
+            this.addCBtn.Click += new System.EventHandler(this.AddCBtn_Click);
             // 
             // contactGbox
             // 
@@ -213,7 +213,7 @@ namespace BudgetManagement.Views
             this.contactGrdView.UseCompatibleStateImageBehavior = false;
             this.contactGrdView.View = System.Windows.Forms.View.Details;
             this.contactGrdView.VirtualListSize = 10;
-            this.contactGrdView.SelectedIndexChanged += new System.EventHandler(this.contactGrdView_SelectedIndexChanged_1);
+            this.contactGrdView.SelectedIndexChanged += new System.EventHandler(this.ContactGrdView_SelectedIndexChanged_1);
             // 
             // ContactView
             // 
@@ -241,7 +241,7 @@ namespace BudgetManagement.Views
 
         #endregion
         private System.Windows.Forms.Button DeleteCbtn;
-        private System.Windows.Forms.Button updateCBtn;
+        private System.Windows.Forms.Button UpdateCBtn;
         private System.Windows.Forms.Button addCBtn;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox nameCtxt;

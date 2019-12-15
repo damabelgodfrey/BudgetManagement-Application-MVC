@@ -32,7 +32,9 @@ namespace BudgetManagement.Views
             
             }
         }
-        //Open contact form.
+        //Open contact form 
+        //prevent multiple instance of a form
+
         public static ContactView GetContactForm()
         {
             lock (ContactPadlock)
@@ -174,12 +176,12 @@ namespace BudgetManagement.Views
         }
 
 
-        private void addCBtn_Click(object sender, EventArgs e)
+        private void AddCBtn_Click(object sender, EventArgs e)
         {
             this.addCBtn.Enabled = false;
             this.DeleteCbtn.Enabled = false;
             //this.cancelCbBtn.Visible = true;
-            this.updateCBtn.Text = "Register Contact";
+            this.UpdateCBtn.Text = "Register Contact";
             this.contactGbox.Text = "Add Contact";
             this.contactGrdView.BackColor = System.Drawing.ColorTranslator.FromHtml("#626262");
             this.contactController.AddNewContact();
@@ -189,22 +191,28 @@ namespace BudgetManagement.Views
         // delete contact
         private void DeleteCbtn_Click(object sender, EventArgs e)
         {
+            DeleteCbtn.Enabled = false;
             this.contactController.RemoveContact();
+            DeleteCbtn.Enabled = true;
+
 
         }
 
-        private void updateCBtn_Click(object sender, EventArgs e)
+        private void UpdateCBtn_Click(object sender, EventArgs e)
         {
-            this.contactController.SaveContact();
-            this.updateCBtn.Text = "Update Contact";
+            UpdateCBtn.Enabled = false;
+           this.contactController.SaveContact();
+            this.UpdateCBtn.Text = "Update Contact";
             this.addCBtn.Enabled = true;
             this.DeleteCbtn.Enabled = true;
             this.DeleteCbtn.Visible = false;
+            UpdateCBtn.Enabled = true;
+
             //ClearGrid();
-           // this.contactListView.BackColor = System.Drawing.Color.Empty; //setto inactive
+            // this.contactListView.BackColor = System.Drawing.Color.Empty; //setto inactive
         }
 
-  
+
 
         public void SetContactController(ContactController controller)
         {
@@ -230,7 +238,7 @@ namespace BudgetManagement.Views
             }
         }
 
-        private void contactGrdView_SelectedIndexChanged_1(object sender, EventArgs e)
+        private void ContactGrdView_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             if (this.contactGrdView.SelectedItems.Count > 0)
                 this.contactController.SelectedContactChanged(this.contactGrdView.SelectedItems[0].Text);

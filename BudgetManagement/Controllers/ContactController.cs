@@ -1,5 +1,6 @@
 ﻿using BudgetManagement.Models;
 using BudgetManagement.Repository;
+using BudgetManagement.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,31 +12,39 @@ namespace BudgetManagement.Controllers
 {
     public class ContactController
     {
-        IContactView _view;
+        ContactView _view;
         Contact _selectedUser;
         List<Contact> myContactlist;
-        int userID = UserRepository.GetUserID();
+        int userID;
         string contactName = TransactionController.GetNewContactName();
 
-        public ContactController(IContactView view, List<Contact> mycontact)
+        public ContactController()
         {
-            this._view = view;
-            this.myContactlist = mycontact;
-            view.SetContactController(this);
+            _view = ContactView.GetContactForm();
+            
+            _view.SetContactController(this);
+            SetContactFormDetails();
+            _view.WindowState = FormWindowState.Normal;
+            _view.Activate();
+            _view.Show();
+        }
+
+        private void SetContactFormDetails()
+        {
+            userID = UserRepository.GetUserID();
+            ContactRepository getSaveTransaction = new ContactRepository();
+            myContactlist= getSaveTransaction.GetSavedContact(userID);
+          
+            LoadContactView();
         }
 
         public void AddNewContact()
         {
-            //string id = _users.FindLastIndex.GetType();
-            
-
             _selectedUser = new Contact(userID, userID, contactName, "","");
-
             this.updateViewDetailValues(_selectedUser);
             this._view.CanModifyID = false;
-
         }
-        public void RemoveContact()
+        public async void  RemoveContact()
         {
             string id = this._view.GetIdOfSelectedContactInGrid();
 
@@ -57,10 +66,10 @@ namespace BudgetManagement.Controllers
                 {
 
                     ContactRepository contactRepoObj = new ContactRepository();
-                    string returnMsg = contactRepoObj.DeleteContact(contactToRemove);
+                    string returnMsg = await Task.Run(() => contactRepoObj.DeleteContact(contactToRemove));
                     if (returnMsg == "success")
                     {
-                        myContactlist = contactRepoObj.GetSavedContact(userID);
+                        myContactlist =  contactRepoObj.GetSavedContact(userID);
                         int newSelectedIndex = this.myContactlist.IndexOf(contactToRemove);
                         //this.myContactlist.Remove(contactToRemove);
                         this._view.RemoveContactFromGrid(contactToRemove);
@@ -80,7 +89,7 @@ namespace BudgetManagement.Controllers
             }
         }
 
-        public void SaveContact()
+        public async void SaveContact()
         {
             updateContactWithViewValues(_selectedUser);
             if (!this.myContactlist.Contains(_selectedUser))
@@ -91,7 +100,7 @@ namespace BudgetManagement.Controllers
                 ContactRepository contactRepoObj = new ContactRepository();
 
 
-                string returnMsg = contactRepoObj.AddContact(_selectedUser);
+                string returnMsg = await Task.Run(() => contactRepoObj.AddContact(_selectedUser));
                 if (returnMsg == "success")
                 {
                     this._view.ClearGrid();

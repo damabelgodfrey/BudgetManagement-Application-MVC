@@ -13,3 +13,8 @@ C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\B
 C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.csproj.CopyComplete
 C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.Views.MyLoginForm.resources
 C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\bin\Debug\System.Windows.Forms.Ribbon.dll
+C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.Views.EventView.resources
+C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\obj\Debug\BudgetManagement.Views.ReportView.resources
+C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\bin\Debug\NLog.config
+C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\bin\Debug\NLog.dll
+C:\Users\user\Desktop\Advanced_software_Eng\Enterprise Coursework\CWEnterprise\BudgetManagement\BudgetManagement\bin\Debug\NLog.xml

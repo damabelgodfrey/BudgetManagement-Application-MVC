@@ -28,36 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.contactView = new System.Windows.Forms.Button();
-            this.transactionview = new System.Windows.Forms.Button();
             this.materialRaisedButton1 = new MaterialSkin.Controls.MaterialRaisedButton();
             this.materialFlatButton2 = new MaterialSkin.Controls.MaterialFlatButton();
             this.ManageUser = new MaterialSkin.Controls.MaterialRaisedButton();
             this.ManageTransaction = new MaterialSkin.Controls.MaterialRaisedButton();
             this.ManageEvent = new MaterialSkin.Controls.MaterialRaisedButton();
             this.ViewReport = new MaterialSkin.Controls.MaterialFlatButton();
-            this.materialFlatButton3 = new MaterialSkin.Controls.MaterialFlatButton();
+            this.ExpensePrediction = new MaterialSkin.Controls.MaterialFlatButton();
             this.ManageContact = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.PredictionPanel = new System.Windows.Forms.Panel();
+            this.GenerateReport = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.RecuringAppRunner = new System.ComponentModel.BackgroundWorker();
+            this.PredictionDate = new System.Windows.Forms.DateTimePicker();
+            this.GeneratePrediction = new System.Windows.Forms.Button();
+            this.predictionValueLabel = new MaterialSkin.Controls.MaterialLabel();
+            this.PredictionPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // contactView
-            // 
-            this.contactView.Location = new System.Drawing.Point(291, 178);
-            this.contactView.Name = "contactView";
-            this.contactView.Size = new System.Drawing.Size(278, 174);
-            this.contactView.TabIndex = 0;
-            this.contactView.Text = "Contacts";
-            this.contactView.UseVisualStyleBackColor = true;
-            this.contactView.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // transactionview
-            // 
-            this.transactionview.Location = new System.Drawing.Point(618, 178);
-            this.transactionview.Name = "transactionview";
-            this.transactionview.Size = new System.Drawing.Size(305, 174);
-            this.transactionview.TabIndex = 1;
-            this.transactionview.Text = "Transactions";
-            this.transactionview.UseVisualStyleBackColor = true;
             // 
             // materialRaisedButton1
             // 
@@ -90,6 +76,7 @@
             this.materialFlatButton2.TabIndex = 7;
             this.materialFlatButton2.Text = "HOME";
             this.materialFlatButton2.UseVisualStyleBackColor = true;
+            this.materialFlatButton2.Click += new System.EventHandler(this.materialFlatButton2_Click);
             // 
             // ManageUser
             // 
@@ -139,6 +126,7 @@
             this.ManageEvent.TabIndex = 10;
             this.ManageEvent.Text = "MANAGE EVENT";
             this.ManageEvent.UseVisualStyleBackColor = true;
+            this.ManageEvent.Click += new System.EventHandler(this.ManageEvent_Click);
             // 
             // ViewReport
             // 
@@ -156,23 +144,25 @@
             this.ViewReport.TabIndex = 11;
             this.ViewReport.Text = "VIEW REPORT";
             this.ViewReport.UseVisualStyleBackColor = true;
+            this.ViewReport.Click += new System.EventHandler(this.ViewReport_Click);
             // 
-            // materialFlatButton3
+            // ExpensePrediction
             // 
-            this.materialFlatButton3.AutoSize = true;
-            this.materialFlatButton3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialFlatButton3.Depth = 0;
-            this.materialFlatButton3.Icon = null;
-            this.materialFlatButton3.Location = new System.Drawing.Point(1, 396);
-            this.materialFlatButton3.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialFlatButton3.MinimumSize = new System.Drawing.Size(195, 63);
-            this.materialFlatButton3.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialFlatButton3.Name = "materialFlatButton3";
-            this.materialFlatButton3.Primary = false;
-            this.materialFlatButton3.Size = new System.Drawing.Size(195, 63);
-            this.materialFlatButton3.TabIndex = 12;
-            this.materialFlatButton3.Text = "EXPENSE PREDICTION";
-            this.materialFlatButton3.UseVisualStyleBackColor = true;
+            this.ExpensePrediction.AutoSize = true;
+            this.ExpensePrediction.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ExpensePrediction.Depth = 0;
+            this.ExpensePrediction.Icon = null;
+            this.ExpensePrediction.Location = new System.Drawing.Point(1, 394);
+            this.ExpensePrediction.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.ExpensePrediction.MinimumSize = new System.Drawing.Size(195, 63);
+            this.ExpensePrediction.MouseState = MaterialSkin.MouseState.HOVER;
+            this.ExpensePrediction.Name = "ExpensePrediction";
+            this.ExpensePrediction.Primary = false;
+            this.ExpensePrediction.Size = new System.Drawing.Size(195, 63);
+            this.ExpensePrediction.TabIndex = 12;
+            this.ExpensePrediction.Text = "EXPENSE PREDICTION";
+            this.ExpensePrediction.UseVisualStyleBackColor = true;
+            this.ExpensePrediction.Click += new System.EventHandler(this.ExpensePrediction_Click);
             // 
             // ManageContact
             // 
@@ -190,41 +180,106 @@
             this.ManageContact.UseVisualStyleBackColor = true;
             this.ManageContact.Click += new System.EventHandler(this.ManageContact_Click_1);
             // 
+            // PredictionPanel
+            // 
+            this.PredictionPanel.Controls.Add(this.predictionValueLabel);
+            this.PredictionPanel.Controls.Add(this.GeneratePrediction);
+            this.PredictionPanel.Controls.Add(this.PredictionDate);
+            this.PredictionPanel.Location = new System.Drawing.Point(201, 144);
+            this.PredictionPanel.Name = "PredictionPanel";
+            this.PredictionPanel.Size = new System.Drawing.Size(853, 387);
+            this.PredictionPanel.TabIndex = 15;
+            // 
+            // GenerateReport
+            // 
+            this.GenerateReport.AutoSize = true;
+            this.GenerateReport.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.GenerateReport.Depth = 0;
+            this.GenerateReport.Icon = null;
+            this.GenerateReport.Location = new System.Drawing.Point(777, 12);
+            this.GenerateReport.MouseState = MaterialSkin.MouseState.HOVER;
+            this.GenerateReport.Name = "GenerateReport";
+            this.GenerateReport.Primary = true;
+            this.GenerateReport.Size = new System.Drawing.Size(144, 36);
+            this.GenerateReport.TabIndex = 16;
+            this.GenerateReport.Text = "Generate Report";
+            this.GenerateReport.UseVisualStyleBackColor = true;
+            this.GenerateReport.Click += new System.EventHandler(this.GenerateReport_Click);
+            // 
+            // RecuringAppRunner
+            // 
+            this.RecuringAppRunner.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            // 
+            // PredictionDate
+            // 
+            this.PredictionDate.Location = new System.Drawing.Point(142, 40);
+            this.PredictionDate.Name = "PredictionDate";
+            this.PredictionDate.Size = new System.Drawing.Size(200, 20);
+            this.PredictionDate.TabIndex = 0;
+            // 
+            // GeneratePrediction
+            // 
+            this.GeneratePrediction.Location = new System.Drawing.Point(417, 40);
+            this.GeneratePrediction.Name = "GeneratePrediction";
+            this.GeneratePrediction.Size = new System.Drawing.Size(150, 23);
+            this.GeneratePrediction.TabIndex = 1;
+            this.GeneratePrediction.Text = "Generate Prediction";
+            this.GeneratePrediction.UseVisualStyleBackColor = true;
+            this.GeneratePrediction.Click += new System.EventHandler(this.GeneratePrediction_Click);
+            // 
+            // predictionValueLabel
+            // 
+            this.predictionValueLabel.AutoSize = true;
+            this.predictionValueLabel.Depth = 0;
+            this.predictionValueLabel.Font = new System.Drawing.Font("Roboto", 11F);
+            this.predictionValueLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.predictionValueLabel.Location = new System.Drawing.Point(266, 148);
+            this.predictionValueLabel.MouseState = MaterialSkin.MouseState.HOVER;
+            this.predictionValueLabel.Name = "predictionValueLabel";
+            this.predictionValueLabel.Size = new System.Drawing.Size(108, 19);
+            this.predictionValueLabel.TabIndex = 2;
+            this.predictionValueLabel.Text = "materialLabel1";
+            // 
             // Dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.ClientSize = new System.Drawing.Size(1059, 531);
+            this.Controls.Add(this.GenerateReport);
+            this.Controls.Add(this.PredictionPanel);
             this.Controls.Add(this.ManageContact);
-            this.Controls.Add(this.materialFlatButton3);
+            this.Controls.Add(this.ExpensePrediction);
             this.Controls.Add(this.ViewReport);
             this.Controls.Add(this.ManageEvent);
             this.Controls.Add(this.ManageTransaction);
             this.Controls.Add(this.ManageUser);
             this.Controls.Add(this.materialFlatButton2);
-            this.Controls.Add(this.transactionview);
-            this.Controls.Add(this.contactView);
             this.Controls.Add(this.materialRaisedButton1);
             this.Name = "Dashboard";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Dashboard";
+            this.PredictionPanel.ResumeLayout(false);
+            this.PredictionPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Button contactView;
-        private System.Windows.Forms.Button transactionview;
         private MaterialSkin.Controls.MaterialRaisedButton materialRaisedButton1;
         private MaterialSkin.Controls.MaterialFlatButton materialFlatButton2;
         private MaterialSkin.Controls.MaterialRaisedButton ManageUser;
         private MaterialSkin.Controls.MaterialRaisedButton ManageTransaction;
         private MaterialSkin.Controls.MaterialRaisedButton ManageEvent;
         private MaterialSkin.Controls.MaterialFlatButton ViewReport;
-        private MaterialSkin.Controls.MaterialFlatButton materialFlatButton3;
+        private MaterialSkin.Controls.MaterialFlatButton ExpensePrediction;
         private MaterialSkin.Controls.MaterialRaisedButton ManageContact;
+        private System.Windows.Forms.Panel PredictionPanel;
+        private MaterialSkin.Controls.MaterialRaisedButton GenerateReport;
+        private System.ComponentModel.BackgroundWorker RecuringAppRunner;
+        private System.Windows.Forms.Button GeneratePrediction;
+        private System.Windows.Forms.DateTimePicker PredictionDate;
+        private MaterialSkin.Controls.MaterialLabel predictionValueLabel;
     }
 }

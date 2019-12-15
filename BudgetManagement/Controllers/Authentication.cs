@@ -62,10 +62,10 @@ namespace BudgetManagement.Controllers
            
             }
 
-        public static string RegisterUser(string name, string email, string password, string passwordConfirm)
+        public static string RegisterUser(string name, string email, string password, string passwordConfirm, DateTime now )
         {
             UserRepository usr = new UserRepository();
-            User user = new User(0, name, email, password);
+            User user = new User(0, name, email, password,now);
             string returnmsg = usr.AddUser(user);
 
             return returnmsg;
@@ -83,16 +83,21 @@ namespace BudgetManagement.Controllers
                 //get contacts
                 ContactRepository contactRepoObj = new ContactRepository();
                 contactRepoObj.GetSavedContact(usl[0].uID);
+                
+
                 //get transaction
                 TransactionRepository transRepoObj = new TransactionRepository();
                 transRepoObj.GetSavedRecurringTransaction(usl[0].uID);
+
                 TransactionRepository transRepoObj2 = new TransactionRepository();
 
                 transRepoObj2.GetSavedTransaction(usl[0].uID);
                 //get events
                 EventRepository eventRepoObj = new EventRepository();
-                eventRepoObj.GetEvents(usl[0].uID);
-                eventRepoObj.GetRecurringEvents(usl[0].uID);
+                eventRepoObj.GetSavedEvent(usl[0].uID);
+                EventRepository eventRepoObj2 = new EventRepository();
+
+                eventRepoObj2.GetSavedRecurringEvent(usl[0].uID);
                // return "success";
 
             }
