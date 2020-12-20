@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Tulpep.NotificationWindow;
 
 namespace BudgetManagement.Controllers
 {
@@ -17,6 +18,7 @@ namespace BudgetManagement.Controllers
         RecurringEvent _selectedREvent;
         List<Event> myEventlist;
         List<RecurringEvent> myRecurringEventlist;
+
         //List<RecurringEvent> myRecurringEventlist = new List<RecurringEvent>();
 
         int userID = UserRepository.GetUserID();
@@ -35,238 +37,149 @@ namespace BudgetManagement.Controllers
             _view.Activate();
             _view.Show();
         }
+        public void DisposeEventView()
+        {
 
+            _view.Dispose();
+        }
         public void SetEventFormDetails()
         {
             EventRepository getSaveEvent = new EventRepository();
-            getSaveEvent.GetSavedEvent(userID);
             EventRepository getSaveREvent = new EventRepository();
-            getSaveREvent.GetSavedRecurringEvent(userID);
-            myEventlist = EventRepository.RequestEventList();
-            myRecurringEventlist = EventRepository.RequestRecurringEventList();
-            LoadEventView();
-            LoadREventView();
+            myEventlist = getSaveEvent.GetSavedEvent(userID);
+            myRecurringEventlist = getSaveREvent.GetSavedRecurringEvent(userID); ;
+            LoadEventView("NormalEvent");
+            LoadEventView("RecurringEvent");
         }
 
-        public void AddNewEvent()
+        public void AddNewEvent(String typeflag)
         {
             //string id = _users.FindLastIndex.GetType();
             DateTime now = DateTime.Now;
-            _selectedEvent = new Event(userID, userID, "", "", now, "", "");
-            this.UpdateViewDetailValues(_selectedEvent);
-            this._view.CanModifyID = false;
-        }
-
-        //add new recurring Event
-        public void AddNewREvent()
-        {
-            DateTime now = DateTime.Now;
-            _selectedREvent = new RecurringEvent(userID, userID, "", "", now, "", "", "", now);
-            this.UpdateViewDetailValues(_selectedREvent);
-            this._view.CanModifyRID = false;
-        }
-
-
-
-        public async void RemoveEvent()
-        {
-            string id = this._view.GetIdOfSelectedEventInGrid();
-            Event EventToRemove = null;
-            if (id != "")
+            if(typeflag == "NormalEvent")
             {
-                foreach (Event Event in this.myEventlist)
-                {
-                    if (Event.EventID.ToString() == id)
-                    {
-                        EventToRemove = Event;
-                        break;
-                    }
-                }
-
-                if (EventToRemove != null)
-                {
-
-                    EventRepository EventRepoObj = new EventRepository();
-                    string returnMsg = await Task.Run(() => EventRepoObj.DeleteEvent(EventToRemove));
-                    if (returnMsg == "success")
-                    {
-                        myEventlist = EventRepoObj.GetSavedEvent(userID);
-                        int newSelectedIndex = this.myEventlist.IndexOf(EventToRemove);
-                        //this.myEventlist.Remove(EventToRemove);
-                        this._view.RemoveEventFromGrid(EventToRemove);
-
-                        if (newSelectedIndex > -1 && newSelectedIndex < myEventlist.Count)
-                        {
-                            this._view.SetSelectedEventInGrid((Event)myEventlist[newSelectedIndex]);
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show(returnMsg, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                    }
-
-                }
+                _selectedEvent = new Event(userID, userID, "", "", now, "", "");
+                this.UpdateViewDetailValues(_selectedEvent);
+                this._view.CanModifyID = false;
             }
-        }
-        //remove recurring Event
-        internal async void RemoveREvent()
-        {
-            string id = this._view.GetIdOfSelectedREventInGrid();
-
-
-            RecurringEvent rEventToRemove = null;
-
-            if (id != "")
+            else
             {
-                foreach (RecurringEvent rEvent in this.myRecurringEventlist)
-                {
-                    if (rEvent.EventID.ToString() == id)
-                    {
-                        rEventToRemove = rEvent;
-                        break;
-                    }
-                }
-
-                if (rEventToRemove != null)
-                {
-                    EventRepository EventRepoObj = new EventRepository();
-                    string returnMsg = await Task.Run(() => EventRepoObj.DeleteEvent(rEventToRemove));
-                    if (returnMsg == "success")
-                    {
-                        myRecurringEventlist = EventRepoObj.GetSavedRecurringEvent(userID);
-                        int newRSelectedIndex = this.myRecurringEventlist.IndexOf(rEventToRemove);
-                        //this.myEventlist.Remove(EventToRemove);
-                        this._view.RemoveEventFromGrid(rEventToRemove);
-
-                        if (newRSelectedIndex > -1 && newRSelectedIndex < myRecurringEventlist.Count)
-                        {
-                            this._view.SetSelectedEventInGrid(myRecurringEventlist[newRSelectedIndex]);
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show(returnMsg, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                    }
-
-                }
+                _selectedREvent = new RecurringEvent(userID, userID, "", "", now, "", "", "", now);
+                this.UpdateViewDetailValues(_selectedREvent);
+                this._view.CanModifyRID = false;
             }
+            
         }
 
-        internal async void SaveREvent()
+
+
+        public async void DeleteEvent(Event myEvent)
         {
-            updateEventWithViewValues(_selectedREvent);
-            int id = UserRepository.GetUserID();
-
-            if (!this.myRecurringEventlist.Contains(_selectedREvent))
+            EventRepository eventRepoObj = new EventRepository();
+            string returnMsg = await Task.Run(() => eventRepoObj.DeleteEvent(myEvent));
+            if (returnMsg == "success")
             {
-                // Add new Event
-                EventRepository EventRepoObj = new EventRepository();
-                string returnMsg = await Task.Run(() => EventRepoObj.AddEvent(_selectedREvent));
-
-                if (returnMsg == "success")
+                if (myEvent is RecurringEvent rEvent)
                 {
-                    this._view.ClearRGrid();
-                    EventRepository EventObj = new EventRepository();
-
                     myRecurringEventlist.Clear();
-                    myRecurringEventlist = EventObj.GetSavedRecurringEvent(id);
-                    foreach (RecurringEvent Event in this.myRecurringEventlist)
-                    {
-                        this._view.AddEventToGrid(Event); //UPDATE GRIDE
+                    myRecurringEventlist = eventRepoObj.GetSavedRecurringEvent(userID);
+                    this._view.RemoveEventFromGrid(rEvent);
 
+
+                    int newSelectedTransIndex = myRecurringEventlist.IndexOf(rEvent) + 1;
+                    if (newSelectedTransIndex > -1 && newSelectedTransIndex < myRecurringEventlist.Count)
+                    {
+
+                        this._view.SetSelectedEventInGrid(myRecurringEventlist[newSelectedTransIndex]);
                     }
-                    MessageBox.Show("ADDED SUCCESSFULLY", "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
 
                 }
                 else
                 {
-                    MessageBox.Show(returnMsg.ToString() + "  Event was not able to be added to database", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    int newSelectedIndex = myEventlist.IndexOf(myEvent) + 1;
+                    myEventlist.Clear();
+                    myEventlist = eventRepoObj.GetSavedEvent(userID);
+                    this._view.RemoveEventFromGrid(myEvent);
+                    if (newSelectedIndex > -1 && newSelectedIndex < myEventlist.Count)
+                    {
+                        this._view.SetSelectedEventInGrid(myEventlist[newSelectedIndex]);
+                    }
+
+
                 }
             }
             else
             {
-                // Update existing Event
-                EventRepository EventRepoObj = new EventRepository();
-                string returnMsg = EventRepoObj.UpdateEvent(_selectedREvent);
-                myRecurringEventlist = await Task.Run(() => EventRepoObj.GetSavedRecurringEvent(id));
-                if (returnMsg == "success")
-                {
-                    this._view.UpdateGridWithChangedEvent(_selectedREvent);
-                    MessageBox.Show(returnMsg, "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    MessageBox.Show(returnMsg, "Update Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
+                MessageBox.Show(returnMsg + " Event not deleted", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            _view.SetSelectedEventInGrid(_selectedREvent);
-            this._view.CanModifyRID = false;
         }
 
-        internal async void SaveEvent()
+        internal async void UpdateEvent(Event myEvent)
         {
-            updateEventWithViewValues(_selectedEvent);
-            if (!this.myEventlist.Contains(_selectedEvent))
+            string returnMsg = "false";
+            EventRepository eventRepoObj = new EventRepository();
+            returnMsg = await Task.Run(() => eventRepoObj.UpdateEvent(myEvent));
+            if (myEvent is RecurringEvent)
             {
-                EventRepository EventRepoObj = new EventRepository();
-                string returnMsg = await Task.Run(() => EventRepoObj.AddEvent(_selectedEvent));
-                if (returnMsg == "success")
-                {
-                    this._view.ClearGrid();
-                    int id = UserRepository.GetUserID();
-                    EventRepository EventObj = new EventRepository();
-                    myEventlist = EventObj.GetSavedEvent(id);
-                    foreach (Event Event in this.myEventlist)
-                    {
-                        this._view.AddEventToGrid(Event); //UPDATE GRIDE
-
-                    }
-                    MessageBox.Show("ADDED SUCCESSFULLY", "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    string Dcontact = _selectedEvent.EventContact;
-                    List<Contact> dContactList = ContactRepository.GetContactList();
-
-
-                    int contactExist = 0;
-                    foreach (var contact in dContactList)
-                    {
-                        if (Dcontact == contact.cName)
-                        {
-                            contactExist = 1;
-                        }
-                    }
-                    if (contactExist == 0)
-                    {
-                        NewContactName = _selectedEvent.EventContact;
-                        ContactController controller = new ContactController();
-                    }
-                }
-                else
-                {
-                    MessageBox.Show(returnMsg.ToString() + "  Event was not able to be added to database", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                }
+                myRecurringEventlist.Clear();
+                myRecurringEventlist = eventRepoObj.GetSavedRecurringEvent(userID);
             }
             else
             {
-                // Update existing Event
-                EventRepository EventRepoObj = new EventRepository();
-                string returnMsg = await Task.Run(() => EventRepoObj.UpdateEvent(_selectedEvent));
-                if (returnMsg == "success")
+                myEventlist.Clear();
+                myEventlist = eventRepoObj.GetSavedEvent(userID);
+            }
+
+            if (returnMsg == "success")
+            {
+                this._view.UpdateGridWithChangedEvent(myEvent);
+                MessageBox.Show("Updated SUCCESSFULLY");
+            }
+            else
+            {
+                MessageBox.Show(returnMsg, "Update Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            _view.SetSelectedEventInGrid(myEvent);
+        }
+        internal async void AddEvent(Event myevent)
+        {
+            EventRepository eventRepoObj = new EventRepository();
+            string returnMsg = await Task.Run(() => eventRepoObj.AddEvent(myevent));
+            if (returnMsg == "success")
+            {
+                EventRepository eventObj = new EventRepository();
+                if (myevent is RecurringEvent)
                 {
-                    this._view.UpdateGridWithChangedEvent(_selectedEvent);
-                    MessageBox.Show(returnMsg, "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    this._view.ClearGrid("RecurringEvent");
+                    myRecurringEventlist.Clear();
+                    myRecurringEventlist = eventObj.GetSavedRecurringEvent(userID);
+                    MessageBox.Show(myRecurringEventlist.Count+ " in count");
+                    int i = 1;
+                    foreach (RecurringEvent rEvent in myRecurringEventlist.ToList())
+                    {
+                        this._view.AddEventToGrid(rEvent); //UPDATE GRIDE
+                        i++;
+                       // MessageBox.Show(myevent.EventName + " in adding");
+
+                    }
+                    MessageBox.Show(myevent.EventName + " ADDED SUCCESSFULLY");
 
                 }
                 else
                 {
-                    MessageBox.Show(returnMsg, "Update Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    this._view.ClearGrid("NormalEvent");
+                    myEventlist.Clear();
+                    myEventlist = await Task.Run(() => eventObj.GetSavedEvent(userID));
+
+                    foreach (Event myEvent in myEventlist.ToList())
+                    {
+                        this._view.AddEventToGrid(myEvent); //UPDATE GRIDE
+                    }
+                    MessageBox.Show(myevent.EventName + " ADDED SUCCESSFULLY");
 
                 }
             }
-            _view.SetSelectedEventInGrid(_selectedEvent);
-            this._view.CanModifyID = false;
         }
 
         public void SelectedEventChanged(string selectedEventId)
@@ -303,83 +216,53 @@ namespace BudgetManagement.Controllers
         {
             if (Event is RecurringEvent rEvent)
             {
-                _view.ViewREventID = rEvent.EventID.ToString();
+                _view.ViewREventID = rEvent.EventID;
                 _view.ViewREventName = rEvent.EventName;
                 _view.ViewREventType = rEvent.EventType;
                 _view.ViewREventNote = rEvent.EventNote;
-                _view.ViewREventStartDate = rEvent.EventDate.ToString();
-                _view.ViewREventEndDate = rEvent.EventEndDate.ToString();
+                _view.ViewREventStartDate = rEvent.EventDate;
+                _view.ViewREventEndDate = rEvent.EventEndDate;
                 _view.ViewREventContact = rEvent.EventContact;
                 _view.viewREventFrequency = rEvent.EventFreQuency;
+
             }
             else
             {
-                _view.ViewEventID = Event.EventID.ToString();
+                _view.ViewEventID = Event.EventID;
                 _view.ViewEventName = Event.EventName;
                 _view.ViewEventType = Event.EventType;
                 _view.ViewEventNote = Event.EventNote;
-                _view.ViewEventDate = Event.EventDate.ToString();
+                _view.ViewEventDate = Event.EventDate;
                 _view.ViewEventContact = Event.EventContact;
             }
 
         }
 
-        private void updateEventWithViewValues(Event Event)
+        public void LoadEventView(String typeflag)
         {
-            if (Event is RecurringEvent rEvent)
+            _view.ClearGrid(typeflag);
+            if (typeflag == "NormalEvent")
             {
-                rEvent.EventID = Convert.ToInt32(_view.ViewREventID);
-                rEvent.EventName = _view.ViewREventName;
-                rEvent.EventType = _view.ViewREventType;
-                rEvent.EventNote = _view.ViewREventNote;
-                rEvent.EventDate = Convert.ToDateTime(_view.ViewREventStartDate);
-                rEvent.EventEndDate = Convert.ToDateTime(_view.ViewREventEndDate);
-                rEvent.EventContact = _view.ViewREventContact;
-                rEvent.EventFreQuency = _view.viewREventFrequency;
+                if (myEventlist.Count > 0)
+                {
+                    foreach (Event Event in myEventlist.ToList())
+                    {
+                        _view.AddEventToGrid(Event);
+                    }
+                    _view.SetSelectedEventInGrid(myEventlist[0]);
+                }
             }
             else
             {
-                Event.EventID = Convert.ToInt32(_view.ViewEventID);
-                Event.EventName = _view.ViewEventName;
-                Event.EventType = _view.ViewEventType;
-                Event.EventNote = _view.ViewEventNote;
-                Event.EventDate = Convert.ToDateTime(_view.ViewEventDate);
-                Event.EventContact = _view.ViewEventContact;
-            }
-
-        }
-
-        public void LoadEventView()
-        {
-            _view.ClearGrid();
-            if (myEventlist.Count > 0)
-            {
-                foreach (Event Event in myEventlist)
+                if (myRecurringEventlist.Count > 0)
                 {
-                    _view.AddEventToGrid(Event);
+                    foreach (RecurringEvent rEvent in myRecurringEventlist)
+                    {
+                        _view.AddEventToGrid(rEvent);
+                    }
+                    _view.SetSelectedEventInGrid(myRecurringEventlist[0]);
                 }
-
-                _view.SetSelectedEventInGrid((Event)myEventlist[0]);
             }
-
-
-        }
-
-        //recuring Event functions.
-        public void LoadREventView()
-        {
-            _view.ClearRGrid();
-            if (myRecurringEventlist.Count > 0)
-            {
-                foreach (RecurringEvent rEvent in myRecurringEventlist)
-                {
-                    _view.AddEventToGrid(rEvent);
-
-                }
-                _view.SetSelectedEventInGrid((RecurringEvent)myRecurringEventlist[0]);
-            }
-
-
         }
     }
 }

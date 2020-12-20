@@ -19,13 +19,18 @@ namespace BudgetManagement.Views
         TransactionController transactionController;
         private static TransactionView TransactionForm;
         private static readonly object TransactionPadlock = new object();
+        int UserId = TransactionController.GetUserID();
+        List<Contact> myContacts;
+
         // ContactRepositoryController contactRepoController;
         public TransactionView()
         {
             InitializeComponent();
-            this.tContactCombobox.DataSource = ContactRepository.GetContactList();
+            ContactRepository contacts = new ContactRepository();
+            myContacts = contacts.GetSavedContact(UserId);
+            this.tContactCombobox.DataSource = myContacts;
             this.tContactCombobox.DisplayMember = "cName";
-            this.rTransContactList.DataSource = ContactRepository.GetContactList();
+            this.rTransContactList.DataSource = myContacts;
             this.rTransContactList.DisplayMember = "cName";
         }
 
@@ -91,99 +96,64 @@ namespace BudgetManagement.Views
             get { return this.rTransNote.Text; }
             set { this.rTransNote.Text = value; }
         }
-        public string ViewRTransID
+        public int ViewRTransID
         {
-            get { return this.rID.Text; }
-            set { this.rID.Text = value; }
+            get { return Convert.ToInt32(this.rID.Text); }
+            set { this.rID.Text = value.ToString(); }
         }
-        public bool CanModifyRID
+
+        public DateTime ViewRTransStartDate
         {
-            set { this.rID.Enabled = value; }
-        }
-        public string ViewRTransStartDate
-        {
-            get { return this.rTransStartPeriod.Text; }
+            get { return Convert.ToDateTime(this.rTransStartPeriod.Text); }
             set { this.rTransStartPeriod.Text = value.ToString(); }
         }
-        public string ViewRTransEndDate
+        public DateTime ViewRTransEndDate
         {
-            get { return this.rTransEndPeriod.Text; }
+            get { return Convert.ToDateTime(this.rTransEndPeriod.Text); }
             set { this.rTransEndPeriod.Text = value.ToString(); }
         }
 
 
-        public void ClearRGrid()
+        public void ClearGrid(String typeflag)
         {
             // Define columns and clear item
-            this.RTransListView.Columns.Clear();
 
-            this.RTransListView.Columns.Add("ID", 150, HorizontalAlignment.Left);
-            this.RTransListView.Columns.Add("Name", 150, HorizontalAlignment.Left);
-            this.RTransListView.Columns.Add("AMOUNT", 150, HorizontalAlignment.Left);
-            this.RTransListView.Columns.Add("TYPE", 150, HorizontalAlignment.Left);
-            this.RTransListView.Items.Clear();
-        }
-        public string GetIdOfSelectedRTransactionInGrid()
-        {
-            if (this.RTransListView.SelectedItems.Count > 0)
+            if (typeflag == "RecurringTrans")
             {
-                return this.RTransListView.SelectedItems[0].Text;
-
+                this.RTransListView.Columns.Clear();
+                this.RTransListView.Columns.Add("ID", 150, HorizontalAlignment.Left);
+                this.RTransListView.Columns.Add("Name", 150, HorizontalAlignment.Left);
+                this.RTransListView.Columns.Add("AMOUNT", 150, HorizontalAlignment.Left);
+                this.RTransListView.Columns.Add("TYPE", 150, HorizontalAlignment.Left);
+                this.RTransListView.Columns.Add("Dates", 250, HorizontalAlignment.Left);
+                this.RTransListView.Items.Clear();
             }
             else
             {
-                return "";
-
+                this.transGridView.Columns.Clear();
+                this.transGridView.Columns.Add("ID", 150, HorizontalAlignment.Left);
+                this.transGridView.Columns.Add("Name", 150, HorizontalAlignment.Left);
+                this.transGridView.Columns.Add("AMOUNT", 150, HorizontalAlignment.Left);
+                this.transGridView.Columns.Add("TYPE", 150, HorizontalAlignment.Left);
+                this.transGridView.Columns.Add("Date", 200, HorizontalAlignment.Left);
+                this.transGridView.Items.Clear();
             }
         }
+        //public string GetIdOfSelectedRTransactionInGrid()
+        //{
+        //    if (this.RTransListView.SelectedItems.Count > 0)
+        //    {
+        //        return this.RTransListView.SelectedItems[0].Text;
+
+        //    }
+        //    else
+        //    {
+        //        return "";
+
+        //    }
+        //}
 
 
-
-        private void AddRTransaction_Click(object sender, EventArgs e)
-        {
-            this.AddRTransaction.Enabled = false;
-            this.DeleteRTransaction.Enabled = false;
-            //this.cancelTBtn.Visible = true;
-            this.RegisterRTransaction.Text = "Submit";
-            this.rTransDetailBox.Text = "Add Recurrent Transaction";
-            this.rTransDetailBox.BackColor = System.Drawing.ColorTranslator.FromHtml("#d8dde3");
-            this.CancelAddRAction.Visible = true;
-            this.transactionController.AddNewRTransaction();
-
-        }
-
-        private void RegisterRTransaction_Click(object sender, EventArgs e)
-        {
-            RegisterRTransaction.Enabled = false;
-            this.transactionController.SaveRTransaction();
-            this.RegisterRTransaction.Text = "Update Recurring";
-            this.AddRTransaction.Enabled = true;
-            this.DeleteRTransaction.Enabled = true;
-            this.DeleteRTransaction.Visible = true;
-            rTransDetailBox.BackColor = System.Drawing.Color.Empty;
-            this.transactionController.LoadRTransactionView();
-            RegisterRTransaction.Enabled = true;
-
-
-        }
-        private void CancelAddRAction_Click(object sender, EventArgs e)
-        {
-            this.CancelAddRAction.Visible = false;
-            this.AddRTransaction.Enabled = true;
-            this.DeleteRTransaction.Enabled = true;
-            this.RegisterRTransaction.Text = "Update Transaction";
-            this.transDetailBox.Text = "Update Transaction";
-            this.transDetailBox.BackColor = System.Drawing.Color.Empty;
-            this.transactionController.LoadRTransactionView();
-        }
-        private void DeleteRTransaction_Click(object sender, EventArgs e)
-        {
-            DeleteRTransaction.Enabled = false;
-            this.transactionController.RemoveRTransaction();
-            DeleteRTransaction.Enabled = true;
-
-
-        }
         private void RTransListView_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (this.RTransListView.SelectedItems.Count > 0)
@@ -249,18 +219,14 @@ namespace BudgetManagement.Views
             get { return this.tNoteTbox.Text; }
             set { this.tNoteTbox.Text = value; }
         }
-        public string ViewTransID
+        public int ViewTransID
         {
-            get { return this.tIDtbox.Text; }
-            set { this.tIDtbox.Text = value; }
+            get { return Convert.ToInt32(this.tIDtbox.Text); }
+            set { this.tIDtbox.Text = value.ToString(); }
         }
-        public bool CanModifyID
+        public DateTime ViewTransDate
         {
-            set { this.tIDtbox.Enabled = value; }
-        }
-        public string ViewTransDate
-        {
-            get { return this.tDatePicker.Text; }
+            get { return Convert.ToDateTime(this.tDatePicker.Text); }
             set { this.tDatePicker.Text = value.ToString(); }
         }
 
@@ -276,11 +242,14 @@ namespace BudgetManagement.Views
             ListViewItem parent;
             if (transaction is RecurringTransaction rTransaction)
             {
+               // parent = this.RTransListView.Items.Add(rTransaction.transID.ToString());
                 parent = this.RTransListView.Items.Add(rTransaction.transID.ToString());
+
                 parent.SubItems.Add(rTransaction.transName);
                 parent.SubItems.Add(rTransaction.transAmount.ToString());
                 parent.SubItems.Add(rTransaction.transType);
-                //ApplyStripeToTransactionGrid();
+                parent.SubItems.Add(rTransaction.TransDate.Date.ToShortDateString ()+ " - " + rTransaction.transEndDate.Date.ToShortDateString());
+
             }
             else
             {
@@ -288,8 +257,10 @@ namespace BudgetManagement.Views
                 parent.SubItems.Add(transaction.transName);
                 parent.SubItems.Add(transaction.transAmount.ToString());
                 parent.SubItems.Add(transaction.transType);
-                ApplyStripeToTransactionGrid();
+                parent.SubItems.Add(transaction.TransDate.Date.ToShortDateString());
+
             }
+            ApplyStripeToTransactionGrid(transaction);
         }
 
         internal static TransactionView GetTransactionForm()
@@ -304,16 +275,18 @@ namespace BudgetManagement.Views
             }
         }
 
-        public void ClearGrid()
+        internal static void DisposeTransactionForm()
         {
-            // Define columns and clear item
-            this.transGridView.Columns.Clear();
-            this.transGridView.Columns.Add("ID", 150, HorizontalAlignment.Left);
-            this.transGridView.Columns.Add("Name", 150, HorizontalAlignment.Left);
-            this.transGridView.Columns.Add("AMOUNT", 150, HorizontalAlignment.Left);
-            this.transGridView.Columns.Add("TYPE", 150, HorizontalAlignment.Left);
-            this.transGridView.Items.Clear();
+            try
+            {
+                TransactionForm.Dispose();
+            }
+            catch (Exception)
+            {
+            }
+            return;
         }
+
 
         public void UpdateGridWithChangedTransaction(Transaction transaction)
         {
@@ -325,6 +298,7 @@ namespace BudgetManagement.Views
                     if (row.Text == rTransaction.transID.ToString())
                     {
                         rowToUpdate = row;
+
                     }
                 }
 
@@ -334,6 +308,12 @@ namespace BudgetManagement.Views
                     rowToUpdate.SubItems[1].Text = rTransaction.transName;
                     rowToUpdate.SubItems[2].Text = rTransaction.transAmount.ToString();
                     rowToUpdate.SubItems[3].Text = rTransaction.transType;
+                    rowToUpdate.SubItems[4].Text = rTransaction.TransDate.ToShortDateString() + " - " + rTransaction.transEndDate.ToShortDateString();
+
+                    RTransListView.Select();
+                    RTransListView.MultiSelect = false;
+                    rowToUpdate.Selected = true;
+                    RTransListView.MultiSelect = true;
                 }
             }
             else
@@ -352,22 +332,30 @@ namespace BudgetManagement.Views
                     rowToUpdate.SubItems[1].Text = transaction.transName;
                     rowToUpdate.SubItems[2].Text = transaction.transAmount.ToString();
                     rowToUpdate.SubItems[3].Text = transaction.transType;
+                    rowToUpdate.SubItems[4].Text = transaction.TransDate.ToShortDateString();
+
+                    transGridView.Select();
+                    transGridView.MultiSelect = false;
+                    rowToUpdate.Selected = true;
+                    transGridView.MultiSelect = true;
+
+
                 }
             }
         }
-        public string GetIdOfSelectedTransactionInGrid()
-        {
-            if (this.transGridView.SelectedItems.Count > 0)
-            {
-                return this.transGridView.SelectedItems[0].Text;
+        //public string GetIdOfSelectedTransactionInGrid()
+        //{
+        //    if (this.transGridView.SelectedItems.Count > 0)
+        //    {
+        //        return this.transGridView.SelectedItems[0].Text;
 
-            }
-            else
-            {
-                return "";
+        //    }
+        //    else
+        //    {
+        //        return "";
 
-            }
-        }
+        //    }
+        //}
 
         public void RemoveTransactionFromGrid(Transaction transaction)
         {
@@ -387,8 +375,8 @@ namespace BudgetManagement.Views
                 if (rowToRemove != null)
                 {
                     this.RTransListView.Items.Remove(rowToRemove);
-                    ApplyStripeToTransactionGrid();
-                    this.transGridView.Focus();
+                    ApplyStripeToTransactionGrid(transaction);
+                    this.RTransListView.Focus();
                 }
             } else {
                 foreach (ListViewItem row in this.transGridView.Items)
@@ -402,7 +390,7 @@ namespace BudgetManagement.Views
                 if (rowToRemove != null)
                 {
                     this.transGridView.Items.Remove(rowToRemove);
-                    ApplyStripeToTransactionGrid();
+                    ApplyStripeToTransactionGrid(transaction);
                     this.transGridView.Focus();
                 }
             }
@@ -438,62 +426,85 @@ namespace BudgetManagement.Views
             }
         }
 
-
-        private void AddTBtn_Click(object sender, EventArgs e)
+        //add transaction
+        private void adTBtn_Click(object sender, EventArgs e)
         {
-            this.addTBtn.Enabled = false;
-            this.DeleteTBtn.Enabled = false;
-            this.cancelTBtn.Visible = true;
-            this.UpdateTBtn.Text = "Register Contact";
-            this.transDetailBox.Text = "Add Contact";
+
+           
+            this.transDetailBox.Text = "Adding Transaction...";
             this.transDetailBox.BackColor = System.Drawing.ColorTranslator.FromHtml("#d8dde3");
-            this.transactionController.AddNewTransaction();
+            this.transactionController.AddNewTransaction("NormalTrans");
+            transGridView.Enabled = false;
+            UpdateTBtn.Visible = false;
+            DeleteTBtn.Visible = false;
+            addTBtn.Enabled = false;
+            cancelTBtn.Visible = true;
+            SubmitTrans.Visible = true;
+
 
         }
-
-        // delete contact
+        // delete transaction
         private void DeleteTBtn_Click(object sender, EventArgs e)
         {
-            DeleteTBtn.Enabled = false;
-            this.transactionController.RemoveTransaction();
-            DeleteTBtn.Enabled = true;
-
-
+            Transaction transaction = new Transaction(ViewTransID, UserId, ViewTransName, ViewTransNote, Convert.ToDateTime(ViewTransDate), ViewTransAmount, ViewTransType, ViewTransContact);
+            transactionController.DeleteTransaction(transaction);
         }
-
         //call controller to save transaction
         private void UpdateTBtn_Click(object sender, EventArgs e)
         {
-            UpdateTBtn.Enabled = false;
-            this.transactionController.SaveTransaction();
-            this.UpdateTBtn.Text = "Update Contact";
-            this.addTBtn.Enabled = true;
-            this.DeleteTBtn.Enabled = true;
-            this.DeleteTBtn.Visible = true;
-            cancelTBtn.Visible = true;
+            if (string.IsNullOrWhiteSpace(ViewTransName))
+            {
+                MessageBox.Show("Please Enter Transaction Name", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (ViewTransAmount <= 0)
+            {
+                MessageBox.Show("Please Enter Transaction Amount above zero", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            Transaction transaction = new Transaction(ViewTransID, UserId, ViewTransName, ViewTransNote, Convert.ToDateTime(ViewTransDate), ViewTransAmount, ViewTransType, ViewTransContact);
+            this.transactionController.UpdateTransaction(transaction);
             this.transDetailBox.BackColor = System.Drawing.Color.Empty;
-            this.transactionController.LoadTransactionView();
-            UpdateTBtn.Enabled = true;
-
-
+            this.transactionController.LoadTransactionView("NormalTrans");
         }
         //apply zebraline to grid
-        public void ApplyStripeToTransactionGrid()
+        public void ApplyStripeToTransactionGrid(Transaction trans)
         {
             int i = 0;
-            transGridView.BackColor = Color.FromArgb(255, 255, 255);
-            foreach (ListViewItem row in this.transGridView.Items)
+            if (trans is RecurringTransaction)
             {
-                if (i == 1)
+                RTransListView.BackColor = Color.FromArgb(255, 255, 255);
+                foreach (ListViewItem row in this.RTransListView.Items)
                 {
-                    row.BackColor = Color.FromArgb(230, 230, 255);
-                    i = 0;
+                    if (i == 1)
+                    {
+                        row.BackColor = Color.FromArgb(230, 230, 255);
+                        i = 0;
 
+                    }
+                    else
+                    {
+                        row.BackColor = Color.FromArgb(255, 255, 255);
+                        i = 1;
+                    }
                 }
-                else
+            }
+            else
+            {
+                transGridView.BackColor = Color.FromArgb(255, 255, 255);
+                foreach (ListViewItem row in this.transGridView.Items)
                 {
-                    row.BackColor = Color.FromArgb(255, 255, 255);
-                    i = 1;
+                    if (i == 1)
+                    {
+                        row.BackColor = Color.FromArgb(230, 230, 255);
+                        i = 0;
+
+                    }
+                    else
+                    {
+                        row.BackColor = Color.FromArgb(255, 255, 255);
+                        i = 1;
+                    }
                 }
             }
         }
@@ -512,49 +523,178 @@ namespace BudgetManagement.Views
 
         private void CancelTBtn_Click(object sender, EventArgs e)
         {
-            this.cancelTBtn.Visible = false;
-            this.addTBtn.Enabled = true;
-            this.DeleteTBtn.Enabled = true;
-            this.UpdateTBtn.Text = "Update Transaction";
+            transGridView.Enabled = true;
+            UpdateTBtn.Visible = true;
+            SubmitTrans.Visible = false;
+            DeleteTBtn.Visible = true;
+            addTBtn.Enabled = true;
+            cancelTBtn.Visible = false;
+            this.transDetailBox.Text = "Transaction Details";
+            this.transDetailBox.BackColor = System.Drawing.Color.Empty;
+            this.transactionController.LoadTransactionView("NormalTrans");
+            transGridView.Focus();
+        }
+        private void SubmitTrans_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(ViewTransName))
+            {
+                MessageBox.Show("Please Enter Transaction Name", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (ViewTransAmount <= 0)
+            {
+                MessageBox.Show("Zero transaction amount not accepted. Please Enter Amount amount.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            int UserId = TransactionController.GetUserID();
+            Transaction transaction = new Transaction(0, UserId, ViewTransName, ViewTransNote, Convert.ToDateTime(ViewTransDate), ViewTransAmount, ViewTransType, ViewTransContact);
+            this.transactionController.AddTransaction(transaction);
+           // this.transactionController.LoadTransactionView("NormalTrans");
+            this.transDetailBox.Text = "Transaction Details";
+            transGridView.Enabled = true;
+            UpdateTBtn.Visible = true;
+            SubmitTrans.Visible = false;
+            DeleteTBtn.Visible = true;
+            addTBtn.Enabled = true;
+            cancelTBtn.Visible = false;
+            transGridView.Focus();
+        }
+
+        //update Recurring Transaction
+        private void UpdateRecurring_Click(object sender, EventArgs e)
+        {
+            string checkName = rTransName.Text;
+            if (string.IsNullOrWhiteSpace(checkName))
+            {
+                MessageBox.Show("Please Enter Transaction Name", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            SubmitRTransaction.Enabled = false;
+            RecurringTransaction transaction = new RecurringTransaction(ViewRTransID, UserId, ViewRTransName, ViewRTransNote, Convert.ToDateTime(ViewRTransStartDate), ViewRTransAmount, ViewRTransType, ViewRTransContact, viewRTransFrequency, ViewRTransEndDate);
+            this.transactionController.UpdateTransaction(transaction);
+            this.AddRTransaction.Enabled = true;
+            this.DeleteRTransaction.Enabled = true;
+            this.DeleteRTransaction.Visible = true;
+            rTransDetailBox.BackColor = System.Drawing.Color.Empty;
+            SubmitRTransaction.Enabled = true;
+        }
+
+        private void DeleteRTransaction_Click_1(object sender, EventArgs e)
+        {
+            RecurringTransaction rTransaction = new RecurringTransaction(ViewRTransID, UserId, ViewRTransName, ViewRTransNote, Convert.ToDateTime(ViewRTransStartDate), ViewRTransAmount, ViewRTransType, ViewRTransContact, viewRTransFrequency, ViewRTransEndDate);
+            this.transactionController.DeleteTransaction(rTransaction);
+            this.transactionController.LoadTransactionView("Recurring");
+        }
+
+        private void CancelRTransaction_Click(object sender, EventArgs e)
+        {
             this.transDetailBox.Text = "Update Transaction";
             this.transDetailBox.BackColor = System.Drawing.Color.Empty;
-            this.transactionController.LoadTransactionView();
+            this.transactionController.LoadTransactionView("RecurringTrans");
+            RTransListView.Enabled = true;
+            UpdateRTransaction.Visible = true;
+            SubmitRTransaction.Visible = false;
+            DeleteRTransaction.Visible = true;
+            AddRTransaction.Enabled = true;
+            CancelRTransaction.Visible = false;
+            RTransListView.Focus();
         }
 
-        private void tAmountTbox_TextChanged(object sender, EventArgs e)
+        private void AddRTransaction_Click_1(object sender, EventArgs e)
         {
-            if (System.Text.RegularExpressions.Regex.IsMatch(tAmountTbox.Text, "[^0-9]"))
+            this.rTransDetailBox.Text = "Add Recurrent Transaction";
+            this.rTransDetailBox.BackColor = System.Drawing.ColorTranslator.FromHtml("#d8dde3");
+            this.transactionController.AddNewTransaction("RecurringTrans");
+            RTransListView.Enabled = false;
+            UpdateRTransaction.Visible = false;
+            DeleteRTransaction.Visible = false;
+            AddRTransaction.Enabled = false;
+            CancelRTransaction.Visible = true;
+            SubmitRTransaction.Visible = true;
+
+        }
+
+        private void RegisterRTransaction_Click_1(object sender, EventArgs e)
+        {
+             if (string.IsNullOrWhiteSpace(ViewRTransName))
             {
-                MessageBox.Show("Please enter only numbers.");
-                tAmountTbox.Text = tAmountTbox.Text.Remove(tAmountTbox.Text.Length - 1);
+                MessageBox.Show("Please Enter Transaction Name", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-        }
-
-        private void rTransAmount_TextChanged(object sender, EventArgs e)
-        {
-            if (System.Text.RegularExpressions.Regex.IsMatch(rTransAmount.Text, "^[0-9]{2}")) 
+            if (string.IsNullOrWhiteSpace(viewRTransFrequency))
             {
-                MessageBox.Show("Please enter only numbers.");
-                 rTransAmount.Text = rTransAmount.Text.Remove(rTransAmount.Text.Length - 1);
+                MessageBox.Show("Please Enter Occurance Frequency from dropdown provided", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
+            if (ViewRTransAmount <= 0)
+            {
+                MessageBox.Show("Zero transaction amount not accepted. Please Enter Amount amount.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            RecurringTransaction transaction = new RecurringTransaction(ViewRTransID, UserId, ViewRTransName, ViewRTransNote, Convert.ToDateTime(ViewRTransStartDate), ViewRTransAmount, ViewRTransType, ViewRTransContact, viewRTransFrequency, ViewRTransEndDate);
+            this.transactionController.AddTransaction(transaction);
+            rTransDetailBox.BackColor = System.Drawing.Color.Empty;
+            this.transactionController.LoadTransactionView("recurringTrans");
+            RTransListView.Enabled = true;
+            UpdateRTransaction.Visible = true;
+            SubmitRTransaction.Visible = false;
+            DeleteRTransaction.Visible = true;
+            AddRTransaction.Enabled = true;
+            CancelRTransaction.Visible = false;
+            RTransListView.Focus();
+        }
+        private void Refresh_Click(object sender, EventArgs e)
+        {
+            ContactRepository contacts = new ContactRepository();
+            myContacts = contacts.GetSavedContact(UserId);
+            tContactCombobox.DataSource = null;
+            tContactCombobox.DataSource = myContacts;
+            tContactCombobox.DisplayMember = "cName";
+            rTransContactList.DataSource = null;
+            rTransContactList.DataSource = myContacts;
+            rTransContactList.DisplayMember = "cName";
+            this.transactionController.LoadTransactionView("NormalTrans");
         }
 
-        private void RefreshTView_Click(object sender, EventArgs e)
+        private void RefreshView_Click(object sender, EventArgs e)
         {
-            RefreshRTView.Enabled = false;
-            RefreshRTView.Text = "Resfreshing....";
-            this.transactionController.LoadTransactionView();
-            RefreshRTView.Enabled = true;
-            RefreshRTView.Text = "Resfresh View";
+            ContactRepository contacts = new ContactRepository();
+            myContacts = contacts.GetSavedContact(UserId);
+            tContactCombobox.DataSource = null;
+            tContactCombobox.DataSource = myContacts;
+            tContactCombobox.DisplayMember = "cName";
+            rTransContactList.DataSource = null;
+            rTransContactList.DataSource = myContacts;
+            rTransContactList.DisplayMember = "cName";
+            transGridView.Enabled = true;
+            UpdateTBtn.Visible = true;
+            SubmitTrans.Visible = false;
+            DeleteTBtn.Visible = true;
+            addTBtn.Enabled = true;
+            cancelTBtn.Visible = false;
+            this.transDetailBox.BackColor = System.Drawing.Color.Empty;
+            this.transactionController.LoadTransactionView("NormalTrans");
+            transGridView.Focus();
         }
 
-        private void RefreshTView_Click_1(object sender, EventArgs e)
+        private void RefreshRView_Click(object sender, EventArgs e)
         {
-            RefreshTView.Enabled = false;
-            RefreshTView.Text = "Resfreshing....";
-            this.transactionController.LoadRTransactionView();
-            RefreshTView.Enabled = true;
-            RefreshTView.Text = "Resfresh View";
+            ContactRepository contacts = new ContactRepository();
+            myContacts = contacts.GetSavedContact(UserId);
+            tContactCombobox.DataSource = null;
+            tContactCombobox.DataSource = myContacts;
+            tContactCombobox.DisplayMember = "cName";
+            rTransContactList.DataSource = null;
+            rTransContactList.DataSource = myContacts;
+            rTransContactList.DisplayMember = "cName";
+            this.transactionController.LoadTransactionView("RecurringTrans");
+            RTransListView.Enabled = true;
+            UpdateRTransaction.Visible = true;
+            SubmitRTransaction.Visible = false;
+            DeleteRTransaction.Visible = true;
+            AddRTransaction.Enabled = true;
+            CancelRTransaction.Visible = false;
+            RTransListView.Focus();
         }
     }
 }

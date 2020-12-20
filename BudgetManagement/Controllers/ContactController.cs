@@ -14,151 +14,101 @@ namespace BudgetManagement.Controllers
     {
         ContactView _view;
         Contact _selectedUser;
-        List<Contact> myContactlist;
-        int userID;
-        string contactName = TransactionController.GetNewContactName();
-
+        private static List<Contact> myContactlist;
+        private int userID;
         public ContactController()
         {
             _view = ContactView.GetContactForm();
-            
+
             _view.SetContactController(this);
             SetContactFormDetails();
             _view.WindowState = FormWindowState.Normal;
             _view.Activate();
             _view.Show();
         }
+        public void DisposeContactView()
+        {
+
+            _view.Dispose();
+        }
 
         private void SetContactFormDetails()
         {
             userID = UserRepository.GetUserID();
             ContactRepository getSaveTransaction = new ContactRepository();
-            myContactlist= getSaveTransaction.GetSavedContact(userID);
-          
+            myContactlist = getSaveTransaction.GetSavedContact(userID);
+
             LoadContactView();
         }
 
         public void AddNewContact()
         {
-            _selectedUser = new Contact(userID, userID, contactName, "","");
-            this.updateViewDetailValues(_selectedUser);
-            this._view.CanModifyID = false;
+            _selectedUser = new Contact(userID, userID, "", "", "");
+            this.UpdateViewDetailValues(_selectedUser);
         }
-        public async void  RemoveContact()
+        public async void DeleteContact(Contact contact)
         {
-            string id = this._view.GetIdOfSelectedContactInGrid();
-
-
-            Contact contactToRemove = null;
-
-            if (id != "")
+            ContactRepository contactRepoObj = new ContactRepository();
+            string returnMsg = await Task.Run(() => contactRepoObj.DeleteContact(contact));
+            if (returnMsg == "success")
             {
-                foreach (Contact contact in this.myContactlist)
+                myContactlist.Clear();
+                myContactlist = contactRepoObj.GetSavedContact(userID);
+                int newSelectedIndex = myContactlist.IndexOf(contact)+1;
+                this._view.RemoveContactFromGrid(contact);
+
+                if (newSelectedIndex > -1 && newSelectedIndex < myContactlist.Count)
                 {
-                    if (contact.cID.ToString() == id)
-                    {
-                        contactToRemove = contact;
-                        break;
-                    }
-                }
-
-                if (contactToRemove != null)
-                {
-
-                    ContactRepository contactRepoObj = new ContactRepository();
-                    string returnMsg = await Task.Run(() => contactRepoObj.DeleteContact(contactToRemove));
-                    if (returnMsg == "success")
-                    {
-                        myContactlist =  contactRepoObj.GetSavedContact(userID);
-                        int newSelectedIndex = this.myContactlist.IndexOf(contactToRemove);
-                        //this.myContactlist.Remove(contactToRemove);
-                        this._view.RemoveContactFromGrid(contactToRemove);
-
-                        if (newSelectedIndex > -1 && newSelectedIndex < myContactlist.Count)
-                        {
-                            this._view.SetSelectedContactInGrid((Contact)myContactlist[newSelectedIndex]);
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show(returnMsg, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                    }
-
-                }
-            }
-        }
-
-        public async void SaveContact()
-        {
-            updateContactWithViewValues(_selectedUser);
-            if (!this.myContactlist.Contains(_selectedUser))
-            {
-                // Add new contact
-
-                this.myContactlist.Add(_selectedUser);
-                ContactRepository contactRepoObj = new ContactRepository();
-
-
-                string returnMsg = await Task.Run(() => contactRepoObj.AddContact(_selectedUser));
-                if (returnMsg == "success")
-                {
-                    this._view.ClearGrid();
-                    int id = UserRepository.GetUserID();
-                    ContactRepository contactObj = new ContactRepository();
-                     myContactlist = contactObj.GetSavedContact(id);
-                    foreach (Contact contact in this.myContactlist)
-                    {
-                    this._view.AddContactToGrid(contact); //UPDATE GRIDE
-                    }
-
-                    MessageBox.Show("ADDED SUCCESSFULLY", "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                }
-                else
-                {
-                    MessageBox.Show(returnMsg.ToString()+"  Contact was not able to update to database", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                    this._view.SetSelectedContactInGrid(myContactlist[newSelectedIndex]);
                 }
             }
             else
             {
-                // Update existing contact
-                this._view.UpdateGridWithChangedContact(_selectedUser);
+                MessageBox.Show(returnMsg, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
             }
-            _view.SetSelectedContactInGrid(_selectedUser);
-            this._view.CanModifyID = false;
+
+        }
+
+        public async void UpdateContact(Contact contact)
+        {
+            string returnMsg = "false";
+            ContactRepository contactRepoObj = new ContactRepository();
+
+            returnMsg = await Task.Run(() => contactRepoObj.UpdateContact(contact));
+
+            myContactlist.Clear();
+            myContactlist = contactRepoObj.GetSavedContact(userID);
+
+            if (returnMsg == "success")
+            {
+                this._view.UpdateGridWithChangedContact(contact);
+                MessageBox.Show("Updated SUCCESSFULLY");
+            }
+            else
+            {
+                MessageBox.Show(returnMsg, "Update Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         public void SelectedContactChanged(string selectedContactId)
         {
-            foreach (Contact contact in this.myContactlist)
+            foreach (Contact contact in myContactlist)
             {
                 if (contact.cID.ToString() == selectedContactId)
                 {
-                    _selectedUser = contact;
-                    updateViewDetailValues(contact);
+                    UpdateViewDetailValues(contact);
                     _view.SetSelectedContactInGrid(contact);
-                    this._view.CanModifyID = false;
                     break;
                 }
             }
         }
-        private void updateViewDetailValues(Contact contact)
+        private void UpdateViewDetailValues(Contact contact)
         {
             _view.ContactName = contact.cName;
             _view.Address = contact.cAddress;
-            _view.CID = contact.cID.ToString();
+            _view.CID = contact.cID;
             _view.ContactType = contact.cType;
-        }
-
-
-        private void updateContactWithViewValues(Contact contact)
-        {
-            contact.cName = _view.ContactName;
-            contact.cAddress = _view.Address;
-            contact.cID = Convert.ToInt32(_view.CID);
-            contact.cType = _view.ContactType;
         }
 
         public void LoadContactView()
@@ -168,12 +118,32 @@ namespace BudgetManagement.Controllers
             {
 
                 foreach (Contact contact in myContactlist)
+                {
                     _view.AddContactToGrid(contact);
-
-                _view.SetSelectedContactInGrid((Contact)myContactlist[0]);
+                }
+                _view.SetSelectedContactInGrid(myContactlist[0]);
             }
 
 
+        }
+
+        internal async void AddContact(Contact contact)
+        {
+            ContactRepository contactRepoObj = new ContactRepository();
+            string returnMsg = await Task.Run(() => contactRepoObj.AddContact(contact));
+            if (returnMsg == "success")
+            {
+                ContactRepository contactRepoObj1 = new ContactRepository();
+
+                this._view.ClearGrid();
+                myContactlist.Clear();
+                myContactlist = await Task.Run(() => contactRepoObj1.GetSavedContact(userID));
+
+                foreach (Contact mycontact in myContactlist.ToList())
+                {
+                    this._view.AddContactToGrid(mycontact);
+                }
+            }
         }
     }
 }

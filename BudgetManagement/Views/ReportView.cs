@@ -11,42 +11,77 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace BudgetManagement.Views
 {
     public partial class ReportView : Form, IReportView
     {
         ReportController reportController;
-        private static ReportView ReportForm;
+        private static ReportView ReportFormInstance;
         private static readonly object ReportPadlock = new object();
-        int sn = 1;
-        double ReportTotalIncome = 0;
-        double ReportTotalExpense = 0;
-        int AllContactFlag = 0;
+        private static double ReportTotalIncome;
+        private static double ReportTotalExpense;
+
         public ReportView()
         {
             InitializeComponent();
-            List<Contact> contacts =ContactRepository.GetContactList();
-            if(AllContactFlag == 0)
-            {
-                Contact contact = new Contact(0, 1, "All", " ", " ");
-                contacts.Insert(0, contact);
-                AllContactFlag = 1;
-            }
-            this.rContactCombobox.DataSource = contacts;
+            this.rContactCombobox.DataSource = ContactRepository.GetContactList();
             this.rContactCombobox.DisplayMember = "cName";
+            rcontactTbox.Text = "All";
+            ReportViewGrid.HideSelection = true;
+            int chosenTime = DateTime.Now.Year;
+            try
+            {
+                PlotMonthlyGraph(chosenTime);
+
+            }
+            catch (Exception )
+            {
+
+            }
+
+        }
+        internal static ReportView GetSetReportFormInstance()
+        {
+            lock (ReportPadlock)
+            {
+                ReportTotalIncome = 0;
+                ReportTotalExpense = 0;
+                if (ReportFormInstance == null || ReportFormInstance.IsDisposed)
+                {
+                    ReportController.SetNewViewObjFlag(true);
+                    ReportFormInstance = new ReportView();
+                }
+                else
+                {
+                    ReportController.SetNewViewObjFlag(false);
+                }
+
+                return ReportFormInstance;
+            }
         }
 
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+
+            if (e.CloseReason == CloseReason.WindowsShutDown) return;
+            e.Cancel = true;
+            ReportFormInstance.Hide();
+        }
         public void ClearGrid()
         {
             // Define columns and clear item
             this.ReportViewGrid.Columns.Clear();
 
-            this.ReportViewGrid.Columns.Add("S/N", 150, HorizontalAlignment.Left);
+            this.ReportViewGrid.Columns.Add("S/N", 80, HorizontalAlignment.Left);
             this.ReportViewGrid.Columns.Add("Name", 150, HorizontalAlignment.Left);
-            this.ReportViewGrid.Columns.Add("Income", 150, HorizontalAlignment.Left);
-            this.ReportViewGrid.Columns.Add("Expense", 150, HorizontalAlignment.Left);
+            this.ReportViewGrid.Columns.Add("Income", 100, HorizontalAlignment.Left);
+            this.ReportViewGrid.Columns.Add("Expense", 100, HorizontalAlignment.Left);
             this.ReportViewGrid.Columns.Add("AMOUNT", 150, HorizontalAlignment.Left);
+            this.ReportViewGrid.Columns.Add("Date", 150, HorizontalAlignment.Left);
+
             this.ReportViewGrid.Items.Clear();
         }
 
@@ -91,14 +126,14 @@ namespace BudgetManagement.Views
 
         }
 
-        public void AddTransactionToGrid(Transaction transaction)
+        public void AddTransactionToGrid(Transaction transaction,int sn)
         {
             ListViewItem parent;
 
             parent = this.ReportViewGrid.Items.Add(sn.ToString());
             parent.SubItems.Add(transaction.transName);
 
-            if (transaction.transType == "Income") { 
+            if (transaction.transType == "Income") {
                 parent.SubItems.Add(transaction.transType);
             }
             else
@@ -106,7 +141,7 @@ namespace BudgetManagement.Views
                 parent.SubItems.Add("");
 
             }
-            if (transaction.transType == "Expenses")
+            if (transaction.transType == "Expense")
             {
                 parent.SubItems.Add(transaction.transType);
             }
@@ -116,7 +151,7 @@ namespace BudgetManagement.Views
 
             }
             parent.SubItems.Add(transaction.transAmount.ToString());
-            if (transaction.transType == "Expenses")
+            if (transaction.transType == "Expense")
             {
                 ReportTotalExpense = ReportTotalExpense + transaction.transAmount;
 
@@ -126,80 +161,25 @@ namespace BudgetManagement.Views
                 ReportTotalIncome = ReportTotalIncome + transaction.transAmount;
 
             }
+            parent.SubItems.Add(transaction.TransDate.ToString("dd/MM/yyyy").ToString());
+
             totalIncome.Text = ReportTotalIncome.ToString();
             totalExpenses.Text = ReportTotalExpense.ToString();
-            sn++;
-              // ApplyStripeToTransactionGrid();
+            ReportDiff.Text = "Diff:  £" + (ReportTotalIncome - ReportTotalExpense).ToString();
+            ReportPeriod.Text =DateTime.Now.ToString("MMM") + " , "+ DateTime.Now.Year.ToString();
+            // ApplyStripeToTransactionGrid();
         }
-
-        internal static ReportView GetReportForm()
-        {
-            lock (ReportPadlock)
-            {
-                if (ReportForm == null || ReportForm.IsDisposed)
-                {
-                    ReportForm = new ReportView();
-
-                }
-                return ReportForm;
-            }
-        }
-
-        public void UpdateGridWithChangedTransaction(Transaction transaction)
-        {
-            ListViewItem rowToUpdate = null;
-                foreach (ListViewItem row in this.ReportViewGrid.Items)
-                {
-                    if (row.Text == transaction.transID.ToString())
-                    {
-                        rowToUpdate = row;
-                    }
-                }
-
-                if (rowToUpdate != null)
-                {
-                    rowToUpdate.Text = transaction.transID.ToString();
-                    rowToUpdate.SubItems[1].Text = transaction.transName;
-                    rowToUpdate.SubItems[3].Text = transaction.transType;
-                rowToUpdate.SubItems[2].Text = transaction.transAmount.ToString();
-
-            }
-        }
-
         public void SetSelectedTransactionInGrid(Transaction transaction)
         {
 
-                foreach (ListViewItem row in this.ReportViewGrid.Items)
-                {
-                    if (row.Text == transaction.transID.ToString())
-                    {
-                        row.Selected = true;
-                    }
-            }
-        }
-
-        //call controller to save transaction
-        //apply zebraline to grid
-        public void ApplyStripeToTransactionGrid()
-        {
-            int i = 0;
-            ReportViewGrid.BackColor = Color.FromArgb(255, 255, 255);
             foreach (ListViewItem row in this.ReportViewGrid.Items)
             {
-                if (i == 1)
+                if (row.Text == transaction.transID.ToString())
                 {
-                    row.BackColor = Color.FromArgb(230, 230, 255);
-                    i = 0;
-
-                }
-                else
-                {
-                    row.BackColor = Color.FromArgb(255, 255, 255);
-                    i = 1;
+                    row.Selected = true;
                 }
             }
         }
-
         public void SetReportController(ReportController controller)
         {
             reportController = controller;
@@ -208,9 +188,8 @@ namespace BudgetManagement.Views
 
         private void GenerateReport_Click(object sender, EventArgs e)
         {
-            sn = 1;
             ReportTotalIncome = 0;
-             ReportTotalExpense = 0;
+            ReportTotalExpense = 0;
             int start = DateTime.Compare(Convert.ToDateTime(ViewEndDate), Convert.ToDateTime(ViewTransDate));
             if (string.IsNullOrWhiteSpace(ViewTransName))
             {
@@ -218,12 +197,12 @@ namespace BudgetManagement.Views
                 MessageBox.Show("Please enter Transaction Name or keep All", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            else if(string.IsNullOrWhiteSpace(ViewTransContact))
+            else if (string.IsNullOrWhiteSpace(ViewTransContact))
             {
                 ViewTransContact = "All";
                 MessageBox.Show("Please enter contact or keep All", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
-            }else if (start ==-1)
+            } else if (start == -1)
             {
                 MessageBox.Show("Start date must be less than end date", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -241,14 +220,18 @@ namespace BudgetManagement.Views
 
                 try
                 {
+                    ReportPeriod.Text = ViewTransDate + " - " + ViewEndDate;
+                    TName.Text = ViewTransName;
+                    TContact.Text = ViewTransContact;
                     totalIncome.Text = ReportTotalIncome.ToString();
                     totalExpenses.Text = ReportTotalExpense.ToString();
+                    ReportDiff.Text = "Diff:  £" + (ReportTotalIncome - ReportTotalExpense).ToString();
 
                 }
                 catch (Exception)
                 {
 
-                    
+
                 }
                 // this.reportController.LoadReportView();
                 //this.transDetailBox.BackColor = System.Drawing.Color.Empty;
@@ -257,5 +240,165 @@ namespace BudgetManagement.Views
 
         }
 
+        private void AllName_CheckedChanged(object sender, EventArgs e)
+        {
+
+            if (this.AllName.Checked) { 
+                this.rNameTbox.Text = "All";
+            rNameTbox.Enabled = false;
+
+         } else{
+            rNameTbox.Text ="";
+            rNameTbox.Enabled = true;
+            }
+        }
+
+        private void AllContact_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.AllContact.Checked)
+            {
+                this.rcontactTbox.Text = "All";
+                rcontactTbox.Enabled = false;
+                rContactCombobox.Enabled = false;
+
+            }
+            else
+            {
+                rcontactTbox.Text = "";
+                rcontactTbox.Enabled = true;
+                rContactCombobox.Enabled = true;
+
+            }
+
+
+
+        }
+
+        internal static void DisposeReportForm()
+        {
+            try
+            {
+                ReportFormInstance.Dispose();
+            }
+            catch (Exception)
+            {
+            }
+            
+        }
+        string[] seriesArray = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec" };
+        private void PlotMonthlyGraph(int year)
+        {
+            Dictionary<int,double> IncomeTotalCollection =  ReportController.GetCalIncomeGraphValue(year);
+            Dictionary<int, double> ExpenseTotalCollection = ReportController.GetCalExpenseGraphValue(year);
+            chart1.Series.Clear();
+            IncomeBarChart.Series.Clear();
+            IncomeLineChart.Series.Clear();
+            ExpenseBarChart.Series.Clear();
+            ExpenseLineChart.Series.Clear();
+            TransactionReportMsg.Visible = false;
+            IncomeTotalMsg.Visible = false;
+            ExpenseTotalMsg.Visible = false;
+            double[] pointsTotalIncome = new double[12];
+            double[] pointsTotalExpense = new double[12];
+            try
+            {
+                for (int Index = 0; Index < 12; Index++)
+                {
+                    pointsTotalIncome[Index] = IncomeTotalCollection[Index];
+                    pointsTotalExpense[Index] = ExpenseTotalCollection[Index];
+                }
+                double totalIncome= pointsTotalIncome.Sum();
+                double totalExpense = pointsTotalExpense.Sum();
+                this.chart1.Palette = ChartColorPalette.SeaGreen;
+               
+                this.IncomeBarChart.Palette = ChartColorPalette.SeaGreen;
+                this.IncomeLineChart.Palette = ChartColorPalette.SeaGreen;
+               
+                
+                
+                this.ExpenseBarChart.Palette = ChartColorPalette.SeaGreen;
+                this.ExpenseLineChart.Palette = ChartColorPalette.SeaGreen;
+
+                Series series = new Series("Expense");
+                var series2 = new Series("Income");
+                
+                var IncomeSeries = new Series("Income");
+                var IncomeSeries2 = new Series("Income");
+                var ExpenseSeries = new Series("Expense");
+                var ExpenseSeries2 = new Series("Expense");
+
+                series2.Points.DataBindXY(seriesArray, pointsTotalIncome);
+                series.Points.DataBindXY(seriesArray, pointsTotalExpense);
+                IncomeSeries.Points.DataBindXY(seriesArray, pointsTotalIncome);
+                IncomeSeries2.Points.DataBindXY(seriesArray, pointsTotalIncome);
+                ExpenseSeries.Points.DataBindXY(seriesArray, pointsTotalExpense);
+                ExpenseSeries2.Points.DataBindXY(seriesArray, pointsTotalExpense);
+                chart1.Series.Add(series2);
+                chart1.Series.Add(series);
+                IncomeLineChart.Series.Add(IncomeSeries);
+                IncomeBarChart.Series.Add(IncomeSeries2);
+                ExpenseLineChart.Series.Add(ExpenseSeries);
+                ExpenseBarChart.Series.Add(ExpenseSeries2);
+
+                series.ChartType = SeriesChartType.Spline;
+                series2.ChartType = SeriesChartType.Spline;
+                IncomeSeries.ChartType = SeriesChartType.SplineArea;
+                IncomeSeries2.ChartType = SeriesChartType.Bar;
+                ExpenseSeries.ChartType = SeriesChartType.SplineArea;
+                ExpenseSeries2.ChartType = SeriesChartType.Bar;
+
+                if(totalIncome == 0)
+                {
+                    IncomeBarChart.Series.Clear();
+                    IncomeLineChart.Series.Clear();
+                    IncomeTotalMsg.Visible = true;
+                }
+                if (totalExpense == 0)
+                {
+                    ExpenseBarChart.Series.Clear();
+                    ExpenseLineChart.Series.Clear();
+                    ExpenseTotalMsg.Visible = true;
+                }
+                if (totalExpense == 0 && totalIncome == 0)
+                {
+                    chart1.Series.Clear();
+                    TransactionReportMsg.Visible = true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex + " Error" + seriesArray.Length);
+            } 
+
+        }
+
+        private void MonthlyGraphPicker_ValueChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int chosenTime = MonthlyGraphPicker.Value.Year;
+                PlotMonthlyGraph(chosenTime);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            int chosenTime = MonthlyGraphPicker.Value.Year;
+            PlotMonthlyGraph(chosenTime);
+        }
+
+        private void PlotGraph_Click(object sender, EventArgs e)
+        {
+
+            int chosenTime = MonthlyGraphPicker.Value.Year;
+            PlotMonthlyGraph(chosenTime);
+        }
     }
 }

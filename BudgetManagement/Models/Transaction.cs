@@ -19,10 +19,9 @@ namespace BudgetManagement.Models
             TransDate = datetime;
             transContact = contact;
         }
+        
         public Transaction()
         {
-            //Transaction transObj;
-            //transObj.addTransaction("Product Buy","","05,11,2019",100,"income",&Category("Game",500));
 
         }
 

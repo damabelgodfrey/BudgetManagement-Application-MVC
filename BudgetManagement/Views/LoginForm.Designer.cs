@@ -49,21 +49,20 @@
             this.RegisterPasswordL = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.RegisterEmailL = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.RegisterNameL = new MaterialSkin.Controls.MaterialSingleLineTextField();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.materialRaisedButton1 = new MaterialSkin.Controls.MaterialRaisedButton();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabPage2.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
+            this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.Buttons;
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(12, 11);
+            this.tabControl1.Location = new System.Drawing.Point(119, 62);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(577, 346);
@@ -71,7 +70,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.BackColor = System.Drawing.Color.Gainsboro;
+            this.tabPage1.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.tabPage1.Controls.Add(this.pictureBox1);
             this.tabPage1.Controls.Add(this.LoginPasswordtxt);
             this.tabPage1.Controls.Add(this.materialLabel2);
@@ -79,10 +78,10 @@
             this.tabPage1.Controls.Add(this.loginEmailTxt);
             this.tabPage1.Controls.Add(this.SubmitBtn);
             this.tabPage1.Controls.Add(this.passwordCheckBox);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(6);
-            this.tabPage1.Size = new System.Drawing.Size(569, 320);
+            this.tabPage1.Size = new System.Drawing.Size(569, 317);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Login";
             // 
@@ -165,10 +164,12 @@
             this.SubmitBtn.Depth = 0;
             this.SubmitBtn.Icon = null;
             this.SubmitBtn.Location = new System.Drawing.Point(194, 199);
+            this.SubmitBtn.MaximumSize = new System.Drawing.Size(228, 36);
+            this.SubmitBtn.MinimumSize = new System.Drawing.Size(228, 36);
             this.SubmitBtn.MouseState = MaterialSkin.MouseState.HOVER;
             this.SubmitBtn.Name = "SubmitBtn";
             this.SubmitBtn.Primary = true;
-            this.SubmitBtn.Size = new System.Drawing.Size(71, 36);
+            this.SubmitBtn.Size = new System.Drawing.Size(228, 36);
             this.SubmitBtn.TabIndex = 7;
             this.SubmitBtn.Text = "SUBMIT";
             this.SubmitBtn.UseVisualStyleBackColor = true;
@@ -187,7 +188,7 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.BackColor = System.Drawing.Color.Gainsboro;
+            this.tabPage2.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.tabPage2.Controls.Add(this.showPassword);
             this.tabPage2.Controls.Add(this.materialLabel6);
             this.tabPage2.Controls.Add(this.materialLabel5);
@@ -198,10 +199,10 @@
             this.tabPage2.Controls.Add(this.RegisterPasswordL);
             this.tabPage2.Controls.Add(this.RegisterEmailL);
             this.tabPage2.Controls.Add(this.RegisterNameL);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(6);
-            this.tabPage2.Size = new System.Drawing.Size(569, 320);
+            this.tabPage2.Size = new System.Drawing.Size(569, 317);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Register";
             // 
@@ -214,7 +215,7 @@
             this.showPassword.TabIndex = 19;
             this.showPassword.Text = "Show Password";
             this.showPassword.UseVisualStyleBackColor = true;
-            this.showPassword.CheckedChanged += new System.EventHandler(this.showPassword_CheckedChanged);
+            this.showPassword.CheckedChanged += new System.EventHandler(this.ShowRegPassword_CheckedChanged);
             // 
             // materialLabel6
             // 
@@ -353,15 +354,6 @@
             this.RegisterNameL.TabStop = false;
             this.RegisterNameL.UseSystemPasswordChar = false;
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.tabControl1);
-            this.groupBox1.Location = new System.Drawing.Point(125, 31);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(603, 369);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            // 
             // imageList1
             // 
             this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
@@ -388,8 +380,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(819, 456);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.materialRaisedButton1);
+            this.MaximumSize = new System.Drawing.Size(835, 495);
+            this.MinimizeBox = false;
             this.Name = "MyLoginForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LoginForm";
@@ -399,7 +393,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -410,7 +403,6 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.CheckBox passwordCheckBox;
         private MaterialSkin.Controls.MaterialRaisedButton SubmitBtn;

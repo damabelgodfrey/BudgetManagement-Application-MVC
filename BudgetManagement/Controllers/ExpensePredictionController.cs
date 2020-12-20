@@ -14,7 +14,8 @@ namespace BudgetManagement.Controllers
     {
 
         int userId = UserRepository.GetUserID();
-        double prediction = 0;
+       // private static double prediction = 0;
+        public static double prediction = new double();
         List<Transaction> myTransactionlist;
         List<RecurringTransaction> myRecurringTransactionlist;
         DateTime predictionDate;
@@ -30,13 +31,16 @@ namespace BudgetManagement.Controllers
 
 
         }
-
-        public async void SetUpTransactionDetail()
+        internal double GetPrediction()
+        {
+            return prediction;
+        }
+        public void SetUpTransactionDetail()
         {
             TransactionRepository getSaveTransaction = new TransactionRepository();
             TransactionRepository getSaveRecurringTransaction = new TransactionRepository();
-            myTransactionlist = await Task.Run(() => getSaveTransaction.GetSavedTransaction(userId));
-            myRecurringTransactionlist = await Task.Run(() => getSaveRecurringTransaction.GetSavedRecurringTransaction(userId));
+            myTransactionlist =  getSaveTransaction.GetSavedTransaction(userId);
+            myRecurringTransactionlist =  getSaveRecurringTransaction.GetSavedRecurringTransaction(userId);
             GeneratePrediction();
 
 
@@ -56,10 +60,10 @@ namespace BudgetManagement.Controllers
             {
                 prediction = totalOfRecurringTransaction;
             }
-            MessageBox.Show("Predicted Expense: £" + prediction, "INFORMATION", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return prediction;
         }
 
+        //accurate Average
         private double GetAverage(List<Transaction> transactionList)
         {
             double averageAmount = 0;
@@ -122,7 +126,7 @@ namespace BudgetManagement.Controllers
             return averageAmount;
         }
 
-        //
+        //Get recurring recurring amount
         private double GetRecurringTransactionAmount(List<RecurringTransaction> recurringTransactionList)
         {
             double totalAmount = 0;
@@ -166,5 +170,6 @@ namespace BudgetManagement.Controllers
             return totalAmount;
         }
 
+       
     }
 }

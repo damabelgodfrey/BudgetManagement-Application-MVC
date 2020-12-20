@@ -19,12 +19,17 @@ namespace BudgetManagement.Views
         EventController EventController;
         private static EventView EventForm;
         private static readonly object EventPadlock = new object();
+        int UserId = TransactionController.GetUserID();
+        List<Contact> myContacts;
+
         public EventView()
         {
             InitializeComponent();
-            this.AllEventContact.DataSource = ContactRepository.GetContactList();
+            ContactRepository contacts = new ContactRepository();
+            myContacts = contacts.GetSavedContact(UserId);
+            this.AllEventContact.DataSource = myContacts;
             this.AllEventContact.DisplayMember = "cName";
-            this.rEventContactList.DataSource = ContactRepository.GetContactList();
+            this.rEventContactList.DataSource = myContacts;
             this.rEventContactList.DisplayMember = "cName";
         }
 
@@ -66,7 +71,7 @@ namespace BudgetManagement.Views
             }
             set
             {
-                if (value == "Income")
+                if (value == "Task")
                     this.rTask.Checked = true;
                 else
                     this.rAppointment.Checked = true;
@@ -85,38 +90,27 @@ namespace BudgetManagement.Views
             get { return this.rEventNote.Text; }
             set { this.rEventNote.Text = value; }
         }
-        public string ViewREventID
+        public int ViewREventID
         {
-            get { return this.EID.Text; }
-            set { this.EID.Text = value; }
+            get { return Convert.ToInt32(this.EID.Text); }
+            set { this.EID.Text = value.ToString(); }
         }
         public bool CanModifyRID
         {
             set { this.EID.Enabled = value; }
         }
-        public string ViewREventStartDate
+        public DateTime ViewREventStartDate
         {
-            get { return this.rEventStartPeriod.Text; }
+            get { return Convert.ToDateTime(this.rEventStartPeriod.Text); }
             set { this.rEventStartPeriod.Text = value.ToString(); }
         }
-        public string ViewREventEndDate
+        public DateTime ViewREventEndDate
         {
-            get { return this.rEventEndPeriod.Text; }
+            get { return Convert.ToDateTime(this.rEventEndPeriod.Text); }
             set { this.rEventEndPeriod.Text = value.ToString(); }
         }
 
 
-        public void ClearRGrid()
-        {
-            // Define columns and clear item
-            this.REventListView.Columns.Clear();
-
-            this.REventListView.Columns.Add("ID", 150, HorizontalAlignment.Left);
-            this.REventListView.Columns.Add("Name", 150, HorizontalAlignment.Left);
-            this.REventListView.Columns.Add("AMOUNT", 150, HorizontalAlignment.Left);
-            this.REventListView.Columns.Add("TYPE", 150, HorizontalAlignment.Left);
-            this.REventListView.Items.Clear();
-        }
         public string GetIdOfSelectedREventInGrid()
         {
             if (this.REventListView.SelectedItems.Count > 0)
@@ -133,7 +127,7 @@ namespace BudgetManagement.Views
 
 
 
-       
+
         //Event
         public string AllContactName
         {
@@ -161,7 +155,7 @@ namespace BudgetManagement.Views
             }
             set
             {
-                if (value == "Income")
+                if (value == "Task")
                     this.TaskRbtn.Checked = true;
                 else
                     this.AppointmentRbtn.Checked = true;
@@ -179,18 +173,18 @@ namespace BudgetManagement.Views
             get { return this.EventNote.Text; }
             set { this.EventNote.Text = value; }
         }
-        public string ViewEventID
+        public int ViewEventID
         {
-            get { return this.EventIDtbox.Text; }
-            set { this.EventIDtbox.Text = value; }
+            get { return Convert.ToInt32(this.EventIDtbox.Text); }
+            set { this.EventIDtbox.Text = value.ToString(); }
         }
         public bool CanModifyID
         {
             set { this.EventIDtbox.Enabled = value; }
         }
-        public string ViewEventDate
+        public DateTime ViewEventDate
         {
-            get { return this.EventDate.Text; }
+            get { return Convert.ToDateTime(this.EventDate.Text); }
             set { this.EventDate.Text = value.ToString(); }
         }
 
@@ -202,16 +196,19 @@ namespace BudgetManagement.Views
             {
                 parent = this.REventListView.Items.Add(rEvent.EventID.ToString());
                 parent.SubItems.Add(rEvent.EventName);
-                parent.SubItems.Add(rEvent.EventAmount.ToString());
                 parent.SubItems.Add(rEvent.EventType);
-                //ApplyStripeToEventGrid();
+                parent.SubItems.Add(rEvent.EventNote);
+                parent.SubItems.Add(rEvent.EventFreQuency);
+                parent.SubItems.Add(rEvent.EventEndDate.ToString());
+
             }
             else
             {
                 parent = this.EventGridView.Items.Add(Event.EventID.ToString());
                 parent.SubItems.Add(Event.EventName);
-                parent.SubItems.Add(Event.EventAmount.ToString());
                 parent.SubItems.Add(Event.EventType);
+                parent.SubItems.Add(Event.EventNote.ToString());
+                parent.SubItems.Add(Event.EventContact);
                 ApplyStripeToEventGrid();
             }
         }
@@ -228,15 +225,34 @@ namespace BudgetManagement.Views
             }
         }
 
-        public void ClearGrid()
+
+        public void ClearGrid(String typeFlag)
         {
             // Define columns and clear item
-            this.EventGridView.Columns.Clear();
-            this.EventGridView.Columns.Add("ID", 150, HorizontalAlignment.Left);
-            this.EventGridView.Columns.Add("Name", 150, HorizontalAlignment.Left);
-            this.EventGridView.Columns.Add("AMOUNT", 150, HorizontalAlignment.Left);
-            this.EventGridView.Columns.Add("TYPE", 150, HorizontalAlignment.Left);
-            this.EventGridView.Items.Clear();
+            if(typeFlag == "RecurringEvent")
+            {
+                // Define columns and clear item
+                this.REventListView.Columns.Clear();
+                this.REventListView.Columns.Add("ID", 150, HorizontalAlignment.Left);
+                this.REventListView.Columns.Add("Name", 150, HorizontalAlignment.Left);
+                this.REventListView.Columns.Add("TYPE", 150, HorizontalAlignment.Left);
+                this.REventListView.Columns.Add("NOTE", 250, HorizontalAlignment.Left);
+                this.REventListView.Columns.Add("FREQUENCY", 150, HorizontalAlignment.Left);
+                this.REventListView.Columns.Add("END DATE", 150, HorizontalAlignment.Left);
+
+                this.REventListView.Items.Clear();
+            }
+            else
+            {
+                this.EventGridView.Columns.Clear();
+                this.EventGridView.Columns.Add("ID", 150, HorizontalAlignment.Left);
+                this.EventGridView.Columns.Add("Name", 150, HorizontalAlignment.Left);
+                this.EventGridView.Columns.Add("TYPE", 200, HorizontalAlignment.Left);
+                this.EventGridView.Columns.Add("NOTE", 150, HorizontalAlignment.Left);
+                this.EventGridView.Columns.Add("CONTACT", 250, HorizontalAlignment.Left);
+                this.EventGridView.Items.Clear();
+            }
+      
         }
 
         public void UpdateGridWithChangedEvent(Event Event)
@@ -256,8 +272,14 @@ namespace BudgetManagement.Views
                 {
                     rowToUpdate.Text = rEvent.EventID.ToString();
                     rowToUpdate.SubItems[1].Text = rEvent.EventName;
-                    rowToUpdate.SubItems[2].Text = rEvent.EventAmount.ToString();
-                    rowToUpdate.SubItems[3].Text = rEvent.EventType;
+                    rowToUpdate.SubItems[2].Text = rEvent.EventType;
+                    rowToUpdate.SubItems[3].Text = rEvent.EventNote.ToString();
+                    rowToUpdate.SubItems[4].Text = rEvent.EventFreQuency;
+                    rowToUpdate.SubItems[5].Text = rEvent.EventDate.Date +" - " + rEvent.EventEndDate.Date;
+                   // REventListView.MultiSelect = false;
+                    rowToUpdate.Selected = true;
+                   // REventListView.MultiSelect = true;
+
                 }
             }
             else
@@ -274,8 +296,13 @@ namespace BudgetManagement.Views
                 {
                     rowToUpdate.Text = Event.EventID.ToString();
                     rowToUpdate.SubItems[1].Text = Event.EventName;
-                    rowToUpdate.SubItems[2].Text = Event.EventAmount.ToString();
-                    rowToUpdate.SubItems[3].Text = Event.EventType;
+                    rowToUpdate.SubItems[2].Text = Event.EventType;
+                    rowToUpdate.SubItems[3].Text = Event.EventNote.ToString();
+                    rowToUpdate.SubItems[4].Text = Event.EventContact;
+                    EventGridView.MultiSelect = false;
+                    rowToUpdate.Selected = true;
+                    EventGridView.MultiSelect = true;
+
                 }
             }
         }
@@ -399,91 +426,34 @@ namespace BudgetManagement.Views
 
         private void AddEvent_Click(object sender, EventArgs e)
         {
-            this.AddEvent.Enabled = false;
-            this.DeleteEvent.Enabled = false;
-            this.cancelEvent.Visible = true;
-            this.UpdateEvent.Text = "Add Event";
-            this.transDetailBox.Text = "Add Event Process";
+            EventGridView.Enabled = false;
+            UpdateEvent.Visible = false;
+            DeleteEvent.Visible = false;
+            AddEvent.Enabled = false;
+            cancelEvent.Visible = true;
+            SubmitEvent.Visible = true;
             this.transDetailBox.BackColor = System.Drawing.ColorTranslator.FromHtml("#d8dde3");
-            this.EventController.AddNewEvent();
+            this.EventController.AddNewEvent("NormalEvent");
+            EventGridView.Focus();
+
         }
 
         private void UpdateEvent_Click(object sender, EventArgs e)
         {
-            UpdateEvent.Enabled = false;
-            this.UpdateEvent.Text = "Processing....";
-            this.EventController.SaveEvent();
-            this.AddEvent.Enabled = true;
-            this.DeleteEvent.Enabled = true;
-            this.DeleteEvent.Visible = true;
-            cancelEvent.Visible = true;
+            if (string.IsNullOrWhiteSpace(ViewEventName))
+            {
+                MessageBox.Show("Please Enter Event Name", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (ViewEventDate.Date < DateTime.Today)
+            {
+                MessageBox.Show("Please choose a future date", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            Event myEvent = new Event(ViewEventID, UserId, ViewEventName, ViewEventNote, ViewEventDate, ViewEventType, ViewEventContact);
+            this.EventController.UpdateEvent(myEvent);
             this.transDetailBox.BackColor = System.Drawing.Color.Empty;
-            this.EventController.LoadEventView();
-            this.UpdateEvent.Text = "Update Event";
-            UpdateEvent.Enabled = true;
-
-        }
-
-        private void DeleteEvent_Click(object sender, EventArgs e)
-        {
-            DeleteEvent.Enabled = false;
-            this.EventController.RemoveEvent();
-            DeleteEvent.Enabled = true;
-
-        }
-
-        private void cancelEvent_Click(object sender, EventArgs e)
-        {
-            this.cancelEvent.Visible = false;
-            this.AddEvent.Enabled = true;
-            this.DeleteEvent.Enabled = true;
-            this.UpdateEvent.Text = "Update Event";
-            this.transDetailBox.Text = "Update Event";
-            this.transDetailBox.BackColor = System.Drawing.Color.Empty;
-            this.EventController.LoadEventView();
-        }
-
-        private void AddREvent_Click_1(object sender, EventArgs e)
-        {
-            this.AddREvent.Enabled = false;
-            this.DeleteREvent.Enabled = false;
-            //this.cancelTBtn.Visible = true;
-            this.RegisterREvent.Text = "Submit";
-            this.rTransDetailBox.Text = "Add Recurrent Event";
-            this.rTransDetailBox.BackColor = System.Drawing.ColorTranslator.FromHtml("#d8dde3");
-            this.CancelAddRAction.Visible = true;
-            this.EventController.AddNewREvent();
-        }
-
-        private void RegisterREvent_Click(object sender, EventArgs e)
-        {
-
-            RegisterREvent.Enabled = false;
-            this.EventController.SaveREvent();
-            this.RegisterREvent.Text = "Update Recurring";
-            this.AddREvent.Enabled = true;
-            this.DeleteREvent.Enabled = true;
-            this.DeleteREvent.Visible = true;
-            rTransDetailBox.BackColor = System.Drawing.Color.Empty;
-            this.EventController.LoadREventView();
-            RegisterREvent.Enabled = true;
-
-        }
-
-        private void CancelAddRAction_Click_1(object sender, EventArgs e)
-        {
-            this.CancelAddRAction.Visible = false;
-            this.AddREvent.Enabled = true;
-            this.DeleteREvent.Enabled = true;
-            this.RegisterREvent.Text = "Update Event";
-            this.transDetailBox.Text = "Update Event";
-            this.transDetailBox.BackColor = System.Drawing.Color.Empty;
-            this.EventController.LoadREventView();
-        }
-
-        private void DeleteREvent_Click_1(object sender, EventArgs e)
-        {
-            this.EventController.RemoveREvent();
+            EventGridView.Focus();
         }
 
         private void REventListView_SelectedIndexChanged(object sender, EventArgs e)
@@ -494,7 +464,7 @@ namespace BudgetManagement.Views
 
         private void rEventContactList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.rEventContact.Text = this.rEventFrequencyList.GetItemText(this.rEventFrequencyList.SelectedItem);
+            this.rEventContact.Text = this.rEventContactList.GetItemText(this.rEventContactList.SelectedItem);
         }
 
         private void rEventFrequencyList_SelectedIndexChanged(object sender, EventArgs e)
@@ -510,21 +480,202 @@ namespace BudgetManagement.Views
 
         private void RefreshEventView_Click(object sender, EventArgs e)
         {
-            RefreshEventView.Enabled = false;
-            RefreshEventView.Text = "Resfreshing....";
-            this.EventController.LoadEventView();
-            RefreshEventView.Enabled = true;
-            RefreshEventView.Text = "Resfresh View";
+            EventGridView.Enabled = true;
+            UpdateEvent.Visible = true;
+            SubmitEvent.Visible = false;
+            DeleteEvent.Visible = true;
+            AddEvent.Enabled = true;
+            cancelEvent.Visible = false;
+            EventGridView.Focus();
+            EventController.LoadEventView("NormalEvent");
+            ContactRepository contacts = new ContactRepository();
+            myContacts = contacts.GetSavedContact(UserId);
+            AllEventContact.DataSource = null;
+            rEventContactList.DataSource = null;
+            this.AllEventContact.DataSource = myContacts;
+            this.AllEventContact.DisplayMember = "cName";
+            this.rEventContactList.DataSource = myContacts;
+            this.rEventContactList.DisplayMember = "cName";
 
         }
 
-        private void RefreshEView_Click(object sender, EventArgs e)
+
+
+        private void AddReEvent_Click(object sender, EventArgs e)
         {
-            RefreshEView.Enabled = false;
-            RefreshEView.Text = "Resfreshing....";
-            this.EventController.LoadREventView();
-            RefreshEView.Enabled = true;
-            RefreshEView.Text = "Resfresh View";
+            
+            REventListView.Enabled = false;
+            UpdateReEvent.Visible = false;
+            DeleteReEvent.Visible = false;
+            AddReEvent.Enabled = false;
+            CancelREvent.Visible = true;
+            SubmitReEvent.Visible = true;
+            this.rTransDetailBox.BackColor = System.Drawing.ColorTranslator.FromHtml("#d8dde3");
+            this.EventController.AddNewEvent("RecurringEvent");
+        }
+
+        private void UpdateReEvent_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(ViewREventName))
+            {
+                MessageBox.Show("Please Enter Event Name", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(viewREventFrequency))
+            {
+                MessageBox.Show("Please Enter Event Frequency", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (ViewREventStartDate.Date < DateTime.Today)
+            {
+                MessageBox.Show("Please choose a future date", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (ViewREventStartDate.Date > ViewREventEndDate)
+            {
+                MessageBox.Show("Please choose an end date that is greaater than start date", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            RecurringEvent myRecurringEvent = new RecurringEvent(ViewREventID, UserId, ViewREventName, ViewREventNote, ViewREventStartDate, ViewREventType, ViewREventContact, viewREventFrequency, ViewREventEndDate);
+            this.EventController.UpdateEvent(myRecurringEvent);
+            rTransDetailBox.BackColor = System.Drawing.Color.Empty;
+            REventListView.Focus();
+    
+        }
+
+        private void DeleteReEvent_Click(object sender, EventArgs e)
+        {
+            RecurringEvent myRecurringEvent = new RecurringEvent(ViewREventID, UserId, ViewREventName, ViewREventNote, ViewREventStartDate, ViewREventType, ViewREventContact, viewREventFrequency, ViewREventEndDate);
+            this.EventController.DeleteEvent(myRecurringEvent);
+            REventListView.Focus();
+
+        }
+
+        private void SubmitReEvent_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(ViewREventName))
+            {
+                MessageBox.Show("Please Enter Event Name", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(viewREventFrequency))
+            {
+                MessageBox.Show("Please Enter Event Frequency", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (ViewREventStartDate.Date < DateTime.Today)
+            {
+                MessageBox.Show("Please choose a future date", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (ViewREventStartDate.Date > ViewREventEndDate)
+            {
+                MessageBox.Show("Please choose a future date greaater than start date", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            RecurringEvent myEvent = new RecurringEvent(ViewREventID, UserId, ViewREventName, ViewREventNote, ViewREventStartDate, ViewREventType, ViewREventContact, viewREventFrequency, ViewREventEndDate);
+            this.EventController.AddEvent(myEvent);
+            rTransDetailBox.BackColor = System.Drawing.Color.Empty;
+            this.EventController.LoadEventView("RecurringEvent");
+            REventListView.Enabled = true;
+            UpdateReEvent.Visible = true;
+            SubmitReEvent.Visible = false;
+            DeleteReEvent.Visible = true;
+            AddReEvent.Enabled = true;
+            CancelREvent.Visible = false;
+            REventListView.Focus();
+        }
+        private void DeleteEvent_Click(object sender, EventArgs e)
+        {
+            Event myEvent = new Event(ViewEventID, UserId, ViewEventName, ViewEventNote, ViewEventDate, ViewEventType, ViewEventContact);
+            this.EventController.DeleteEvent(myEvent);
+            EventGridView.Focus();
+        }
+
+        internal static void DisposeEventForm()
+        {
+            try
+            {
+                EventForm.Dispose();
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void SubmitEvent_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(ViewEventName))
+            {
+                MessageBox.Show("Please Enter Event Name", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (ViewEventDate.Date < DateTime.Today)
+            {
+                MessageBox.Show("Please choose a future date", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            Event myEvent = new Event(ViewEventID, UserId, ViewEventName, ViewEventNote, ViewEventDate, ViewEventType, ViewEventContact);
+            this.EventController.AddEvent(myEvent);
+            this.transDetailBox.BackColor = System.Drawing.Color.Empty;
+            this.EventController.LoadEventView("NormalEvent");
+            EventGridView.Enabled = true;
+            UpdateEvent.Visible = true;
+            SubmitEvent.Visible = false;
+            DeleteEvent.Visible = true;
+            AddEvent.Enabled = true;
+            cancelEvent.Visible = false;
+            EventGridView.Focus();
+        }
+
+        private void RefreshRView_Click(object sender, EventArgs e)
+        {
+            RefreshEventView.Text = "Resfreshing....";
+            this.EventController.LoadEventView("RecurringEvent");
+            ContactRepository contacts = new ContactRepository();
+            myContacts = contacts.GetSavedContact(UserId);
+            AllEventContact.DataSource = null;
+            rEventContactList.DataSource = null;
+            this.AllEventContact.DataSource = myContacts;
+            this.AllEventContact.DisplayMember = "cName";
+            this.rEventContactList.DataSource = myContacts;
+            this.rEventContactList.DisplayMember = "cName";
+            REventListView.Enabled = true;
+            UpdateReEvent.Visible = true;
+            SubmitReEvent.Visible = false;
+            DeleteReEvent.Visible = true;
+            AddReEvent.Enabled = true;
+            CancelREvent.Visible = false;
+            REventListView.Focus();
+
+
+        }
+
+        private void cancelEvent_Click(object sender, EventArgs e)
+        {
+            EventController.LoadEventView("NormalEvent");
+            EventGridView.Enabled = true;
+            UpdateEvent.Visible = true;
+            SubmitEvent.Visible = false;
+            DeleteEvent.Visible = true;
+            AddEvent.Enabled = true;
+            cancelEvent.Visible = false;
+            EventGridView.Focus();
+        }
+
+        private void CancelREvent_Click(object sender, EventArgs e)
+        {
+            this.transDetailBox.Text = "Update Event";
+            this.transDetailBox.BackColor = System.Drawing.Color.Empty;
+            this.EventController.LoadEventView("RecurringEvent");
+            REventListView.Enabled = true;
+            UpdateReEvent.Visible = true;
+            SubmitReEvent.Visible = false;
+            DeleteReEvent.Visible = true;
+            AddReEvent.Enabled = true;
+            CancelREvent.Visible = false;
+            REventListView.Focus();
         }
     }
 }

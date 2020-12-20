@@ -31,6 +31,7 @@ namespace BudgetManagement.Views
         private void InitializeComponent()
         {
             this.transDetailBox = new System.Windows.Forms.GroupBox();
+            this.RefreshEventView = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.EventNote = new System.Windows.Forms.RichTextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -54,13 +55,17 @@ namespace BudgetManagement.Views
             this.EventGridView = new System.Windows.Forms.ListView();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.SubmitEvent = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.CancelAddRAction = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.SubmitReEvent = new System.Windows.Forms.Button();
+            this.eventControl = new System.Windows.Forms.GroupBox();
+            this.DeleteReEvent = new System.Windows.Forms.Button();
+            this.UpdateReEvent = new System.Windows.Forms.Button();
+            this.AddReEvent = new System.Windows.Forms.Button();
             this.REventListView = new System.Windows.Forms.ListView();
-            this.DeleteREvent = new MaterialSkin.Controls.MaterialRaisedButton();
-            this.RegisterREvent = new MaterialSkin.Controls.MaterialRaisedButton();
-            this.AddREvent = new MaterialSkin.Controls.MaterialRaisedButton();
             this.rTransDetailBox = new System.Windows.Forms.GroupBox();
+            this.RefreshRView = new System.Windows.Forms.Button();
             this.rEventFrequency = new System.Windows.Forms.TextBox();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             this.label11 = new System.Windows.Forms.Label();
@@ -80,8 +85,7 @@ namespace BudgetManagement.Views
             this.rEventContact = new System.Windows.Forms.TextBox();
             this.rEventName = new System.Windows.Forms.TextBox();
             this.EID = new System.Windows.Forms.TextBox();
-            this.RefreshEventView = new System.Windows.Forms.Button();
-            this.RefreshEView = new System.Windows.Forms.Button();
+            this.CancelREvent = new System.Windows.Forms.Button();
             this.transDetailBox.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -90,6 +94,7 @@ namespace BudgetManagement.Views
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.eventControl.SuspendLayout();
             this.rTransDetailBox.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.SuspendLayout();
@@ -112,6 +117,16 @@ namespace BudgetManagement.Views
             this.transDetailBox.TabIndex = 0;
             this.transDetailBox.TabStop = false;
             this.transDetailBox.Text = "Event Details";
+            // 
+            // RefreshEventView
+            // 
+            this.RefreshEventView.Location = new System.Drawing.Point(707, 135);
+            this.RefreshEventView.Name = "RefreshEventView";
+            this.RefreshEventView.Size = new System.Drawing.Size(121, 23);
+            this.RefreshEventView.TabIndex = 20;
+            this.RefreshEventView.Text = "Refresh View";
+            this.RefreshEventView.UseVisualStyleBackColor = true;
+            this.RefreshEventView.Click += new System.EventHandler(this.RefreshEventView_Click);
             // 
             // groupBox5
             // 
@@ -158,6 +173,7 @@ namespace BudgetManagement.Views
             this.AllEventContact.Name = "AllEventContact";
             this.AllEventContact.Size = new System.Drawing.Size(177, 21);
             this.AllEventContact.TabIndex = 9;
+            this.AllEventContact.Text = "--Select a Contact--";
             this.AllEventContact.SelectedIndexChanged += new System.EventHandler(this.AllEventContact_SelectedIndexChanged);
             // 
             // EventDate
@@ -246,9 +262,9 @@ namespace BudgetManagement.Views
             // 
             // AddEvent
             // 
-            this.AddEvent.Location = new System.Drawing.Point(12, 18);
+            this.AddEvent.Location = new System.Drawing.Point(852, 237);
             this.AddEvent.Name = "AddEvent";
-            this.AddEvent.Size = new System.Drawing.Size(155, 30);
+            this.AddEvent.Size = new System.Drawing.Size(155, 82);
             this.AddEvent.TabIndex = 1;
             this.AddEvent.Text = "Add Event";
             this.AddEvent.UseVisualStyleBackColor = true;
@@ -256,7 +272,7 @@ namespace BudgetManagement.Views
             // 
             // UpdateEvent
             // 
-            this.UpdateEvent.Location = new System.Drawing.Point(12, 63);
+            this.UpdateEvent.Location = new System.Drawing.Point(12, 36);
             this.UpdateEvent.Name = "UpdateEvent";
             this.UpdateEvent.Size = new System.Drawing.Size(155, 30);
             this.UpdateEvent.TabIndex = 2;
@@ -266,7 +282,7 @@ namespace BudgetManagement.Views
             // 
             // DeleteEvent
             // 
-            this.DeleteEvent.Location = new System.Drawing.Point(12, 108);
+            this.DeleteEvent.Location = new System.Drawing.Point(12, 96);
             this.DeleteEvent.Name = "DeleteEvent";
             this.DeleteEvent.Size = new System.Drawing.Size(155, 30);
             this.DeleteEvent.TabIndex = 3;
@@ -276,10 +292,10 @@ namespace BudgetManagement.Views
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.SubmitEvent);
             this.groupBox3.Controls.Add(this.cancelEvent);
             this.groupBox3.Controls.Add(this.DeleteEvent);
             this.groupBox3.Controls.Add(this.UpdateEvent);
-            this.groupBox3.Controls.Add(this.AddEvent);
             this.groupBox3.Location = new System.Drawing.Point(840, 6);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(188, 155);
@@ -288,7 +304,7 @@ namespace BudgetManagement.Views
             // 
             // cancelEvent
             // 
-            this.cancelEvent.Location = new System.Drawing.Point(12, 125);
+            this.cancelEvent.Location = new System.Drawing.Point(12, 97);
             this.cancelEvent.Name = "cancelEvent";
             this.cancelEvent.Size = new System.Drawing.Size(155, 28);
             this.cancelEvent.TabIndex = 4;
@@ -303,10 +319,10 @@ namespace BudgetManagement.Views
             this.EventGridView.FullRowSelect = true;
             this.EventGridView.GridLines = true;
             this.EventGridView.HideSelection = false;
-            this.EventGridView.Location = new System.Drawing.Point(3, 223);
+            this.EventGridView.Location = new System.Drawing.Point(3, 212);
             this.EventGridView.Name = "EventGridView";
             this.EventGridView.ShowItemToolTips = true;
-            this.EventGridView.Size = new System.Drawing.Size(726, 262);
+            this.EventGridView.Size = new System.Drawing.Size(802, 293);
             this.EventGridView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.EventGridView.TabIndex = 5;
             this.EventGridView.UseCompatibleStateImageBehavior = false;
@@ -315,6 +331,7 @@ namespace BudgetManagement.Views
             // 
             // tabControl1
             // 
+            this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.Buttons;
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Location = new System.Drawing.Point(0, 2);
@@ -326,48 +343,110 @@ namespace BudgetManagement.Views
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Controls.Add(this.transDetailBox);
             this.tabPage1.Controls.Add(this.groupBox3);
+            this.tabPage1.Controls.Add(this.AddEvent);
             this.tabPage1.Controls.Add(this.EventGridView);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1048, 491);
+            this.tabPage1.Size = new System.Drawing.Size(1048, 488);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "My Event";
+            // 
+            // SubmitEvent
+            // 
+            this.SubmitEvent.Location = new System.Drawing.Point(12, 37);
+            this.SubmitEvent.Name = "SubmitEvent";
+            this.SubmitEvent.Size = new System.Drawing.Size(155, 28);
+            this.SubmitEvent.TabIndex = 7;
+            this.SubmitEvent.Text = "Submit";
+            this.SubmitEvent.UseVisualStyleBackColor = true;
+            this.SubmitEvent.Visible = false;
+            this.SubmitEvent.Click += new System.EventHandler(this.SubmitEvent_Click);
+            // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(6, 176);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(1039, 39);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "EVENT TABLE";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage2.Controls.Add(this.CancelAddRAction);
+            this.tabPage2.Controls.Add(this.eventControl);
             this.tabPage2.Controls.Add(this.REventListView);
-            this.tabPage2.Controls.Add(this.DeleteREvent);
-            this.tabPage2.Controls.Add(this.RegisterREvent);
-            this.tabPage2.Controls.Add(this.AddREvent);
             this.tabPage2.Controls.Add(this.rTransDetailBox);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1048, 491);
+            this.tabPage2.Size = new System.Drawing.Size(1048, 488);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Recurrent Event";
             // 
-            // CancelAddRAction
+            // SubmitReEvent
             // 
-            this.CancelAddRAction.AutoSize = true;
-            this.CancelAddRAction.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.CancelAddRAction.Depth = 0;
-            this.CancelAddRAction.Icon = null;
-            this.CancelAddRAction.Location = new System.Drawing.Point(900, 114);
-            this.CancelAddRAction.MouseState = MaterialSkin.MouseState.HOVER;
-            this.CancelAddRAction.Name = "CancelAddRAction";
-            this.CancelAddRAction.Primary = true;
-            this.CancelAddRAction.Size = new System.Drawing.Size(73, 36);
-            this.CancelAddRAction.TabIndex = 5;
-            this.CancelAddRAction.Text = "Cancel";
-            this.CancelAddRAction.UseVisualStyleBackColor = true;
-            this.CancelAddRAction.Visible = false;
-            this.CancelAddRAction.Click += new System.EventHandler(this.CancelAddRAction_Click_1);
+            this.SubmitReEvent.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.SubmitReEvent.Location = new System.Drawing.Point(6, 30);
+            this.SubmitReEvent.Name = "SubmitReEvent";
+            this.SubmitReEvent.Size = new System.Drawing.Size(142, 30);
+            this.SubmitReEvent.TabIndex = 5;
+            this.SubmitReEvent.Text = "Submit";
+            this.SubmitReEvent.UseVisualStyleBackColor = false;
+            this.SubmitReEvent.Visible = false;
+            this.SubmitReEvent.Click += new System.EventHandler(this.SubmitReEvent_Click);
+            // 
+            // eventControl
+            // 
+            this.eventControl.Controls.Add(this.CancelREvent);
+            this.eventControl.Controls.Add(this.SubmitReEvent);
+            this.eventControl.Controls.Add(this.DeleteReEvent);
+            this.eventControl.Controls.Add(this.UpdateReEvent);
+            this.eventControl.Controls.Add(this.AddReEvent);
+            this.eventControl.Location = new System.Drawing.Point(888, 14);
+            this.eventControl.Name = "eventControl";
+            this.eventControl.Size = new System.Drawing.Size(154, 186);
+            this.eventControl.TabIndex = 6;
+            this.eventControl.TabStop = false;
+            this.eventControl.Text = "Recurring Controls";
+            // 
+            // DeleteReEvent
+            // 
+            this.DeleteReEvent.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.DeleteReEvent.Location = new System.Drawing.Point(6, 127);
+            this.DeleteReEvent.Name = "DeleteReEvent";
+            this.DeleteReEvent.Size = new System.Drawing.Size(142, 30);
+            this.DeleteReEvent.TabIndex = 2;
+            this.DeleteReEvent.Text = "Delete Event";
+            this.DeleteReEvent.UseVisualStyleBackColor = false;
+            this.DeleteReEvent.Click += new System.EventHandler(this.DeleteReEvent_Click);
+            // 
+            // UpdateReEvent
+            // 
+            this.UpdateReEvent.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.UpdateReEvent.Location = new System.Drawing.Point(6, 77);
+            this.UpdateReEvent.Name = "UpdateReEvent";
+            this.UpdateReEvent.Size = new System.Drawing.Size(142, 30);
+            this.UpdateReEvent.TabIndex = 1;
+            this.UpdateReEvent.Text = "Update Event";
+            this.UpdateReEvent.UseVisualStyleBackColor = false;
+            this.UpdateReEvent.Click += new System.EventHandler(this.UpdateReEvent_Click);
+            // 
+            // AddReEvent
+            // 
+            this.AddReEvent.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.AddReEvent.Location = new System.Drawing.Point(6, 28);
+            this.AddReEvent.Name = "AddReEvent";
+            this.AddReEvent.Size = new System.Drawing.Size(142, 30);
+            this.AddReEvent.TabIndex = 0;
+            this.AddReEvent.Text = "Add  Event";
+            this.AddReEvent.UseVisualStyleBackColor = false;
+            this.AddReEvent.Click += new System.EventHandler(this.AddReEvent_Click);
             // 
             // REventListView
             // 
@@ -376,7 +455,7 @@ namespace BudgetManagement.Views
             this.REventListView.FullRowSelect = true;
             this.REventListView.GridLines = true;
             this.REventListView.HideSelection = false;
-            this.REventListView.Location = new System.Drawing.Point(3, 241);
+            this.REventListView.Location = new System.Drawing.Point(3, 238);
             this.REventListView.Name = "REventListView";
             this.REventListView.Size = new System.Drawing.Size(1042, 247);
             this.REventListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
@@ -385,57 +464,9 @@ namespace BudgetManagement.Views
             this.REventListView.View = System.Windows.Forms.View.Details;
             this.REventListView.SelectedIndexChanged += new System.EventHandler(this.REventListView_SelectedIndexChanged);
             // 
-            // DeleteREvent
-            // 
-            this.DeleteREvent.AutoSize = true;
-            this.DeleteREvent.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.DeleteREvent.Depth = 0;
-            this.DeleteREvent.Icon = null;
-            this.DeleteREvent.Location = new System.Drawing.Point(898, 150);
-            this.DeleteREvent.MouseState = MaterialSkin.MouseState.HOVER;
-            this.DeleteREvent.Name = "DeleteREvent";
-            this.DeleteREvent.Primary = true;
-            this.DeleteREvent.Size = new System.Drawing.Size(69, 36);
-            this.DeleteREvent.TabIndex = 3;
-            this.DeleteREvent.Text = "DELETE";
-            this.DeleteREvent.UseVisualStyleBackColor = true;
-            this.DeleteREvent.Click += new System.EventHandler(this.DeleteREvent_Click_1);
-            // 
-            // RegisterREvent
-            // 
-            this.RegisterREvent.AutoSize = true;
-            this.RegisterREvent.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.RegisterREvent.Depth = 0;
-            this.RegisterREvent.Icon = null;
-            this.RegisterREvent.Location = new System.Drawing.Point(900, 88);
-            this.RegisterREvent.MouseState = MaterialSkin.MouseState.HOVER;
-            this.RegisterREvent.Name = "RegisterREvent";
-            this.RegisterREvent.Primary = true;
-            this.RegisterREvent.Size = new System.Drawing.Size(73, 36);
-            this.RegisterREvent.TabIndex = 2;
-            this.RegisterREvent.Text = "UPDATE";
-            this.RegisterREvent.UseVisualStyleBackColor = true;
-            this.RegisterREvent.Click += new System.EventHandler(this.RegisterREvent_Click);
-            // 
-            // AddREvent
-            // 
-            this.AddREvent.AutoSize = true;
-            this.AddREvent.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.AddREvent.Depth = 0;
-            this.AddREvent.Icon = null;
-            this.AddREvent.Location = new System.Drawing.Point(902, 27);
-            this.AddREvent.MouseState = MaterialSkin.MouseState.HOVER;
-            this.AddREvent.Name = "AddREvent";
-            this.AddREvent.Primary = true;
-            this.AddREvent.Size = new System.Drawing.Size(129, 36);
-            this.AddREvent.TabIndex = 1;
-            this.AddREvent.Text = "Add Recurrent ";
-            this.AddREvent.UseVisualStyleBackColor = true;
-            this.AddREvent.Click += new System.EventHandler(this.AddREvent_Click_1);
-            // 
             // rTransDetailBox
             // 
-            this.rTransDetailBox.Controls.Add(this.RefreshEView);
+            this.rTransDetailBox.Controls.Add(this.RefreshRView);
             this.rTransDetailBox.Controls.Add(this.rEventFrequency);
             this.rTransDetailBox.Controls.Add(this.materialLabel1);
             this.rTransDetailBox.Controls.Add(this.label11);
@@ -460,10 +491,21 @@ namespace BudgetManagement.Views
             this.rTransDetailBox.TabStop = false;
             this.rTransDetailBox.Text = "Update Recurrent Event";
             // 
+            // RefreshRView
+            // 
+            this.RefreshRView.Location = new System.Drawing.Point(679, 170);
+            this.RefreshRView.Name = "RefreshRView";
+            this.RefreshRView.Size = new System.Drawing.Size(75, 23);
+            this.RefreshRView.TabIndex = 21;
+            this.RefreshRView.Text = "Refresh";
+            this.RefreshRView.UseVisualStyleBackColor = true;
+            this.RefreshRView.Click += new System.EventHandler(this.RefreshRView_Click);
+            // 
             // rEventFrequency
             // 
             this.rEventFrequency.Location = new System.Drawing.Point(668, 104);
             this.rEventFrequency.Name = "rEventFrequency";
+            this.rEventFrequency.ReadOnly = true;
             this.rEventFrequency.Size = new System.Drawing.Size(200, 20);
             this.rEventFrequency.TabIndex = 19;
             // 
@@ -548,7 +590,7 @@ namespace BudgetManagement.Views
             // rAppointment
             // 
             this.rAppointment.AutoSize = true;
-            this.rAppointment.Location = new System.Drawing.Point(72, 50);
+            this.rAppointment.Location = new System.Drawing.Point(64, 50);
             this.rAppointment.Name = "rAppointment";
             this.rAppointment.Size = new System.Drawing.Size(84, 17);
             this.rAppointment.TabIndex = 1;
@@ -579,6 +621,7 @@ namespace BudgetManagement.Views
             this.rEventFrequencyList.Name = "rEventFrequencyList";
             this.rEventFrequencyList.Size = new System.Drawing.Size(200, 21);
             this.rEventFrequencyList.TabIndex = 8;
+            this.rEventFrequencyList.Text = "--Select Frequency--";
             this.rEventFrequencyList.SelectedIndexChanged += new System.EventHandler(this.rEventFrequencyList_SelectedIndexChanged);
             // 
             // rEventContactList
@@ -588,6 +631,7 @@ namespace BudgetManagement.Views
             this.rEventContactList.Name = "rEventContactList";
             this.rEventContactList.Size = new System.Drawing.Size(176, 21);
             this.rEventContactList.TabIndex = 7;
+            this.rEventContactList.Text = "--Select a Contact--";
             this.rEventContactList.SelectedIndexChanged += new System.EventHandler(this.rEventContactList_SelectedIndexChanged);
             // 
             // rEventEndPeriod
@@ -637,25 +681,16 @@ namespace BudgetManagement.Views
             this.EID.Size = new System.Drawing.Size(80, 20);
             this.EID.TabIndex = 0;
             // 
-            // RefreshEventView
+            // CancelREvent
             // 
-            this.RefreshEventView.Location = new System.Drawing.Point(707, 135);
-            this.RefreshEventView.Name = "RefreshEventView";
-            this.RefreshEventView.Size = new System.Drawing.Size(121, 23);
-            this.RefreshEventView.TabIndex = 20;
-            this.RefreshEventView.Text = "Refresh View";
-            this.RefreshEventView.UseVisualStyleBackColor = true;
-            this.RefreshEventView.Click += new System.EventHandler(this.RefreshEventView_Click);
-            // 
-            // RefreshEView
-            // 
-            this.RefreshEView.Location = new System.Drawing.Point(767, 169);
-            this.RefreshEView.Name = "RefreshEView";
-            this.RefreshEView.Size = new System.Drawing.Size(107, 23);
-            this.RefreshEView.TabIndex = 20;
-            this.RefreshEView.Text = "Refresh View";
-            this.RefreshEView.UseVisualStyleBackColor = true;
-            this.RefreshEView.Click += new System.EventHandler(this.RefreshEView_Click);
+            this.CancelREvent.Location = new System.Drawing.Point(6, 99);
+            this.CancelREvent.Name = "CancelREvent";
+            this.CancelREvent.Size = new System.Drawing.Size(142, 31);
+            this.CancelREvent.TabIndex = 22;
+            this.CancelREvent.Text = "Cancel";
+            this.CancelREvent.UseVisualStyleBackColor = true;
+            this.CancelREvent.Visible = false;
+            this.CancelREvent.Click += new System.EventHandler(this.CancelREvent_Click);
             // 
             // EventView
             // 
@@ -663,6 +698,8 @@ namespace BudgetManagement.Views
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1059, 531);
             this.Controls.Add(this.tabControl1);
+            this.MaximumSize = new System.Drawing.Size(1075, 570);
+            this.MinimumSize = new System.Drawing.Size(1075, 570);
             this.Name = "EventView";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Event View";
@@ -677,7 +714,7 @@ namespace BudgetManagement.Views
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
+            this.eventControl.ResumeLayout(false);
             this.rTransDetailBox.ResumeLayout(false);
             this.rTransDetailBox.PerformLayout();
             this.groupBox7.ResumeLayout(false);
@@ -713,9 +750,6 @@ namespace BudgetManagement.Views
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox EventContact;
         private System.Windows.Forms.DateTimePicker EventDate;
-        private MaterialSkin.Controls.MaterialRaisedButton DeleteREvent;
-        private MaterialSkin.Controls.MaterialRaisedButton RegisterREvent;
-        private MaterialSkin.Controls.MaterialRaisedButton AddREvent;
         private GroupBox rTransDetailBox;
         private TextBox rEventFrequency;
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
@@ -737,8 +771,15 @@ namespace BudgetManagement.Views
         private TextBox rEventName;
         private TextBox EID;
         private ListView REventListView;
-        private MaterialSkin.Controls.MaterialRaisedButton CancelAddRAction;
         private Button RefreshEventView;
-        private Button RefreshEView;
+        private Button button1;
+        private Button SubmitReEvent;
+        private GroupBox eventControl;
+        private Button DeleteReEvent;
+        private Button UpdateReEvent;
+        private Button AddReEvent;
+        private Button SubmitEvent;
+        private Button RefreshRView;
+        private Button CancelREvent;
     }
 }

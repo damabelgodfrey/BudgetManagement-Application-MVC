@@ -29,7 +29,6 @@ namespace BudgetManagement.Models
         public int EventUserID { get; set; }
         public string EventName { get; set; }
         public string EventNote { get; set; }
-        public double EventAmount { get; set; }
         public string EventType { get; set; }
         public DateTime EventDate { get; set; }
         public string EventContact { get; set; }

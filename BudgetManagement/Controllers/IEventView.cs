@@ -9,38 +9,33 @@ namespace BudgetManagement.Controllers
 {
     public interface IEventView
     { 
+         void SetEventController(EventController controller);
+        void ClearGrid(String typeFlag);
+        void AddEventToGrid(Event Event);
+        void UpdateGridWithChangedEvent(Event Event);
+        void RemoveEventFromGrid(Event Event);
+        string GetIdOfSelectedEventInGrid();
+        void SetSelectedEventInGrid(Event Event);
 
-        void SetEventController(EventController controller);
-    void ClearGrid();
-    void AddEventToGrid(Event Event);
-    void UpdateGridWithChangedEvent(Event Event);
-    void RemoveEventFromGrid(Event Event);
-    string GetIdOfSelectedEventInGrid();
-    void SetSelectedEventInGrid(Event Event);
+        DateTime ViewEventDate { get; set; }
+        bool CanModifyID { set; }
+        int ViewEventID { get; set; }
+        string ViewEventNote { get; set; }
+        string ViewEventContact { get; set; }
+        string ViewEventType { get; set; }
+        string ViewEventName { get; set; }
 
-    string ViewEventDate { get; set; }
-    bool CanModifyID { set; }
-    string ViewEventID { get; set; }
-    string ViewEventNote { get; set; }
-    string ViewEventContact { get; set; }
-    string ViewEventType { get; set; }
-    string ViewEventName { get; set; }
+        string GetIdOfSelectedREventInGrid();
+        // void SetSelectedREventInGrid(RecurringEvent Event);
 
-    void ClearRGrid();
-    // void AddREventToGrid(RecurringEvent Event);
-    // void UpdateGridWithChangedREvent(RecurringEvent Event);
-    // void RemoveREventFromGrid(RecurringEvent Event);
-    string GetIdOfSelectedREventInGrid();
-    // void SetSelectedREventInGrid(RecurringEvent Event);
-
-    bool CanModifyRID { set; }
-    string ViewREventID { get; set; }
-    string ViewREventNote { get; set; }
-    string ViewREventContact { get; set; }
-    string ViewREventType { get; set; }
-    string ViewREventName { get; set; }
-    string ViewREventStartDate { get; set; }
-    string ViewREventEndDate { get; set; }
-    string viewREventFrequency { get; set; }
-}
+        bool CanModifyRID { set; }
+        int ViewREventID { get; set; }
+        string ViewREventNote { get; set; }
+        string ViewREventContact { get; set; }
+        string ViewREventType { get; set; }
+        string ViewREventName { get; set; }
+        DateTime ViewREventStartDate { get; set; }
+        DateTime ViewREventEndDate { get; set; }
+        string viewREventFrequency { get; set; }
+    }
 }

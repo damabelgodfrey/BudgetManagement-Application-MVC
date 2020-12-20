@@ -22,47 +22,44 @@ namespace BudgetManagement.Controllers
         public static bool AuthenticateUser (string email, string password)
         {
 
-            string response;
+            User user;
             String Key = UserRepository.GetKey();
-            List<User> myUserlist = UserRepository.GetUserList();
+           // List<User> myUserlist = UserRepository.GetUserList();
             // string decriptPassword = DataCypher.EncryptString(Key, password);
             UserRepository usd = new UserRepository();
-             response = usd.VerifyUser(email, password);
-            if (response=="true")
+            user = usd.VerifyUser(email, password);
+            if (user != null)
             {
                 try
                 {
                    
-                    userId = Convert.ToInt32(myUserlist[0].uID);
-                    userEmail = myUserlist[0].uEmail;
-                    string decriptPassword = DataCypher.DecryptString(Key, myUserlist[0].uPassword);
+                    userId = Convert.ToInt32(user.uID);
+                    userEmail = user.uEmail;
+                    string decriptPassword = DataCypher.DecryptString(Key, user.uPassword);
                     if (decriptPassword == password)
                     {
-                      //  MessageBox.Show(decriptPassword + password+ "Login successful", "SUCCESS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return true;
                     }
                     else
                     {
                         
-                       // MessageBox.Show("iNVALID PASSWORD", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return false;
                     }
                 }
                 catch (Exception)
                 {
-                    throw;
+                    return false;
                 }
-               
+
             }
             else
             {
-               // MessageBox.Show( "User record with this email does not exist", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
            
             }
 
-        public static string RegisterUser(string name, string email, string password, string passwordConfirm, DateTime now )
+        public static string RegisterUser(string name, string email, string password, DateTime now )
         {
             UserRepository usr = new UserRepository();
             User user = new User(0, name, email, password,now);
@@ -76,28 +73,29 @@ namespace BudgetManagement.Controllers
         public static void SetUpUserDetails()
         {
 
-            List<User> usl = UserRepository.GetUserList();
+            User usl = UserRepository.GetUser();
+
 
             try
             {   
                 //get contacts
                 ContactRepository contactRepoObj = new ContactRepository();
-                contactRepoObj.GetSavedContact(usl[0].uID);
+                contactRepoObj.GetSavedContact(usl.uID);
                 
 
                 //get transaction
                 TransactionRepository transRepoObj = new TransactionRepository();
-                transRepoObj.GetSavedRecurringTransaction(usl[0].uID);
+                transRepoObj.GetSavedRecurringTransaction(usl.uID);
 
                 TransactionRepository transRepoObj2 = new TransactionRepository();
 
-                transRepoObj2.GetSavedTransaction(usl[0].uID);
+                transRepoObj2.GetSavedTransaction(usl.uID);
                 //get events
                 EventRepository eventRepoObj = new EventRepository();
-                eventRepoObj.GetSavedEvent(usl[0].uID);
+                eventRepoObj.GetSavedEvent(usl.uID);
                 EventRepository eventRepoObj2 = new EventRepository();
 
-                eventRepoObj2.GetSavedRecurringEvent(usl[0].uID);
+                eventRepoObj2.GetSavedRecurringEvent(usl.uID);
                // return "success";
 
             }
@@ -133,11 +131,11 @@ namespace BudgetManagement.Controllers
                     return match.Groups[1].Value + domainName;
                 }
             }
-            catch (RegexMatchTimeoutException e)
+            catch (RegexMatchTimeoutException )
             {
                 return false;
             }
-            catch (ArgumentException e)
+            catch (ArgumentException )
             {
                 return false;
             }

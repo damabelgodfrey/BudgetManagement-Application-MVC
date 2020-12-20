@@ -114,11 +114,11 @@ namespace BudgetManagement.Repository
                 sqlConnection.Open();
                 int i = sqlCommand.ExecuteNonQuery();
                 if (i > 0)
-                    dbReturnMessage = contact.cName + "  Updated Successfully!!";
+                    dbReturnMessage = "success";
 
                 else
-                    throw new Exception("Error: " + contact.cName + " Data Could Not Be Found!");
-                sqlConnection.Close();
+                    dbReturnMessage = "fail";
+
             }
             catch (Exception ex)
             {

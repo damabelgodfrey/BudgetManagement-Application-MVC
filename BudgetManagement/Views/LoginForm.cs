@@ -8,16 +8,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Tulpep.NotificationWindow;
 
 namespace BudgetManagement.Views
 {
+    
     public partial class MyLoginForm : Form
     {
+        private static MyLoginForm LoginForm;
+        private static readonly object LoginPadlock = new object();
+        PopupNotifier popup = new PopupNotifier();
         public MyLoginForm()
         {
             InitializeComponent();
         }
+
+        internal static MyLoginForm GetLoginForm()
+        {
+            lock (LoginPadlock)
+            {
+                if (LoginForm == null || LoginForm.IsDisposed)
+                {
+                    LoginForm = new MyLoginForm();
+                }
+
+                return LoginForm;
+            }
+        }
+
 
         private void SubmitBtn_Click(object sender, EventArgs e)
         {
@@ -35,21 +53,26 @@ namespace BudgetManagement.Views
             }
             else if (string.IsNullOrWhiteSpace(password))
             {
-                MessageBox.Show("Please enter Email", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please enter password", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             } else
             {
                 bool result = Authentication.AuthenticateUser(email, password);
                 if (result)
                 {
-                    //this.Hide();
-                   // Dispose();
+                    this.Hide();
+                    LoginPasswordtxt.Text = "";
+                    popup.TitleText = "STATUS ALERT";
+                    popup.ContentText = "Authentication was successful....";
+                    popup.Popup();
                     Dashboard myDashboard = new Dashboard();
-                    myDashboard.ShowDialog();
+                    myDashboard.ShowDialog(); 
+                   
                 }
                 else
                 {
-                    MessageBox.Show("Login Details Incorrect", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LoginPasswordtxt.Text = "";
+                    MessageBox.Show("Login Details Could not be Verified", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
@@ -74,23 +97,17 @@ namespace BudgetManagement.Views
 
         }
 
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
-        {
-           // LoginPasswordtxt.PasswordChar = LoginPasswordtxt.Checked ? '\0' : '*';
-           // this.LoginPasswordtxt.PasswordChar = '\0';
-
-               // }
-        }
+  
         private void passwordCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             LoginPasswordtxt.PasswordChar = passwordCheckBox.Checked ? '\0' : '*';
 
         }
 
-        private void showPassword_CheckedChanged(object sender, EventArgs e)
+        private void ShowRegPassword_CheckedChanged(object sender, EventArgs e)
         {
-            RegisterPasswordL.PasswordChar = passwordCheckBox.Checked ? '\0' : '*';
-            RegisterPassword2L.PasswordChar = passwordCheckBox.Checked ? '\0' : '*';
+            RegisterPasswordL.PasswordChar = showPassword.Checked ? '\0' : '*';
+            RegisterPassword2L.PasswordChar = showPassword.Checked ? '\0' : '*';
         }
 
         private void Register_Click_1(object sender, EventArgs e)
@@ -137,7 +154,7 @@ namespace BudgetManagement.Views
             else
             {
 
-                string result = Authentication.RegisterUser(name, email, password, passwordConfirm, thisDay);
+                string result = Authentication.RegisterUser(name, email, password, thisDay);
                 if (result == "false")
                 {
                     RegisterPassword2L.ResetText();
@@ -145,11 +162,21 @@ namespace BudgetManagement.Views
                 }
                 else
                 {
+                    popup.TitleText = "SUCCESS ALERT";
+                    popup.ContentText = "Registration was successfull";
+                    popup.Popup();
                     RegisterPasswordL.ResetText();
                     RegisterPassword2L.ResetText();
                 }
 
             }
+        }
+
+        internal void displayForm()
+        {
+            this.WindowState = FormWindowState.Normal;
+            this.Activate();
+            this.Show();
         }
     }
 }

@@ -26,9 +26,5 @@ namespace BudgetManagement.Models
             cAddress = address;
             cType = type;
         }
-
-        public Contact()
-        {
-        }
     }
 }

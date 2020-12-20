@@ -19,8 +19,7 @@ namespace BudgetManagement.Controllers
 
         string ContactName { get; set; }
         string Address { get; set; }
-        string CID { get; set; }
+        int CID { get; set; }
         string ContactType { get; set; }
-        bool CanModifyID { set; }
     }
 }

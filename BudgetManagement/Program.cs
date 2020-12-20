@@ -21,13 +21,20 @@ namespace BudgetManagement
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+       public static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-              Application.Run(new MyLoginForm());
-            //Application.Run(new Dashboard());
+            try
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(MyLoginForm.GetLoginForm());
+            }
+            catch (Exception)
+            {
 
+               
+            }
+           
         }
     }
 }

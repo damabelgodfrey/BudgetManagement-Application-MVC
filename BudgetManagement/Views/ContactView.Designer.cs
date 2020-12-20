@@ -32,6 +32,7 @@ namespace BudgetManagement.Views
         private void InitializeComponent()
         {
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.Cancel = new System.Windows.Forms.Button();
             this.DeleteCbtn = new System.Windows.Forms.Button();
             this.UpdateCBtn = new System.Windows.Forms.Button();
             this.addCBtn = new System.Windows.Forms.Button();
@@ -46,6 +47,8 @@ namespace BudgetManagement.Views
             this.payerRBtn = new System.Windows.Forms.RadioButton();
             this.payeeRBtn = new System.Windows.Forms.RadioButton();
             this.contactGrdView = new System.Windows.Forms.ListView();
+            this.button1 = new System.Windows.Forms.Button();
+            this.SubmitContact = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             this.contactGbox.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -53,44 +56,59 @@ namespace BudgetManagement.Views
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.SubmitContact);
+            this.groupBox3.Controls.Add(this.Cancel);
             this.groupBox3.Controls.Add(this.DeleteCbtn);
             this.groupBox3.Controls.Add(this.UpdateCBtn);
-            this.groupBox3.Controls.Add(this.addCBtn);
-            this.groupBox3.Location = new System.Drawing.Point(785, 14);
+            this.groupBox3.Location = new System.Drawing.Point(804, 12);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(217, 177);
+            this.groupBox3.Size = new System.Drawing.Size(217, 179);
             this.groupBox3.TabIndex = 6;
             this.groupBox3.TabStop = false;
             // 
+            // Cancel
+            // 
+            this.Cancel.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.Cancel.ForeColor = System.Drawing.Color.Maroon;
+            this.Cancel.Location = new System.Drawing.Point(19, 107);
+            this.Cancel.Name = "Cancel";
+            this.Cancel.Size = new System.Drawing.Size(181, 40);
+            this.Cancel.TabIndex = 6;
+            this.Cancel.Text = "Cancel";
+            this.Cancel.UseVisualStyleBackColor = false;
+            this.Cancel.Visible = false;
+            this.Cancel.Click += new System.EventHandler(this.Cancel_Click);
+            // 
             // DeleteCbtn
             // 
-            this.DeleteCbtn.Location = new System.Drawing.Point(19, 124);
+            this.DeleteCbtn.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.DeleteCbtn.Location = new System.Drawing.Point(19, 108);
             this.DeleteCbtn.Name = "DeleteCbtn";
             this.DeleteCbtn.Size = new System.Drawing.Size(181, 39);
             this.DeleteCbtn.TabIndex = 5;
             this.DeleteCbtn.Text = "Delete Contact";
-            this.DeleteCbtn.UseVisualStyleBackColor = true;
+            this.DeleteCbtn.UseVisualStyleBackColor = false;
             this.DeleteCbtn.Click += new System.EventHandler(this.DeleteCbtn_Click);
             // 
             // UpdateCBtn
             // 
-            this.UpdateCBtn.Location = new System.Drawing.Point(19, 61);
+            this.UpdateCBtn.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.UpdateCBtn.Location = new System.Drawing.Point(19, 32);
             this.UpdateCBtn.Name = "UpdateCBtn";
             this.UpdateCBtn.Size = new System.Drawing.Size(181, 39);
             this.UpdateCBtn.TabIndex = 4;
             this.UpdateCBtn.Text = "Update Contact";
-            this.UpdateCBtn.UseVisualStyleBackColor = true;
+            this.UpdateCBtn.UseVisualStyleBackColor = false;
             this.UpdateCBtn.Click += new System.EventHandler(this.UpdateCBtn_Click);
             // 
             // addCBtn
             // 
-            this.addCBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(42)))), ((int)(((byte)(11)))), ((int)(((byte)(51)))));
+            this.addCBtn.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.addCBtn.FlatAppearance.BorderColor = System.Drawing.SystemColors.Control;
             this.addCBtn.FlatAppearance.BorderSize = 0;
-            this.addCBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.addCBtn.Location = new System.Drawing.Point(19, 16);
+            this.addCBtn.Location = new System.Drawing.Point(804, 238);
             this.addCBtn.Name = "addCBtn";
-            this.addCBtn.Size = new System.Drawing.Size(181, 39);
+            this.addCBtn.Size = new System.Drawing.Size(217, 90);
             this.addCBtn.TabIndex = 3;
             this.addCBtn.Text = "Add New Contact";
             this.addCBtn.UseVisualStyleBackColor = false;
@@ -98,7 +116,7 @@ namespace BudgetManagement.Views
             // 
             // contactGbox
             // 
-            this.contactGbox.BackColor = System.Drawing.SystemColors.Control;
+            this.contactGbox.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.contactGbox.Controls.Add(this.label3);
             this.contactGbox.Controls.Add(this.label1);
             this.contactGbox.Controls.Add(this.label2);
@@ -153,6 +171,7 @@ namespace BudgetManagement.Views
             // 
             this.idCTxt.Location = new System.Drawing.Point(120, 19);
             this.idCTxt.Name = "idCTxt";
+            this.idCTxt.ReadOnly = true;
             this.idCTxt.Size = new System.Drawing.Size(261, 20);
             this.idCTxt.TabIndex = 4;
             // 
@@ -201,19 +220,38 @@ namespace BudgetManagement.Views
             // contactGrdView
             // 
             this.contactGrdView.AllowColumnReorder = true;
-            this.contactGrdView.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.contactGrdView.FullRowSelect = true;
             this.contactGrdView.GridLines = true;
             this.contactGrdView.HideSelection = false;
-            this.contactGrdView.Location = new System.Drawing.Point(0, 213);
+            this.contactGrdView.Location = new System.Drawing.Point(0, 238);
             this.contactGrdView.Name = "contactGrdView";
-            this.contactGrdView.Size = new System.Drawing.Size(1059, 318);
-            this.contactGrdView.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.contactGrdView.Size = new System.Drawing.Size(773, 293);
             this.contactGrdView.TabIndex = 38;
             this.contactGrdView.UseCompatibleStateImageBehavior = false;
             this.contactGrdView.View = System.Windows.Forms.View.Details;
             this.contactGrdView.VirtualListSize = 10;
             this.contactGrdView.SelectedIndexChanged += new System.EventHandler(this.ContactGrdView_SelectedIndexChanged_1);
+            // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(0, 211);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(773, 30);
+            this.button1.TabIndex = 39;
+            this.button1.Text = "CONTACT TABLE";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // SubmitContact
+            // 
+            this.SubmitContact.Location = new System.Drawing.Point(19, 32);
+            this.SubmitContact.Name = "SubmitContact";
+            this.SubmitContact.Size = new System.Drawing.Size(181, 38);
+            this.SubmitContact.TabIndex = 40;
+            this.SubmitContact.Text = "SUBMIT";
+            this.SubmitContact.UseVisualStyleBackColor = true;
+            this.SubmitContact.Visible = false;
+            this.SubmitContact.Click += new System.EventHandler(this.SubmitContact_Click);
             // 
             // ContactView
             // 
@@ -221,12 +259,15 @@ namespace BudgetManagement.Views
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1059, 531);
+            this.Controls.Add(this.addCBtn);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.contactGrdView);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.contactGbox);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(1075, 570);
             this.Name = "ContactView";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Manage Contact Board";
@@ -255,5 +296,8 @@ namespace BudgetManagement.Views
         private System.Windows.Forms.RadioButton payerRBtn;
         private System.Windows.Forms.RadioButton payeeRBtn;
         private ListView contactGrdView;
+        private Button Cancel;
+        private Button button1;
+        private Button SubmitContact;
     }
 }

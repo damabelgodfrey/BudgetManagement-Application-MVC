@@ -11,6 +11,6 @@ namespace BudgetManagement.Controllers
     {
         void SetReportController(ReportController controller);
         void ClearGrid();
-        void AddTransactionToGrid(Transaction trans);
+        void AddTransactionToGrid(Transaction trans, int no);
     }
 }

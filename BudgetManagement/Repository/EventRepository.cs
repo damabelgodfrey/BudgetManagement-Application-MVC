@@ -1,4 +1,5 @@
 ﻿using BudgetManagement.Models;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,8 +13,12 @@ namespace BudgetManagement.Repository
 {
     class EventRepository :  AzureDbConnection
     {
+
         private static List<Event> EventList = new List<Event>();
         private static List<RecurringEvent> RecurringEventList = new List<RecurringEvent>();
+        private Logger _logger = LogManager.GetCurrentClassLogger();
+        int UserID = UserRepository.GetUserID();
+
         //add contact
         public SqlCommand sqlCommand;
         public string AddEvent(Event Event)
@@ -28,22 +33,8 @@ namespace BudgetManagement.Repository
             {
                 dbQuery = "INSERT INTO Events([UserId],[Name],[Type],[Note],[ContactName],[StartDate]) VALUES(@UserId,@Name, @Type,@Note,@ContactName,@StartDate);";
             }
-
-            if (Event.GetType().IsAssignableFrom(typeof(Event)))
-            {
-                // dbQuery = "INSERT INTO EventS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[StartDate]) VALUES(@UserId,@Name, @Type,@Amount,@Note,@ContactName,@StartDate);";
-            }
-            if (Event.GetType().IsAssignableFrom(typeof(RecurringEvent)))
-            {
-                // dbQuery = "INSERT INTO RecurringEventS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[StartDate],[Period]) VALUES(@UserId,@Name, @type,@Amount,@Note,@ContactName,@StartDate,@Period);";
-
-            }
-            // dbQuery = "INSERT INTO RecurringEventS([UserId],[Name],[Type],[Amount],[Note],[ContactName],[StartDate],[Period]) VALUES(@UserId,@Name, @type,@Amount,@Note,@ContactName,@StartDate,@Period);";
-
-            //dbQuery = "INSERT INTO Contacts([UserId],[Name],[Address],[Type]) VALUES(@UserId,@Name, @address, @type);";
-
             sqlCommand = new SqlCommand(dbQuery, sqlConnection);
-            sqlCommand.Parameters.AddWithValue("@UserId", Event.EventID);
+            sqlCommand.Parameters.AddWithValue("@UserId", UserID);
             sqlCommand.Parameters.AddWithValue("@Name", Event.EventName);
             sqlCommand.Parameters.AddWithValue("@Type", Event.EventType);
             sqlCommand.Parameters.AddWithValue("@Note", Event.EventNote);
@@ -64,12 +55,14 @@ namespace BudgetManagement.Repository
                 }
                 else
                 {
+
                     MessageBox.Show(i + "  Could not verify", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     sqlConnection.Close();
                 }
             }
             catch (Exception ex)
             {
+                _logger.Error(ex);
                 dbReturnMessage = "Exception: " + ex.Message;
                 MessageBox.Show(dbReturnMessage + "Could not open", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
@@ -106,6 +99,7 @@ namespace BudgetManagement.Repository
             }
             catch (Exception ex)
             {
+                _logger.Error(ex);
                 dbReturnMessage = "Exception: " + ex.Message;
                 MessageBox.Show(dbReturnMessage);
             }
@@ -148,6 +142,7 @@ namespace BudgetManagement.Repository
                 }
                 catch (Exception ex)
                 {
+                    _logger.Error(ex);
                     dbReturnMessage = "Exception: " + ex.Message;
                     MessageBox.Show(dbReturnMessage);
 
@@ -201,6 +196,7 @@ namespace BudgetManagement.Repository
             }
             catch (Exception ex)
             {
+                _logger.Error(ex);
                 dbReturnMessage = "Exception: " + ex.Message;
                 MessageBox.Show(dbReturnMessage);
 
@@ -210,38 +206,6 @@ namespace BudgetManagement.Repository
                 sqlConnection.Close();
             }
             return dbReturnMessage;
-        }
-        //check if Event name exist
-        public bool CheckEvent(Event Event)
-        {
-            dbQuery = "SELECT count(*)  FROM Event WHERE [Name] = @Name";
-            sqlCommand = new SqlCommand(dbQuery, sqlConnection);
-            sqlCommand.Parameters.AddWithValue("@Name", Event.EventName);
-            try
-            {
-                sqlConnection.Open();
-                int i = sqlCommand.ExecuteNonQuery();
-                int recordCount = (int)sqlCommand.ExecuteScalar();
-
-                if (recordCount > 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                dbReturnMessage = "Exception: " + ex.Message;
-                return false;
-            }
-            finally
-            {
-                sqlConnection.Close();
-            }
-
         }
 
         //get Recurring Event
@@ -271,6 +235,7 @@ namespace BudgetManagement.Repository
             }
             catch (Exception ex)
             {
+                _logger.Error(ex); 
                 dbReturnMessage = "Exception: " + ex.Message;
 
 

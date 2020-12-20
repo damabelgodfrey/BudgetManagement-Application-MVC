@@ -9,35 +9,36 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Windows.Forms;
 using BudgetManagement.Utilities;
+using NLog;
 
 namespace BudgetManagement.Repository
 {
     class UserRepository: AzureDbConnection
     {
-        private static List<User> UserList = new List<User>();
+        private static User user;
         public SqlCommand sqlCommand;
+        private Logger _logger = LogManager.GetCurrentClassLogger();
+
 
         internal static int GetUserID() {
-
-           int id = UserList[0].uID;
-            return id;
-
+          int id = user.uID;
+          return id;
         }
 
         internal static DateTime GetUserLogDate()
         {
 
-            DateTime id = UserList[0].uLastAccess;
-            return id;
+            DateTime access = user.uLastAccess;
+            return access;
 
         }
 
-        internal static List<User> GetUserList(){
-            return UserList;
+        internal static User GetUser(){
+            return user;
         }
-        internal static void ClearUserList()
+        internal static void ClearUser()
         {
-            UserList.Clear();
+            user = null;
         }
 
         internal static string GetKey()
@@ -47,10 +48,10 @@ namespace BudgetManagement.Repository
         }
 
         //Add User 
-        public string AddUser(User user)
+        public string AddUser(User myUser)
             {
             dbReturnMessage = "";
-            if (CheckUser(user))
+            if (CheckUser(myUser))
             {
                 dbReturnMessage = "false";
             }
@@ -61,15 +62,15 @@ namespace BudgetManagement.Repository
                 try
                 {
                     sqlCommand = new SqlCommand(dbQuery, sqlConnection);
-                    sqlCommand.Parameters.AddWithValue("@Name", user.uName);
-                    sqlCommand.Parameters.AddWithValue("@Email", user.uEmail);
+                    sqlCommand.Parameters.AddWithValue("@Name", myUser.uName);
+                    sqlCommand.Parameters.AddWithValue("@Email", myUser.uEmail);
                     Key = GetKey();
-                    String EncriptPassword = DataCypher.EncryptString(Key, user.uPassword); //encript password
+                    String EncriptPassword = DataCypher.EncryptString(Key, myUser.uPassword); //encript password
                     sqlCommand.Parameters.AddWithValue("@Password", EncriptPassword);
                     sqlConnection.Open();
                     int i = sqlCommand.ExecuteNonQuery();
                     if (i > 0)
-                        dbReturnMessage = user.uName + "  Added Successfully!!";
+                        dbReturnMessage = myUser.uName + "  Added Successfully!!";
 
                     else
                         throw new Exception("Error, Data Could Not Be Added!");
@@ -88,11 +89,11 @@ namespace BudgetManagement.Repository
                 return dbReturnMessage;
         }
 
-        public  string VerifyUser(string email, string Password)
+        public  User VerifyUser(string email, string Password)
         {
-            if (UserList.Count()> 0)
+            if (user != null)
             {
-                ClearUserList();
+                user = null;
             }
                 
             dbQuery = "SELECT * FROM Users  WHERE [Email] = @Email;";
@@ -125,19 +126,15 @@ namespace BudgetManagement.Repository
             {
                 dbReturnMessage = "Exception: " + ex.Message;
                 MessageBox.Show(dbReturnMessage, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(dbReturnMessage.ToString());
+
 
             }
             finally
             {
                 sqlConnection.Close();
             }
-            if (UserList.Count() > 0)
-            {
-                return "true";
-            }
-            else {
-                return "false";
-            }
+            return user;
             
         }
 
@@ -150,17 +147,17 @@ namespace BudgetManagement.Repository
             string Email = Convert.ToString(record[2]);
             string Password = Convert.ToString(record[3]);
             DateTime LastAccess = Convert.ToDateTime(record[4]);
-            User obj = new User(id, Name, Email, Password,LastAccess);
-            UserList.Add(obj);
+            user = new User(id, Name, Email, Password,LastAccess);
+            //UserList.Add(obj);
         }
 
         //Check if user exist
-        public bool CheckUser(User user)
+        public bool CheckUser(User myUser)
         {
 
             dbQuery = "SELECT count(*)  FROM Users WHERE [Email] = @Email";
             sqlCommand = new SqlCommand(dbQuery, sqlConnection);
-            sqlCommand.Parameters.AddWithValue("@Email", user.uEmail);
+            sqlCommand.Parameters.AddWithValue("@Email", myUser.uEmail);
             try
             {
                 sqlConnection.Open();
@@ -187,17 +184,31 @@ namespace BudgetManagement.Repository
             }
            
         }
-        public bool UpdateLogDate(int user)
+
+        internal bool UpdateUser(User newUser, string flag)
         {
+            if (flag == "Details")
+            {
+                dbQuery = "UPDATE Users SET [Name] = @Name WHERE [Id] = @Id ;";
+                sqlCommand = new SqlCommand(dbQuery, sqlConnection);
+                sqlCommand.Parameters.AddWithValue("@Name", newUser.uName);
 
-            MessageBox.Show("innn");
-
-            dbQuery = "UPDATE Users SET [LastAccess] = @LastAccess WHERE [Id] = @Id ;";
-            sqlCommand = new SqlCommand(dbQuery, sqlConnection);
-            sqlCommand.Parameters.AddWithValue("@Id", user);
-            DateTime thisDay = DateTime.Now;
-
-            sqlCommand.Parameters.AddWithValue("@LastAccess", thisDay);
+            }
+            if (flag == "Password")
+            {
+                dbQuery = "UPDATE Users SET [Password] = @Password WHERE [Id] = @Id ;";
+                sqlCommand = new SqlCommand(dbQuery, sqlConnection);
+                Key = GetKey();
+                String EncriptPassword = DataCypher.EncryptString(Key, newUser.uPassword); //encript password
+                sqlCommand.Parameters.AddWithValue("@Password", EncriptPassword);
+            }
+            if (flag == "Log")
+            {
+                dbQuery = "UPDATE Users SET [LastAccess] = @LastAccess WHERE [Id] = @Id ;";
+                sqlCommand = new SqlCommand(dbQuery, sqlConnection);
+                sqlCommand.Parameters.AddWithValue("@LastAccess", DateTime.Now);
+            }
+                sqlCommand.Parameters.AddWithValue("@Id", newUser.uID);
             try
             {
                 sqlConnection.Open();
@@ -210,24 +221,28 @@ namespace BudgetManagement.Repository
 
                 else
                 {
-                    throw new Exception("Error:  Data Could Not Be Found!");
+                    dbReturnMessage = "Error:  Data Could Not Be Found!";
+                    MessageBox.Show("Update User Access" + dbReturnMessage);
 
                 }
                 sqlConnection.Close();
+                if (user != null)
+                {
+                    user=null;
+                }
+               user = newUser;
                 return true;
             }
             catch (Exception ex)
             {
+                _logger.Error(ex);
                 dbReturnMessage = "Exception: " + ex.Message;
-                return true;
+                return false;
             }
             finally
             {
                 sqlConnection.Close();
             }
-
-
         }
-
     }
 }

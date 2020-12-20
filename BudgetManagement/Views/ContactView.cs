@@ -18,19 +18,13 @@ namespace BudgetManagement.Views
         ContactController contactController;
         private static ContactView ContactForm;
         private static readonly object ContactPadlock = new object();
+        int UserId = TransactionController.GetUserID();
+
 
         // ContactRepositoryController contactRepoController;
         public ContactView()
         {
             InitializeComponent();
-            string contactName = TransactionController.GetNewContactName();
-            if (contactName !="")
-            {
-                //click n button
-                addCBtn.PerformClick();
-                this.nameCtxt.Text = contactName;
-            
-            }
         }
         //Open contact form 
         //prevent multiple instance of a form
@@ -47,6 +41,19 @@ namespace BudgetManagement.Views
                 }
           
                 return ContactForm;
+            }
+        }
+
+        internal static void DisposeContactForm()
+        {
+            try
+            {
+                ContactForm.Dispose();
+
+            }
+            catch (Exception)
+            {
+
             }
         }
         public string ContactName
@@ -79,16 +86,11 @@ namespace BudgetManagement.Views
             get { return this.addressCtxt.Text; }
             set { this.addressCtxt.Text = value; }
         }
-        public string CID
+        public int CID
         {
-            get { return this.idCTxt.Text; }
-            set { this.idCTxt.Text = value; }
+            get { return Convert.ToInt32(this.idCTxt.Text); }
+            set { this.idCTxt.Text = value.ToString(); }
         }
-        public bool CanModifyID
-        {
-            set { this.idCTxt.Enabled = value; }
-        }
-    
         public void AddContactToGrid(Contact contact)
         {
             ListViewItem parent;
@@ -129,6 +131,8 @@ namespace BudgetManagement.Views
                 rowToUpdate.SubItems[1].Text = contact.cName;
                 rowToUpdate.SubItems[2].Text = contact.cType;
                 rowToUpdate.SubItems[3].Text = contact.cAddress;
+                contactGrdView.Select();
+                rowToUpdate.Selected = true;
             }
         }
         public string GetIdOfSelectedContactInGrid()
@@ -178,38 +182,38 @@ namespace BudgetManagement.Views
 
         private void AddCBtn_Click(object sender, EventArgs e)
         {
-            this.addCBtn.Enabled = false;
-            this.DeleteCbtn.Enabled = false;
-            //this.cancelCbBtn.Visible = true;
-            this.UpdateCBtn.Text = "Register Contact";
             this.contactGbox.Text = "Add Contact";
             this.contactGrdView.BackColor = System.Drawing.ColorTranslator.FromHtml("#626262");
             this.contactController.AddNewContact();
+            contactGrdView.Enabled = false;
+            UpdateCBtn.Visible = false;
+            DeleteCbtn.Visible = false;
+            addCBtn.Enabled = false;
+            Cancel.Visible = true;
+            SubmitContact.Visible = true;
 
         }
         
         // delete contact
         private void DeleteCbtn_Click(object sender, EventArgs e)
         {
-            DeleteCbtn.Enabled = false;
-            this.contactController.RemoveContact();
-            DeleteCbtn.Enabled = true;
-
+            Contact contact = new Contact(CID, UserId,ContactName,Address,ContactType);
+            this.contactController.DeleteContact(contact);
+            contactGrdView.Focus();
 
         }
 
         private void UpdateCBtn_Click(object sender, EventArgs e)
         {
-            UpdateCBtn.Enabled = false;
-           this.contactController.SaveContact();
-            this.UpdateCBtn.Text = "Update Contact";
-            this.addCBtn.Enabled = true;
-            this.DeleteCbtn.Enabled = true;
-            this.DeleteCbtn.Visible = false;
-            UpdateCBtn.Enabled = true;
-
-            //ClearGrid();
-            // this.contactListView.BackColor = System.Drawing.Color.Empty; //setto inactive
+            
+            if (string.IsNullOrWhiteSpace(ContactName))
+            {
+                MessageBox.Show("Please Enter Contact Name", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            Contact contact = new Contact(CID, UserId, ContactName, Address, ContactType);
+            this.contactController.UpdateContact(contact);
+            contactGrdView.Focus();
         }
 
 
@@ -244,5 +248,35 @@ namespace BudgetManagement.Views
                 this.contactController.SelectedContactChanged(this.contactGrdView.SelectedItems[0].Text);
         }
 
+        private void Cancel_Click(object sender, EventArgs e)
+        {
+            this.contactGbox.Text = "Contact Detail View";
+            this.contactController.LoadContactView();
+            contactGrdView.Enabled = true;
+            UpdateCBtn.Visible = true;
+            DeleteCbtn.Visible = true;
+            Cancel.Visible = false;
+            addCBtn.Enabled = true;
+            SubmitContact.Visible = false;
+            contactGrdView.Focus();
+        }
+
+        private void SubmitContact_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(ContactName))
+            {
+                MessageBox.Show("Please Enter Contact Name", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            Contact contact = new Contact(CID, UserId, ContactName, Address, ContactType);
+            this.contactController.AddContact(contact);
+            contactGrdView.Enabled = true;
+            UpdateCBtn.Visible = true;
+            DeleteCbtn.Visible = true;
+            Cancel.Visible = false;
+            addCBtn.Enabled = true;
+            SubmitContact.Visible = false;
+            contactGrdView.Focus();
+        }
     }
 }

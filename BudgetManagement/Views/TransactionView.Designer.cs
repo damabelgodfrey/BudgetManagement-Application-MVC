@@ -31,6 +31,8 @@ namespace BudgetManagement.Views
         private void InitializeComponent()
         {
             this.transDetailBox = new System.Windows.Forms.GroupBox();
+            this.RefreshView = new System.Windows.Forms.Button();
+            this.tAmountTbox = new System.Windows.Forms.NumericUpDown();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.tNoteTbox = new System.Windows.Forms.RichTextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -39,7 +41,6 @@ namespace BudgetManagement.Views
             this.tDatePicker = new System.Windows.Forms.DateTimePicker();
             this.tID = new System.Windows.Forms.Label();
             this.tIDtbox = new System.Windows.Forms.TextBox();
-            this.tAmountTbox = new System.Windows.Forms.TextBox();
             this.tNameTbox = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.expenseTRbtn = new System.Windows.Forms.RadioButton();
@@ -47,24 +48,28 @@ namespace BudgetManagement.Views
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.addTBtn = new System.Windows.Forms.Button();
             this.UpdateTBtn = new System.Windows.Forms.Button();
             this.DeleteTBtn = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.SubmitTrans = new System.Windows.Forms.Button();
             this.cancelTBtn = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.transGridView = new System.Windows.Forms.ListView();
-            this.label4 = new System.Windows.Forms.Label();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.addTBtn = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.CancelAddRAction = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.button2 = new System.Windows.Forms.Button();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.SubmitRTransaction = new System.Windows.Forms.Button();
+            this.CancelRTransaction = new System.Windows.Forms.Button();
+            this.UpdateRTransaction = new System.Windows.Forms.Button();
+            this.DeleteRTransaction = new System.Windows.Forms.Button();
             this.RTransListView = new System.Windows.Forms.ListView();
-            this.DeleteRTransaction = new MaterialSkin.Controls.MaterialRaisedButton();
-            this.RegisterRTransaction = new MaterialSkin.Controls.MaterialRaisedButton();
-            this.AddRTransaction = new MaterialSkin.Controls.MaterialRaisedButton();
             this.rTransDetailBox = new System.Windows.Forms.GroupBox();
+            this.RefreshRView = new System.Windows.Forms.Button();
+            this.rTransAmount = new System.Windows.Forms.NumericUpDown();
             this.rTransFrequency = new System.Windows.Forms.TextBox();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             this.label11 = new System.Windows.Forms.Label();
@@ -84,32 +89,32 @@ namespace BudgetManagement.Views
             this.rTransNote = new System.Windows.Forms.RichTextBox();
             this.rTransContact = new System.Windows.Forms.TextBox();
             this.rTransName = new System.Windows.Forms.TextBox();
-            this.rTransAmount = new System.Windows.Forms.TextBox();
             this.rID = new System.Windows.Forms.TextBox();
-            this.RefreshRTView = new System.Windows.Forms.Button();
-            this.RefreshTView = new System.Windows.Forms.Button();
+            this.AddRTransaction = new System.Windows.Forms.Button();
             this.transDetailBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tAmountTbox)).BeginInit();
             this.groupBox5.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.rTransDetailBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.rTransAmount)).BeginInit();
             this.groupBox7.SuspendLayout();
             this.SuspendLayout();
             // 
             // transDetailBox
             // 
-            this.transDetailBox.Controls.Add(this.RefreshTView);
+            this.transDetailBox.Controls.Add(this.RefreshView);
+            this.transDetailBox.Controls.Add(this.tAmountTbox);
             this.transDetailBox.Controls.Add(this.groupBox5);
             this.transDetailBox.Controls.Add(this.groupBox1);
             this.transDetailBox.Controls.Add(this.tDatePicker);
             this.transDetailBox.Controls.Add(this.tID);
             this.transDetailBox.Controls.Add(this.tIDtbox);
-            this.transDetailBox.Controls.Add(this.tAmountTbox);
             this.transDetailBox.Controls.Add(this.tNameTbox);
             this.transDetailBox.Controls.Add(this.groupBox2);
             this.transDetailBox.Controls.Add(this.label3);
@@ -122,12 +127,35 @@ namespace BudgetManagement.Views
             this.transDetailBox.TabStop = false;
             this.transDetailBox.Text = "Transaction Details";
             // 
+            // RefreshView
+            // 
+            this.RefreshView.Location = new System.Drawing.Point(757, 127);
+            this.RefreshView.Name = "RefreshView";
+            this.RefreshView.Size = new System.Drawing.Size(69, 23);
+            this.RefreshView.TabIndex = 22;
+            this.RefreshView.Text = "Refresh";
+            this.RefreshView.UseVisualStyleBackColor = true;
+            this.RefreshView.Click += new System.EventHandler(this.RefreshView_Click);
+            // 
+            // tAmountTbox
+            // 
+            this.tAmountTbox.DecimalPlaces = 2;
+            this.tAmountTbox.Location = new System.Drawing.Point(249, 35);
+            this.tAmountTbox.Maximum = new decimal(new int[] {
+            1316134912,
+            2328,
+            0,
+            0});
+            this.tAmountTbox.Name = "tAmountTbox";
+            this.tAmountTbox.Size = new System.Drawing.Size(177, 20);
+            this.tAmountTbox.TabIndex = 21;
+            // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.tNoteTbox);
             this.groupBox5.Location = new System.Drawing.Point(453, 69);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(319, 79);
+            this.groupBox5.Size = new System.Drawing.Size(303, 79);
             this.groupBox5.TabIndex = 19;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Note";
@@ -136,7 +164,7 @@ namespace BudgetManagement.Views
             // 
             this.tNoteTbox.Location = new System.Drawing.Point(19, 17);
             this.tNoteTbox.Name = "tNoteTbox";
-            this.tNoteTbox.Size = new System.Drawing.Size(284, 51);
+            this.tNoteTbox.Size = new System.Drawing.Size(265, 51);
             this.tNoteTbox.TabIndex = 15;
             this.tNoteTbox.Text = "";
             // 
@@ -167,13 +195,14 @@ namespace BudgetManagement.Views
             this.tContactCombobox.Name = "tContactCombobox";
             this.tContactCombobox.Size = new System.Drawing.Size(177, 21);
             this.tContactCombobox.TabIndex = 9;
+            this.tContactCombobox.Text = "--Select a Contact--";
             this.tContactCombobox.SelectedIndexChanged += new System.EventHandler(this.TContactCombobox_SelectedIndexChanged);
             // 
             // tDatePicker
             // 
             this.tDatePicker.CustomFormat = "dd-MM-yyyy hh:mm";
             this.tDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.tDatePicker.Location = new System.Drawing.Point(472, 37);
+            this.tDatePicker.Location = new System.Drawing.Point(472, 34);
             this.tDatePicker.Name = "tDatePicker";
             this.tDatePicker.Size = new System.Drawing.Size(284, 20);
             this.tDatePicker.TabIndex = 17;
@@ -192,20 +221,14 @@ namespace BudgetManagement.Views
             // 
             this.tIDtbox.Location = new System.Drawing.Point(9, 34);
             this.tIDtbox.Name = "tIDtbox";
+            this.tIDtbox.ReadOnly = true;
             this.tIDtbox.Size = new System.Drawing.Size(56, 20);
             this.tIDtbox.TabIndex = 12;
-            // 
-            // tAmountTbox
-            // 
-            this.tAmountTbox.Location = new System.Drawing.Point(249, 34);
-            this.tAmountTbox.Name = "tAmountTbox";
-            this.tAmountTbox.Size = new System.Drawing.Size(177, 20);
-            this.tAmountTbox.TabIndex = 8;
-            this.tAmountTbox.TextChanged += new System.EventHandler(this.tAmountTbox_TextChanged);
             // 
             // tNameTbox
             // 
             this.tNameTbox.Location = new System.Drawing.Point(71, 34);
+            this.tNameTbox.MaxLength = 32;
             this.tNameTbox.Name = "tNameTbox";
             this.tNameTbox.Size = new System.Drawing.Size(172, 20);
             this.tNameTbox.TabIndex = 7;
@@ -226,10 +249,10 @@ namespace BudgetManagement.Views
             this.expenseTRbtn.AutoSize = true;
             this.expenseTRbtn.Location = new System.Drawing.Point(133, 29);
             this.expenseTRbtn.Name = "expenseTRbtn";
-            this.expenseTRbtn.Size = new System.Drawing.Size(71, 17);
+            this.expenseTRbtn.Size = new System.Drawing.Size(66, 17);
             this.expenseTRbtn.TabIndex = 1;
             this.expenseTRbtn.TabStop = true;
-            this.expenseTRbtn.Text = "Expenses";
+            this.expenseTRbtn.Text = "Expense";
             this.expenseTRbtn.UseVisualStyleBackColor = true;
             // 
             // incomeTRbtn
@@ -255,7 +278,7 @@ namespace BudgetManagement.Views
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(458, 21);
+            this.label2.Location = new System.Drawing.Point(468, 21);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(30, 13);
             this.label2.TabIndex = 1;
@@ -270,19 +293,11 @@ namespace BudgetManagement.Views
             this.label1.TabIndex = 0;
             this.label1.Text = "Name";
             // 
-            // addTBtn
-            // 
-            this.addTBtn.Location = new System.Drawing.Point(12, 18);
-            this.addTBtn.Name = "addTBtn";
-            this.addTBtn.Size = new System.Drawing.Size(155, 30);
-            this.addTBtn.TabIndex = 1;
-            this.addTBtn.Text = "Add Transaction";
-            this.addTBtn.UseVisualStyleBackColor = true;
-            this.addTBtn.Click += new System.EventHandler(this.AddTBtn_Click);
-            // 
             // UpdateTBtn
             // 
-            this.UpdateTBtn.Location = new System.Drawing.Point(12, 63);
+            this.UpdateTBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.UpdateTBtn.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.UpdateTBtn.Location = new System.Drawing.Point(11, 35);
             this.UpdateTBtn.Name = "UpdateTBtn";
             this.UpdateTBtn.Size = new System.Drawing.Size(155, 30);
             this.UpdateTBtn.TabIndex = 2;
@@ -292,7 +307,7 @@ namespace BudgetManagement.Views
             // 
             // DeleteTBtn
             // 
-            this.DeleteTBtn.Location = new System.Drawing.Point(12, 108);
+            this.DeleteTBtn.Location = new System.Drawing.Point(12, 98);
             this.DeleteTBtn.Name = "DeleteTBtn";
             this.DeleteTBtn.Size = new System.Drawing.Size(155, 30);
             this.DeleteTBtn.TabIndex = 3;
@@ -302,19 +317,31 @@ namespace BudgetManagement.Views
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.SubmitTrans);
             this.groupBox3.Controls.Add(this.cancelTBtn);
             this.groupBox3.Controls.Add(this.DeleteTBtn);
             this.groupBox3.Controls.Add(this.UpdateTBtn);
-            this.groupBox3.Controls.Add(this.addTBtn);
-            this.groupBox3.Location = new System.Drawing.Point(840, 6);
+            this.groupBox3.Location = new System.Drawing.Point(846, 3);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(188, 155);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             // 
+            // SubmitTrans
+            // 
+            this.SubmitTrans.Location = new System.Drawing.Point(12, 35);
+            this.SubmitTrans.Name = "SubmitTrans";
+            this.SubmitTrans.Size = new System.Drawing.Size(155, 31);
+            this.SubmitTrans.TabIndex = 5;
+            this.SubmitTrans.Text = "Submit";
+            this.SubmitTrans.UseVisualStyleBackColor = true;
+            this.SubmitTrans.Visible = false;
+            this.SubmitTrans.Click += new System.EventHandler(this.SubmitTrans_Click);
+            // 
             // cancelTBtn
             // 
-            this.cancelTBtn.Location = new System.Drawing.Point(12, 125);
+            this.cancelTBtn.ForeColor = System.Drawing.Color.Maroon;
+            this.cancelTBtn.Location = new System.Drawing.Point(12, 102);
             this.cancelTBtn.Name = "cancelTBtn";
             this.cancelTBtn.Size = new System.Drawing.Size(155, 28);
             this.cancelTBtn.TabIndex = 4;
@@ -326,42 +353,23 @@ namespace BudgetManagement.Views
             // transGridView
             // 
             this.transGridView.AllowColumnReorder = true;
+            this.transGridView.AutoArrange = false;
+            this.transGridView.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.transGridView.FullRowSelect = true;
             this.transGridView.GridLines = true;
             this.transGridView.HideSelection = false;
-            this.transGridView.Location = new System.Drawing.Point(3, 223);
+            this.transGridView.Location = new System.Drawing.Point(0, 204);
             this.transGridView.Name = "transGridView";
             this.transGridView.ShowItemToolTips = true;
-            this.transGridView.Size = new System.Drawing.Size(726, 262);
-            this.transGridView.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.transGridView.Size = new System.Drawing.Size(834, 281);
             this.transGridView.TabIndex = 5;
             this.transGridView.UseCompatibleStateImageBehavior = false;
             this.transGridView.View = System.Windows.Forms.View.Details;
             this.transGridView.SelectedIndexChanged += new System.EventHandler(this.TransGridView_SelectedIndexChanged);
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(331, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(203, 20);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "TRANSACTION TABLE";
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.groupBox4.Controls.Add(this.label4);
-            this.groupBox4.Location = new System.Drawing.Point(8, 172);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(721, 26);
-            this.groupBox4.TabIndex = 7;
-            this.groupBox4.TabStop = false;
-            // 
             // tabControl1
             // 
+            this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.Buttons;
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Location = new System.Drawing.Point(0, 2);
@@ -373,117 +381,143 @@ namespace BudgetManagement.Views
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage1.Controls.Add(this.groupBox4);
+            this.tabPage1.Controls.Add(this.addTBtn);
+            this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Controls.Add(this.transDetailBox);
             this.tabPage1.Controls.Add(this.groupBox3);
             this.tabPage1.Controls.Add(this.transGridView);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1048, 491);
+            this.tabPage1.Size = new System.Drawing.Size(1048, 488);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "My Transaction";
+            // 
+            // addTBtn
+            // 
+            this.addTBtn.BackColor = System.Drawing.Color.SkyBlue;
+            this.addTBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addTBtn.Location = new System.Drawing.Point(858, 166);
+            this.addTBtn.Name = "addTBtn";
+            this.addTBtn.Size = new System.Drawing.Size(155, 116);
+            this.addTBtn.TabIndex = 7;
+            this.addTBtn.Text = "ADD TRANSACTION";
+            this.addTBtn.UseVisualStyleBackColor = false;
+            this.addTBtn.Click += new System.EventHandler(this.adTBtn_Click);
+            // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(3, 166);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(831, 38);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "TRANSACTION TABLE";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage2.Controls.Add(this.CancelAddRAction);
+            this.tabPage2.Controls.Add(this.button2);
+            this.tabPage2.Controls.Add(this.groupBox4);
             this.tabPage2.Controls.Add(this.RTransListView);
-            this.tabPage2.Controls.Add(this.DeleteRTransaction);
-            this.tabPage2.Controls.Add(this.RegisterRTransaction);
-            this.tabPage2.Controls.Add(this.AddRTransaction);
             this.tabPage2.Controls.Add(this.rTransDetailBox);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Controls.Add(this.AddRTransaction);
+            this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1048, 491);
+            this.tabPage2.Size = new System.Drawing.Size(1048, 488);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Recurrent Transaction";
             // 
-            // CancelAddRAction
+            // button2
             // 
-            this.CancelAddRAction.AutoSize = true;
-            this.CancelAddRAction.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.CancelAddRAction.Depth = 0;
-            this.CancelAddRAction.Icon = null;
-            this.CancelAddRAction.Location = new System.Drawing.Point(900, 114);
-            this.CancelAddRAction.MouseState = MaterialSkin.MouseState.HOVER;
-            this.CancelAddRAction.Name = "CancelAddRAction";
-            this.CancelAddRAction.Primary = true;
-            this.CancelAddRAction.Size = new System.Drawing.Size(73, 36);
-            this.CancelAddRAction.TabIndex = 5;
-            this.CancelAddRAction.Text = "Cancel";
-            this.CancelAddRAction.UseVisualStyleBackColor = true;
-            this.CancelAddRAction.Visible = false;
-            this.CancelAddRAction.Click += new System.EventHandler(this.CancelAddRAction_Click);
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.Location = new System.Drawing.Point(3, 212);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(1042, 30);
+            this.button2.TabIndex = 12;
+            this.button2.Text = "RECURRING TRANSACTION TABLE";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.SubmitRTransaction);
+            this.groupBox4.Controls.Add(this.CancelRTransaction);
+            this.groupBox4.Controls.Add(this.UpdateRTransaction);
+            this.groupBox4.Controls.Add(this.DeleteRTransaction);
+            this.groupBox4.Location = new System.Drawing.Point(888, 6);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(154, 195);
+            this.groupBox4.TabIndex = 11;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Controls";
+            // 
+            // SubmitRTransaction
+            // 
+            this.SubmitRTransaction.BackColor = System.Drawing.SystemColors.Control;
+            this.SubmitRTransaction.Location = new System.Drawing.Point(20, 40);
+            this.SubmitRTransaction.Name = "SubmitRTransaction";
+            this.SubmitRTransaction.Size = new System.Drawing.Size(120, 30);
+            this.SubmitRTransaction.TabIndex = 10;
+            this.SubmitRTransaction.Text = "Submit";
+            this.SubmitRTransaction.UseVisualStyleBackColor = false;
+            this.SubmitRTransaction.Visible = false;
+            this.SubmitRTransaction.Click += new System.EventHandler(this.RegisterRTransaction_Click_1);
+            // 
+            // CancelRTransaction
+            // 
+            this.CancelRTransaction.BackColor = System.Drawing.SystemColors.Control;
+            this.CancelRTransaction.ForeColor = System.Drawing.Color.Maroon;
+            this.CancelRTransaction.Location = new System.Drawing.Point(20, 112);
+            this.CancelRTransaction.Name = "CancelRTransaction";
+            this.CancelRTransaction.Size = new System.Drawing.Size(120, 32);
+            this.CancelRTransaction.TabIndex = 8;
+            this.CancelRTransaction.Text = "Cancel";
+            this.CancelRTransaction.UseVisualStyleBackColor = false;
+            this.CancelRTransaction.Visible = false;
+            this.CancelRTransaction.Click += new System.EventHandler(this.CancelRTransaction_Click);
+            // 
+            // UpdateRTransaction
+            // 
+            this.UpdateRTransaction.BackColor = System.Drawing.SystemColors.Control;
+            this.UpdateRTransaction.Location = new System.Drawing.Point(20, 39);
+            this.UpdateRTransaction.Name = "UpdateRTransaction";
+            this.UpdateRTransaction.Size = new System.Drawing.Size(120, 31);
+            this.UpdateRTransaction.TabIndex = 6;
+            this.UpdateRTransaction.Text = "Update Transaction";
+            this.UpdateRTransaction.UseVisualStyleBackColor = false;
+            this.UpdateRTransaction.Click += new System.EventHandler(this.UpdateRecurring_Click);
+            // 
+            // DeleteRTransaction
+            // 
+            this.DeleteRTransaction.BackColor = System.Drawing.SystemColors.Control;
+            this.DeleteRTransaction.Location = new System.Drawing.Point(20, 112);
+            this.DeleteRTransaction.Name = "DeleteRTransaction";
+            this.DeleteRTransaction.Size = new System.Drawing.Size(120, 32);
+            this.DeleteRTransaction.TabIndex = 7;
+            this.DeleteRTransaction.Text = "Delete";
+            this.DeleteRTransaction.UseVisualStyleBackColor = false;
+            this.DeleteRTransaction.Click += new System.EventHandler(this.DeleteRTransaction_Click_1);
             // 
             // RTransListView
             // 
             this.RTransListView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RTransListView.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.RTransListView.FullRowSelect = true;
             this.RTransListView.GridLines = true;
             this.RTransListView.HideSelection = false;
             this.RTransListView.Location = new System.Drawing.Point(3, 241);
             this.RTransListView.Name = "RTransListView";
-            this.RTransListView.Size = new System.Drawing.Size(1042, 247);
-            this.RTransListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.RTransListView.Size = new System.Drawing.Size(879, 247);
             this.RTransListView.TabIndex = 4;
             this.RTransListView.UseCompatibleStateImageBehavior = false;
             this.RTransListView.View = System.Windows.Forms.View.Details;
             this.RTransListView.SelectedIndexChanged += new System.EventHandler(this.RTransListView_SelectedIndexChanged);
             // 
-            // DeleteRTransaction
-            // 
-            this.DeleteRTransaction.AutoSize = true;
-            this.DeleteRTransaction.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.DeleteRTransaction.Depth = 0;
-            this.DeleteRTransaction.Icon = null;
-            this.DeleteRTransaction.Location = new System.Drawing.Point(898, 150);
-            this.DeleteRTransaction.MouseState = MaterialSkin.MouseState.HOVER;
-            this.DeleteRTransaction.Name = "DeleteRTransaction";
-            this.DeleteRTransaction.Primary = true;
-            this.DeleteRTransaction.Size = new System.Drawing.Size(69, 36);
-            this.DeleteRTransaction.TabIndex = 3;
-            this.DeleteRTransaction.Text = "DELETE";
-            this.DeleteRTransaction.UseVisualStyleBackColor = true;
-            this.DeleteRTransaction.Click += new System.EventHandler(this.DeleteRTransaction_Click);
-            // 
-            // RegisterRTransaction
-            // 
-            this.RegisterRTransaction.AutoSize = true;
-            this.RegisterRTransaction.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.RegisterRTransaction.Depth = 0;
-            this.RegisterRTransaction.Icon = null;
-            this.RegisterRTransaction.Location = new System.Drawing.Point(900, 88);
-            this.RegisterRTransaction.MouseState = MaterialSkin.MouseState.HOVER;
-            this.RegisterRTransaction.Name = "RegisterRTransaction";
-            this.RegisterRTransaction.Primary = true;
-            this.RegisterRTransaction.Size = new System.Drawing.Size(73, 36);
-            this.RegisterRTransaction.TabIndex = 2;
-            this.RegisterRTransaction.Text = "UPDATE";
-            this.RegisterRTransaction.UseVisualStyleBackColor = true;
-            this.RegisterRTransaction.Click += new System.EventHandler(this.RegisterRTransaction_Click);
-            // 
-            // AddRTransaction
-            // 
-            this.AddRTransaction.AutoSize = true;
-            this.AddRTransaction.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.AddRTransaction.Depth = 0;
-            this.AddRTransaction.Icon = null;
-            this.AddRTransaction.Location = new System.Drawing.Point(902, 27);
-            this.AddRTransaction.MouseState = MaterialSkin.MouseState.HOVER;
-            this.AddRTransaction.Name = "AddRTransaction";
-            this.AddRTransaction.Primary = true;
-            this.AddRTransaction.Size = new System.Drawing.Size(129, 36);
-            this.AddRTransaction.TabIndex = 1;
-            this.AddRTransaction.Text = "Add Recurrent ";
-            this.AddRTransaction.UseVisualStyleBackColor = true;
-            this.AddRTransaction.Click += new System.EventHandler(this.AddRTransaction_Click);
-            // 
             // rTransDetailBox
             // 
-            this.rTransDetailBox.Controls.Add(this.RefreshRTView);
+            this.rTransDetailBox.Controls.Add(this.RefreshRView);
+            this.rTransDetailBox.Controls.Add(this.rTransAmount);
             this.rTransDetailBox.Controls.Add(this.rTransFrequency);
             this.rTransDetailBox.Controls.Add(this.materialLabel1);
             this.rTransDetailBox.Controls.Add(this.label11);
@@ -501,7 +535,6 @@ namespace BudgetManagement.Views
             this.rTransDetailBox.Controls.Add(this.rTransNote);
             this.rTransDetailBox.Controls.Add(this.rTransContact);
             this.rTransDetailBox.Controls.Add(this.rTransName);
-            this.rTransDetailBox.Controls.Add(this.rTransAmount);
             this.rTransDetailBox.Controls.Add(this.rID);
             this.rTransDetailBox.Location = new System.Drawing.Point(8, 6);
             this.rTransDetailBox.Name = "rTransDetailBox";
@@ -510,10 +543,34 @@ namespace BudgetManagement.Views
             this.rTransDetailBox.TabStop = false;
             this.rTransDetailBox.Text = "Update Recurrent Transaction";
             // 
+            // RefreshRView
+            // 
+            this.RefreshRView.Location = new System.Drawing.Point(797, 170);
+            this.RefreshRView.Name = "RefreshRView";
+            this.RefreshRView.Size = new System.Drawing.Size(75, 23);
+            this.RefreshRView.TabIndex = 22;
+            this.RefreshRView.Text = "Refresh";
+            this.RefreshRView.UseVisualStyleBackColor = true;
+            this.RefreshRView.Click += new System.EventHandler(this.RefreshRView_Click);
+            // 
+            // rTransAmount
+            // 
+            this.rTransAmount.DecimalPlaces = 2;
+            this.rTransAmount.Location = new System.Drawing.Point(400, 62);
+            this.rTransAmount.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.rTransAmount.Name = "rTransAmount";
+            this.rTransAmount.Size = new System.Drawing.Size(176, 20);
+            this.rTransAmount.TabIndex = 21;
+            // 
             // rTransFrequency
             // 
             this.rTransFrequency.Location = new System.Drawing.Point(668, 104);
             this.rTransFrequency.Name = "rTransFrequency";
+            this.rTransFrequency.ReadOnly = true;
             this.rTransFrequency.Size = new System.Drawing.Size(200, 20);
             this.rTransFrequency.TabIndex = 19;
             // 
@@ -602,7 +659,7 @@ namespace BudgetManagement.Views
             this.groupBox7.Size = new System.Drawing.Size(148, 103);
             this.groupBox7.TabIndex = 9;
             this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "groupBox7";
+            this.groupBox7.Text = "Type";
             // 
             // rExpense
             // 
@@ -638,6 +695,7 @@ namespace BudgetManagement.Views
             this.rTransFrequencyList.Name = "rTransFrequencyList";
             this.rTransFrequencyList.Size = new System.Drawing.Size(200, 21);
             this.rTransFrequencyList.TabIndex = 8;
+            this.rTransFrequencyList.Text = "--Select Frequency--";
             this.rTransFrequencyList.SelectedIndexChanged += new System.EventHandler(this.rTransFrequencyList_SelectedIndexChanged);
             // 
             // rTransContactList
@@ -647,6 +705,7 @@ namespace BudgetManagement.Views
             this.rTransContactList.Name = "rTransContactList";
             this.rTransContactList.Size = new System.Drawing.Size(176, 21);
             this.rTransContactList.TabIndex = 7;
+            this.rTransContactList.Text = "--Select a Contact";
             this.rTransContactList.SelectedIndexChanged += new System.EventHandler(this.rTransContactList_SelectedIndexChanged);
             // 
             // rTransEndPeriod
@@ -685,45 +744,29 @@ namespace BudgetManagement.Views
             // rTransName
             // 
             this.rTransName.Location = new System.Drawing.Point(166, 21);
+            this.rTransName.MaxLength = 32;
             this.rTransName.Name = "rTransName";
             this.rTransName.Size = new System.Drawing.Size(410, 20);
             this.rTransName.TabIndex = 2;
-            // 
-            // rTransAmount
-            // 
-            this.rTransAmount.Location = new System.Drawing.Point(400, 61);
-            this.rTransAmount.MaxLength = 20;
-            this.rTransAmount.Name = "rTransAmount";
-            this.rTransAmount.Size = new System.Drawing.Size(176, 20);
-            this.rTransAmount.TabIndex = 1;
-            this.rTransAmount.TextChanged += new System.EventHandler(this.rTransAmount_TextChanged);
             // 
             // rID
             // 
             this.rID.Location = new System.Drawing.Point(36, 21);
             this.rID.Name = "rID";
+            this.rID.ReadOnly = true;
             this.rID.Size = new System.Drawing.Size(80, 20);
             this.rID.TabIndex = 0;
             // 
-            // RefreshRTView
+            // AddRTransaction
             // 
-            this.RefreshRTView.Location = new System.Drawing.Point(746, 172);
-            this.RefreshRTView.Name = "RefreshRTView";
-            this.RefreshRTView.Size = new System.Drawing.Size(122, 23);
-            this.RefreshRTView.TabIndex = 20;
-            this.RefreshRTView.Text = "Refresh View";
-            this.RefreshRTView.UseVisualStyleBackColor = true;
-            this.RefreshRTView.Click += new System.EventHandler(this.RefreshTView_Click);
-            // 
-            // RefreshTView
-            // 
-            this.RefreshTView.Location = new System.Drawing.Point(729, 6);
-            this.RefreshTView.Name = "RefreshTView";
-            this.RefreshTView.Size = new System.Drawing.Size(99, 23);
-            this.RefreshTView.TabIndex = 20;
-            this.RefreshTView.Text = "Refresh View";
-            this.RefreshTView.UseVisualStyleBackColor = true;
-            this.RefreshTView.Click += new System.EventHandler(this.RefreshTView_Click_1);
+            this.AddRTransaction.BackColor = System.Drawing.SystemColors.Control;
+            this.AddRTransaction.Location = new System.Drawing.Point(908, 248);
+            this.AddRTransaction.Name = "AddRTransaction";
+            this.AddRTransaction.Size = new System.Drawing.Size(120, 88);
+            this.AddRTransaction.TabIndex = 9;
+            this.AddRTransaction.Text = "ADD";
+            this.AddRTransaction.UseVisualStyleBackColor = false;
+            this.AddRTransaction.Click += new System.EventHandler(this.AddRTransaction_Click_1);
             // 
             // TransactionView
             // 
@@ -731,25 +774,27 @@ namespace BudgetManagement.Views
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1059, 531);
             this.Controls.Add(this.tabControl1);
+            this.MaximumSize = new System.Drawing.Size(1075, 570);
+            this.MinimumSize = new System.Drawing.Size(1075, 570);
             this.Name = "TransactionView";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TransactionView";
             this.transDetailBox.ResumeLayout(false);
             this.transDetailBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tAmountTbox)).EndInit();
             this.groupBox5.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
             this.rTransDetailBox.ResumeLayout(false);
             this.rTransDetailBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.rTransAmount)).EndInit();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
             this.ResumeLayout(false);
@@ -762,7 +807,6 @@ namespace BudgetManagement.Views
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button addTBtn;
         private System.Windows.Forms.Button UpdateTBtn;
         private System.Windows.Forms.Button DeleteTBtn;
         private System.Windows.Forms.GroupBox groupBox2;
@@ -770,11 +814,7 @@ namespace BudgetManagement.Views
         private System.Windows.Forms.RadioButton incomeTRbtn;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.Windows.Forms.TextBox tAmountTbox;
         private System.Windows.Forms.TextBox tNameTbox;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.ComboBox tContactCombobox;
         private System.Windows.Forms.Label tID;
         private System.Windows.Forms.TextBox tIDtbox;
         internal System.Windows.Forms.ListView transGridView;
@@ -785,11 +825,7 @@ namespace BudgetManagement.Views
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.RichTextBox tNoteTbox;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox tcontactTbox;
         private System.Windows.Forms.DateTimePicker tDatePicker;
-        private MaterialSkin.Controls.MaterialRaisedButton DeleteRTransaction;
-        private MaterialSkin.Controls.MaterialRaisedButton RegisterRTransaction;
-        private MaterialSkin.Controls.MaterialRaisedButton AddRTransaction;
         private GroupBox rTransDetailBox;
         private TextBox rTransFrequency;
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
@@ -804,17 +840,29 @@ namespace BudgetManagement.Views
         private RadioButton rExpense;
         private RadioButton rIncome;
         private ComboBox rTransFrequencyList;
-        private ComboBox rTransContactList;
         private DateTimePicker rTransEndPeriod;
         private DateTimePicker rTransStartPeriod;
         private RichTextBox rTransNote;
         private TextBox rTransContact;
         private TextBox rTransName;
-        private TextBox rTransAmount;
         private TextBox rID;
         private ListView RTransListView;
-        private MaterialSkin.Controls.MaterialRaisedButton CancelAddRAction;
-        private Button RefreshRTView;
-        private Button RefreshTView;
+        private NumericUpDown tAmountTbox;
+        private NumericUpDown rTransAmount;
+        private Button UpdateRTransaction;
+        private Button DeleteRTransaction;
+        private Button CancelRTransaction;
+        private Button AddRTransaction;
+        private Button SubmitRTransaction;
+        private Button button1;
+        private GroupBox groupBox4;
+        private Button button2;
+        private Button addTBtn;
+        private Button SubmitTrans;
+        private TextBox tcontactTbox;
+        internal ComboBox tContactCombobox;
+        internal ComboBox rTransContactList;
+        private Button RefreshView;
+        private Button RefreshRView;
     }
 }
